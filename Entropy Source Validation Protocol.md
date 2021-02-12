@@ -222,7 +222,7 @@ These are done with a `POST /esv/v1/entropyAssessments/<eaId>/dataFiles/<dfId>` 
 
 ```
 Content-Type: multipart/form-data;
-Key: datafile, Value: <binary data file upload>
+Key: dataFile, Value: <binary data file upload>
 ```
 
 In the above case, the `<eaId>` and `<dfId>` are determined by the response from the server during the `POST /esv/v1/entropyAssessments` request. Multiple data file upload URLs will be provided by the server. The client is responsible for uploading the appropriate file to each URL. The files may be submitted in any order, but as the hashes are required in the previous `POST /esv/v1/entropyAssessments`, the files should be ready from the beginning.
