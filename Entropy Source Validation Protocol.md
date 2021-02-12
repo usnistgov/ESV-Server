@@ -132,8 +132,7 @@ with a body like the following
                 "minNin": 128,
                 "minHin": 4,
                 "nw": 128,
-                "nOut": 128,
-                "conditionedBitsSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                "nOut": 128
             }
         ]
     }
@@ -209,6 +208,8 @@ When a conditioning component is vetted, many of the options are restricted to s
 The `validationNumber` field is only applicable when `"vetted": true` is present. In this case, the `description` field must exactly match the ACVTS mode of the ConditioningComponent algorithm. The potential vetted functions can be found in [SP800-90B Section X]().
 
 The `bijectiveClaim` field is only applicable when `"vetted": false` is present. A bijective conditioning component is one that neither adds nor removes entropy from the inputs passed in, as every input to the bijective function maps to exactly one output.
+
+The `conditionedBitsSHA256` field is only applicable when `"vetted": false` is present. File upload is only required on non-vetted conditioning components, so a hash of the uploaded file is only expected at that time.
 
 ## 4. Submitting Files 
 
