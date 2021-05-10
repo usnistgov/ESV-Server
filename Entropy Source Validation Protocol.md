@@ -1,6 +1,6 @@
 # Entropy Source Validation Protocol
 
-The Entropy Source Validation Protocol is a means of communicating information about an entropy source to a validation server. The main use-case is to obtain an entropy source validation certificate to be publicly displayed as proof of conformance to the National Institute of Standards and Technology (NIST) [SP800-90B](). While the protocol is meant as an open standard for any number of servers, some configurable values are provided for a specific set of NIST run instances. The only `esvVersion` NIST servers support is `"1.0"`. 
+The Entropy Source Validation Protocol is a means of communicating information about an entropy source to a validation server. The main use-case is to obtain an entropy source validation certificate to be publicly displayed as proof of conformance to the National Institute of Standards and Technology (NIST) [SP800-90B](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf). While the protocol is meant as an open standard for any number of servers, some configurable values are provided for a specific set of NIST run instances. The only `esvVersion` NIST servers support is `"1.0"`. 
 
 ## Table of Contents
 
@@ -8,10 +8,11 @@ The Entropy Source Validation Protocol is a means of communicating information a
 2. Authentication
 3. Registering an Entropy Source
 4. Submitting Files
-5. Accessing the Demo Environment
-6. Issues
-7. Contributions
-8. Disclaimer
+5. Certify
+6. Accessing the Demo Environment
+7. Issues
+8. Contributions
+9. Disclaimer
 
 ## 1. Workflow
 
@@ -19,7 +20,7 @@ The first step for interacting with an ESV server is to login. Upon a completed 
 
 ## 2. Authentication
 
-Authentication is handled with a two-factor system. The first is a certificate signed by a selected certificate authority for mutual TLS (mTLS). The certificates shall be present from both parties for all communications between the server and client. The second factor is a Time-based One Time Password (TOTP) according to [RFCX](). The chosen step is 30 seconds, and the 8 digits shall be in the generated password. The TOTP is only used for the initial login of the session, and to refresh and JWTs that may have expired. A JWT provides authentication for the current session and any objects created by the user. The server may provide claims embedded in the JWT which provide authorization for the specific user to access those objects. JWTs are set to expire 30 minutes after they are issued.
+Authentication is handled with a two-factor system. The first is a certificate signed by a selected certificate authority for mutual TLS (mTLS). The certificates shall be present from both parties for all communications between the server and client. The second factor is a Time-based One Time Password (TOTP) according to [RFC-6238](https://datatracker.ietf.org/doc/html/rfc6238). The chosen step is 30 seconds, and the 8 digits shall be in the generated password. The TOTP is only used for the initial login of the session, and to refresh and JWTs that may have expired. A JWT provides authentication for the current session and any objects created by the user. The server may provide claims embedded in the JWT which provide authorization for the specific user to access those objects. JWTs are set to expire 30 minutes after they are issued.
 
 A user can login with the following request
 
@@ -203,9 +204,9 @@ The valid properties for the conditioning components are as follows
 | nOut                  | number of bits outputted by the conditioning function                                                                                                        | integer    |
 | conditionedBitsSHA256 | the SHA256 of the conditioning component bits data file to be uploaded later                                                                                 | hex string |
 
-When a conditioning component is vetted, many of the options are restricted to singular values in accordance to [SP800-90B Section X]().
+When a conditioning component is vetted, many of the options are restricted to singular values in accordance to [SP800-90B Section 3.1.5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf).
 
-The `validationNumber` field is only applicable when `"vetted": true` is present. In this case, the `description` field must exactly match the ACVTS mode of the ConditioningComponent algorithm. The potential vetted functions can be found in [SP800-90B Section X]().
+The `validationNumber` field is only applicable when `"vetted": true` is present. In this case, the `description` field must exactly match the ACVTS mode of the ConditioningComponent algorithm. The potential vetted functions can be found in [SP800-90B Section 3.1.5.1.1](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf).
 
 The `bijectiveClaim` field is only applicable when `"vetted": false` is present. A bijective conditioning component is one that neither adds nor removes entropy from the inputs passed in, as every input to the bijective function maps to exactly one output.
 
@@ -241,7 +242,38 @@ Key: sdComments, Value: <string describing document, optional>
 Key: sdFile, Value: <file upload, .doc, .docx, .pdf>
 ```
 
-## 5. Accessing the Demo Environment
+## 5. Certify
+
+Certify requests are done by `POST /esv/v1/certify`. The `moduleId`, `vendorId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. A certify request may have multiple supporting documents, or multiple entropy assessments. Each must include their accompanying JWT access token. The tokens may need to be refreshed before submitting. An example is the following...
+
+```
+[
+    {
+        "esvVersion": "1.0"
+    },
+    {
+        "itar": false,
+        "limitEntropyAssessmentToSingleModule": false,
+        "moduleId": 1,	
+        "vendorId": 1,	
+        "supportingDocumentation": [ 
+            {"sdId": sdId1, "accessToken": "<jwt-with-claims-for-sdId1>"},
+            ... may include other supporting documents
+        ],
+        "entropyAssessments": [			
+            {
+                "eaId": eaId1,
+                "oeId": 1,
+                "accessToken": "<jwt-with-claims-for-eaId1>"
+            }
+        ]          
+    }
+]
+```
+
+The response from the server will mirror the information sent, with the ACVTS IDs resolved to their values to allow quick confirmation of the data submitted.
+
+## 6. Accessing the Demo Environment
 
 To access the demo server one needs an mTLS credential and a one-time password (OTP). 
 
@@ -249,7 +281,7 @@ To set expectations, since this is a demo system, it will be in a state of flux 
 
 ### Obtaining TLS credentials
 
-To access the demo environment you will need to send a Certificate Signing Request (CSR) to us. Please use a 2048-bit RSA key pair and sign using at least a SHA-256 hash. Please send a request to esv-demo@nist.gov with 'ESV: DEMO CSR REQUEST' in the subject line. You will receive instructions for how to upload the CSR. You will receive a TOTP seed value along with the final certificate. 
+To access the demo environment you will need to send a Certificate Signing Request (CSR) to us. Please use a 2048-bit RSA key pair and sign using at least a SHA2-256 hash. Please send a request to esv-demo@nist.gov with 'ESV: DEMO CSR REQUEST' in the subject line. You will receive instructions for how to upload the CSR. You will receive a TOTP seed value along with the final certificate. 
 
 You are expected to protect both the key pair and TOTP seed from unauthorized use and to notify NIST in the event that either becomes compromised. Also, since we do not have a formal login page the following notice applies when accessing the ESV system:
 
@@ -268,10 +300,10 @@ lawful Government purpose.
 ***WARNING***WARNING***WARNING”
 ```
 
-## 6. Issues
+## 7. Issues
 
 Users are encouraged to submit issues to this repository. ESV developers will routinely check and communicate with users in the comment on those issues. If there is an issue you'd like to discuss privately, send an email to christopher.celi@nist.gov. 
 
-## 7. Contributions
+## 8. Contributions
 
 Change suggestions are welcome in Pull Requests.
