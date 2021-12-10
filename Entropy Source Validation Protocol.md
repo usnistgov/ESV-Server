@@ -108,10 +108,8 @@ with a body like the following
         "hminEstimate": 3.1,
         "physical": true,
         "itar": false,
-        "rawNoiseSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "numberOfRestarts": 1000,
         "samplesPerRestart": 1000,
-        "restartBitsSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "additionalNoiseSources": false,
         "conditioningComponent": [
             {
@@ -123,7 +121,6 @@ with a body like the following
                 "minHin": 4,
                 "nw": 16,
                 "nOut": 8,
-                "conditionedBitsSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
             },
             {
                 "sequencePosition": 2,
@@ -182,8 +179,6 @@ The valid properties within the top level of the registration are as follows
 | hminEstimate           | an estimate of the number of bits of entropy outputted by the noise source over one sample | float      |
 | physical               | if the noise source is physical or non-physical                                            | boolean    |
 | itar                   | if the entropy source claims heightened security for an ITAR validation                    | boolean    |
-| rawNoiseSHA256         | the SHA256 of the raw noise bits data file to be uploaded later                            | hex string |
-| restartBitsSHA256      | the SHA256 of the restart bits data file to be uploaded later                              | hex string |
 | numberOfRestarts       | the number of restarts used to generate the restart bits data file                         | integer    |
 | samplesPerRestart      | the number of samples per restart used to generate the restart bits data file              | integer    |
 | additionalNoiseSources | if additional noise sources are incorporated in the entropy source                         | boolean    |
@@ -202,7 +197,6 @@ The valid properties for the conditioning components are as follows
 | minHIn                | minimum amount of entropy inputted to the conditioning function per the number of bits inputted                                                              | float      |
 | nW                    | narrowest width of the conditioning function                                                                                                                 | integer    |
 | nOut                  | number of bits outputted by the conditioning function                                                                                                        | integer    |
-| conditionedBitsSHA256 | the SHA256 of the conditioning component bits data file to be uploaded later                                                                                 | hex string |
 
 When a conditioning component is vetted, many of the options are restricted to singular values in accordance to [SP800-90B Section 3.1.5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf).
 
@@ -210,7 +204,7 @@ The `validationNumber` field is only applicable when `"vetted": true` is present
 
 The `bijectiveClaim` field is only applicable when `"vetted": false` is present. A bijective conditioning component is one that neither adds nor removes entropy from the inputs passed in, as every input to the bijective function maps to exactly one output.
 
-The `conditionedBitsSHA256` field is only applicable when `"vetted": false` is present. File upload is only required on non-vetted conditioning components, so a hash of the uploaded file is only expected at that time.
+File upload is only allowed on non-vetted conditioning components.
 
 ## 4. Submitting Files 
 
