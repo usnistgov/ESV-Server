@@ -107,7 +107,6 @@ with a body like the following
         "alphabetSize": 16,
         "hminEstimate": 3.1,
         "physical": true,
-        "itar": false,
         "numberOfRestarts": 1000,
         "samplesPerRestart": 1000,
         "additionalNoiseSources": false,
@@ -178,7 +177,6 @@ The valid properties within the top level of the registration are as follows
 | alphabetSize           | the total number of distinct samples possibly outputted by the noise source                | integer    |
 | hminEstimate           | an estimate of the number of bits of entropy outputted by the noise source over one sample | float      |
 | physical               | if the noise source is physical or non-physical                                            | boolean    |
-| itar                   | if the entropy source claims heightened security for an ITAR validation                    | boolean    |
 | numberOfRestarts       | the number of restarts used to generate the restart bits data file                         | integer    |
 | samplesPerRestart      | the number of samples per restart used to generate the restart bits data file              | integer    |
 | additionalNoiseSources | if additional noise sources are incorporated in the entropy source                         | boolean    |
@@ -223,6 +221,8 @@ Key: dataFile, Value: <binary data file upload>
 
 In the above case, the `<eaId>` and `<dfId>` are determined by the response from the server during the `POST /esv/v1/entropyAssessments` request. Multiple data file upload URLs will be provided by the server. The client is responsible for uploading the appropriate file to each URL. The files may be submitted in any order, but as the hashes are required in the previous `POST /esv/v1/entropyAssessments`, the files should be ready from the beginning.
 
+After a file has been submitted, a user may issue a `GET /esv/v1/entropyAssessments/<eaId>/dataFiles/<dfId>` to view the status of the submission through the testing process. Normally the file will complete entirely in about 5 minutes. There may be a handful of potential statuses displayed. "Uploaded" states that the file was received and no action has been taken yet. "RunStarted" indicates the testing has begun. "Successful" indicates the testing completed and will also display the results. "Error" states are met with appropriate error information.
+
 ### Supporting Documentation Files
 
 Supporting documentation files are documents that explain the model behind the noise source in addition to other non-testable requirements of SP800-90B. The clients shall only upload Microsoft Word or PDF files: `.doc`, `.docx`, or `.pdf`. 
@@ -231,14 +231,14 @@ These are done with a `POST /esv/v1/supportingDocumentation` with the following 
 
 ```
 Content-Type: multipart/form-data;
-Key: itar, Value: <true/false>
+Key: isITAR, Value: "on"/"off"
 Key: sdComments, Value: <string describing document, optional>
 Key: sdFile, Value: <file upload, .doc, .docx, .pdf>
 ```
 
 ## 5. Certify
 
-Certify requests are done by `POST /esv/v1/certify`. The `moduleId`, `vendorId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. A certify request may have multiple supporting documents, or multiple entropy assessments. Each must include their accompanying JWT access token. The tokens may need to be refreshed before submitting. An example is the following...
+Certify requests are done by `POST /esv/v1/certify`. The `moduleId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. The EntropyID field is analagous to the Test Identifier (TID) in the module validation process. It helps the submitter track the entropy validation after it is submitted to the server. A certify request may have multiple supporting documents, or multiple entropy assessments. Each must include their accompanying JWT access token. The tokens may need to be refreshed before submitting. An example is the following...
 
 ```
 [
@@ -249,7 +249,7 @@ Certify requests are done by `POST /esv/v1/certify`. The `moduleId`, `vendorId` 
         "itar": false,
         "limitEntropyAssessmentToSingleModule": false,
         "moduleId": 1,	
-        "vendorId": 1,	
+        "entropyId": 0000
         "supportingDocumentation": [ 
             {"sdId": sdId1, "accessToken": "<jwt-with-claims-for-sdId1>"},
             ... may include other supporting documents
