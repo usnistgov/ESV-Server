@@ -171,8 +171,8 @@ The valid properties within the top level of the registration are as follows
 
 | JSON Property          | Description                                                                                | JSON Type  |
 |------------------------|--------------------------------------------------------------------------------------------|------------|
-| primaryNoiseSource     | 64 character description                                                                   | string     |
-| iidClaim               | if the IUT claims the noise source produces [independent and identically distributed]() samples       | boolean    |
+| primaryNoiseSource     | 64 character description of the primary noise source                                       | string     |
+| iidClaim               | if the IUT claims the noise source produces [independent and identically distributed](https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables) samples       | boolean    |
 | bitsPerSample          | the number of bits per sample output by the noise source                                   | integer    |
 | alphabetSize           | the total number of distinct samples possibly output by the noise source                   | integer    |
 | hminEstimate           | an estimate of the number of bits of entropy output by the noise source over one sample    | float      |
@@ -193,7 +193,7 @@ The valid properties for the conditioning components are as follows
 | validationNumber      | the ACVTS validation certificate number of the vetted conditioning component                                                                                 | string     |
 | minNIn                | minimum bits input to the conditioning function                                                                                                           | integer    |
 | minHIn                | minimum amount of entropy input to the conditioning function per the number of bits input                                                              | float      |
-| nW                    | narrowest width of the conditioning function                                                                                                                 | integer    |
+| nw                    | narrowest width of the conditioning function                                                                                                                 | integer    |
 | nOut                  | number of bits output by the conditioning function                                                                                                           | integer    |
 
 When a conditioning component is vetted, many of the options are restricted to singular values in accordance to [SP800-90B Section 3.1.5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf).
