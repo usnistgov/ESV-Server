@@ -172,7 +172,7 @@ The valid properties within the top level of the registration are as follows
 | JSON Property          | Description                                                                                | JSON Type  |
 |------------------------|--------------------------------------------------------------------------------------------|------------|
 | primaryNoiseSource     | 64 character description                                                                   | string     |
-| iidClaim               | if the IUT claims the entropy source is [independent and identically distributed]()        | boolean    |
+| iidClaim               | if the IUT claims the entropy source produced [independent and identically distributed]() samples       | boolean    |
 | bitsPerSample          | the number of bits per sample output by the noise source                                   | integer    |
 | alphabetSize           | the total number of distinct samples possibly output by the noise source                   | integer    |
 | hminEstimate           | an estimate of the number of bits of entropy output by the noise source over one sample    | float      |
@@ -191,8 +191,8 @@ The valid properties for the conditioning components are as follows
 | bijectiveClaim        | this non-vetted conditioning component is a bijective function                                                                                               | boolean    |
 | description           | brief description of the conditioning component, for a vetted conditioning component this shall be exactly the ACVTS name of the conditioning component mode | string     |
 | validationNumber      | the ACVTS validation certificate number of the vetted conditioning component                                                                                 | string     |
-| minNIn                | minimum bits inputted to the conditioning function                                                                                                           | integer    |
-| minHIn                | minimum amount of entropy inputted to the conditioning function per the number of bits inputted                                                              | float      |
+| minNIn                | minimum bits input to the conditioning function                                                                                                           | integer    |
+| minHIn                | minimum amount of entropy input to the conditioning function per the number of bits input                                                              | float      |
 | nW                    | narrowest width of the conditioning function                                                                                                                 | integer    |
 | nOut                  | number of bits output by the conditioning function                                                                                                           | integer    |
 
