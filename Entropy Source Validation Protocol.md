@@ -172,7 +172,7 @@ The valid properties within the top level of the registration are as follows
 | JSON Property          | Description                                                                                | JSON Type  |
 |------------------------|--------------------------------------------------------------------------------------------|------------|
 | primaryNoiseSource     | 64 character description                                                                   | string     |
-| iidClaim               | if the IUT claims the entropy source produced [independent and identically distributed]() samples       | boolean    |
+| iidClaim               | if the IUT claims the noise source produces [independent and identically distributed]() samples       | boolean    |
 | bitsPerSample          | the number of bits per sample output by the noise source                                   | integer    |
 | alphabetSize           | the total number of distinct samples possibly output by the noise source                   | integer    |
 | hminEstimate           | an estimate of the number of bits of entropy output by the noise source over one sample    | float      |
