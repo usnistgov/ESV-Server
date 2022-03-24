@@ -273,6 +273,8 @@ To access the demo server one needs an mTLS credential and a one-time password (
 
 To set expectations, since this is a demo system, it will be in a state of flux and any all data on the system is considered temporary and may be reset to accommodate development of the Entropy Source Validation Protocol (ESVP) service. We will try to keep the demo service relatively stable, but we plan to update it as we continue to add new features.
 
+The URL is https://demo.esvts.nist.gov:7443. 
+
 ### Obtaining TLS credentials
 
 To access the demo environment you will need to send a Certificate Signing Request (CSR) to us. Please use a 2048-bit RSA key pair and sign using at least a SHA2-256 hash. Please send a request to esv-demo@nist.gov with 'ESV: DEMO CSR REQUEST' in the subject line. You will receive instructions for how to upload the CSR. You will receive a TOTP seed value along with the final certificate. 
