@@ -1,0 +1,21 @@
+[
+    {
+        "esvVersion": "1.0"
+    },
+    {
+        "itar": false,
+        "limitEntropyAssessmentToSingleModule": false,
+        "moduleId": null,	
+        "vendorId": null,	
+        "supportingDocumentation": [ 
+            
+        ],
+        "entropyAssessments": [			
+            {
+                "eaId": null,
+                "oeId": null,
+                "accessToken": "<jwt-with-claims-for-eaId1>"
+            }
+        ]          
+    }
+]
