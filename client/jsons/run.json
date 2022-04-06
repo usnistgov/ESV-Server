@@ -1,0 +1,51 @@
+[
+    {
+        "AssessmentRegistrationPath": "/path/to/entropy-source-metadata.json",
+        "DataFiles": {
+            "rawNoisePath": "/path/to/truerand_4bit.bin",
+            "restartTestPath": "/path/to/truerand_4bit.bin",
+            "unvettedConditionedPaths": [
+                "/path/to/truerand_4bit.bin",
+                "/path/to/truerand_4bit.bin"
+            ]
+        },
+        "SupportingDocuments": {
+            "filePaths": [
+                "/path/to/Test PDF.pdf"
+            ],
+            "comments": [
+                ""
+            ]
+        },
+        "Certify": {
+            "Certify": true,
+            "moduleID": 1,
+            "vendorID": 1,
+            "itar": false,
+            "entropyID": "E123"
+        },
+        "Assessment": {
+            "numberOfAssessments": 1,
+            "oeID": 1,
+            "limitEntropyAssessmentToSingleModule": false
+        },
+        "PreviousRun": {
+            "entr_jwt": "example",
+            "df_ids": [
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
+            "ea_id": "1",
+            "cert_supp": [
+                [
+                    {
+                        "sdId": 1,
+                        "accessToken": "example"
+                    }
+                ]
+            ]
+        }
+    }
+]

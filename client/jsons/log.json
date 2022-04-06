@@ -1,0 +1,27 @@
+[
+    {
+        "entr_jwt": "example",
+        "df_ids": [
+            "1",
+            "2",
+            "3",
+            "4"
+        ],
+        "ea_id": "1",
+        "server_url": "https://esvts.nist.gov:7443/esv/v1",
+        "client_cert": [
+            "/path/to/NIST_TestCert_2021_ESVProd.cer",
+            "/path/to/NIST_TestCert_2021_ESVProd.key"
+        ],
+        "config_path": "config.prod.json",
+        "run_path": "run.prod.json",
+        "cert_supp": [
+            [
+                {
+                    "sdId": 1,
+                    "accessToken": "example"
+                }
+            ]
+        ]
+    }
+]

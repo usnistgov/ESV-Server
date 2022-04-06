@@ -1,0 +1,7 @@
+[{
+    "TOTPPath" : "/path/to/prod_totp.txt",
+    "CertPath" : "/path/to/prod.cer",
+    "KeyPath" : "/path/to/prod.key",
+    "ServerURL" : "https://esvts.nist.gov:7443/esv/v1",
+	"EsvVersion": "1.0"
+}]  
