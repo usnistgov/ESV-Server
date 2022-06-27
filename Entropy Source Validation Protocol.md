@@ -107,6 +107,7 @@ with a body like the following
         "alphabetSize": 16,
         "hminEstimate": 3.1,
         "physical": true,
+        "itar": false,
         "numberOfRestarts": 1000,
         "samplesPerRestart": 1000,
         "additionalNoiseSources": false,
@@ -119,7 +120,7 @@ with a body like the following
                 "minNin": 16,
                 "minHin": 4,
                 "nw": 16,
-                "nOut": 8,
+                "nOut": 8
             },
             {
                 "sequencePosition": 2,
@@ -181,6 +182,7 @@ The valid properties within the top level of the registration are as follows
 | samplesPerRestart      | the number of samples per restart used to generate the restart bits data file              | integer    |
 | additionalNoiseSources | if additional noise sources are incorporated in the entropy source                         | boolean    |
 | conditioningComponent  | an array of conditioning component objects described below                                 | object     |
+| itar                   | whether or not the submission is applying under ITAR restrictions                          | boolean    |
 
 The valid properties for the conditioning components are as follows
 
