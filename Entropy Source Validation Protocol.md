@@ -111,6 +111,7 @@ with a body like the following
         "numberOfRestarts": 1000,
         "samplesPerRestart": 1000,
         "additionalNoiseSources": false,
+        "numberOfOEs": 1,
         "conditioningComponent": [
             {
                 "sequencePosition": 1,
@@ -181,6 +182,7 @@ The valid properties within the top level of the registration are as follows
 | numberOfRestarts       | the number of restarts used to generate the restart bits data file                         | integer    |
 | samplesPerRestart      | the number of samples per restart used to generate the restart bits data file              | integer    |
 | additionalNoiseSources | if additional noise sources are incorporated in the entropy source                         | boolean    |
+| numberOfOEs            | (OPTIONAL) number of Operating Environments for this metadata (defaults to 1)              | integer    | 
 | conditioningComponent  | an array of conditioning component objects described below                                 | object     |
 | itar                   | whether or not the submission is applying under ITAR restrictions                          | boolean    |
 
