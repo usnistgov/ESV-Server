@@ -243,7 +243,9 @@ Key: sdType, Value: "EntropyAnalysisReport"/"PublicUseDocument"/"Other"
 
 ## 5. Certify
 
-Certify requests are done by `POST /esv/v1/certify`. The `moduleId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. The EntropyID field is analagous to the Test Identifier (TID) in the module validation process. It helps the submitter track the entropy validation after it is submitted to the server. A certify request may have multiple supporting documents, or multiple entropy assessments. Each must include their accompanying JWT access token. The tokens may need to be refreshed before submitting. An example is the following...
+Certify requests are done by `POST /esv/v1/certify`. The `moduleId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. Thus, the "module" information and OE information must be previously registered to the ACVTS environment prior to this step. The EntropyID field is analagous to the Test Identifier (TID) in the module validation process. It helps the submitter track the entropy validation after it is submitted to the server. The `<eaId>` is determined by the response from the server during the `POST /esv/v1/entropyAssessments` request.
+
+A certify request may have multiple supporting documents, or multiple entropy assessments. Each must include their accompanying JWT access token. The tokens may need to be refreshed before submitting. An example is the following...
 
 ```
 [
