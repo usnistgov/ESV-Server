@@ -1,3 +1,4 @@
+import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 from threads.thread_functions import get_status, df_upload_cond, df_upload_raw, df_upload_restart, send_supp
@@ -7,9 +8,12 @@ import globalenv
 class ThreadWrapper:
 
     #Step 4: Runner for threading stats
-    def runner_stats(server_url, ea_id, df_ids, entr_jwt, client_cert):
+    def runner_stats(server_url, response, client_cert):
+        ea_id = response.ea_id
+        df_ids = response.df_ids
+        entr_jwt = response.entr_jwt
         threads= []
-        print("Getting Status...")
+        print("*** Getting Status")
         print("Waiting for data file tests to complete...")
         with ThreadPoolExecutor(max_workers=20) as executor:
             for id in df_ids:
@@ -20,7 +24,10 @@ class ThreadWrapper:
                 check_status(task.result()) 
                 
     #Step 3: Runner for threading data uploads       
-    def runner_data(server_url, ea_id, df_ids, entr_jwt, conditioned, rawNoise, restartTest, client_cert):
+    def runner_data(server_url, responses, conditioned, rawNoise, restartTest, client_cert):
+        ea_id = responses.ea_id
+        df_ids = responses.df_ids
+        entr_jwt = responses.entr_jwt
         threads= []
         with ThreadPoolExecutor(max_workers=20) as executor:
             #Send raw and restart
@@ -37,19 +44,19 @@ class ThreadWrapper:
             print("Data files submitted!\n")
 
     #Step 5: Runner for threading supporting docs uploads
-    def runner_supp(comments, supporting_paths, itar, server_url, client_cert, auth_header):
+    def runner_supp(comments, sdType, supporting_paths, itar, server_url, client_cert, auth_header):
         threads= []
         cert_supp = []
         with ThreadPoolExecutor(max_workers=20) as executor:
-            print('\nSending supporting documents')
+            print('\n*** Sending supporting documents')
             if len(comments) < len(supporting_paths): #Check formatting
                 print("Error: Comments array must be the same length as that of the supporting file paths")
-                exit()
+                sys.exit(1)
             
-            print("Your Supporting Documentation ID(s): ")
+            print("Supporting Documentation ID(s): ")
             #cert_supp = [] #Get and format IDs and JWTs for certify
             for i in range(len(supporting_paths)):
-                threads.append(executor.submit(send_supp, comments[i], supporting_paths[i], itar, server_url, client_cert, auth_header))
+                threads.append(executor.submit(send_supp, comments[i], sdType[i], supporting_paths[i], itar, server_url, client_cert, auth_header))
 
             for task in as_completed(threads):
                 #Check status code of responses and create cert_sup for certify

@@ -3,6 +3,7 @@ import requests
 import threading
 import os
 import time
+import sys
 
 #thread-safe printing
 def safe_print(*args, sep=" ", end="", **kwargs):
@@ -19,18 +20,20 @@ def get_status(server_url, ea_id, id, entrjwt, client_cert):
     substrings = ['error', 'runsuccessful'] 
 
     while not any (x in status.lower() for x in substrings): #check for a certain value in status
-        # TODO need check for JWT expiration
         response = requests.get(datafileUrl + id, headers = auth_header, cert=client_cert)
+        #print("Raw status")
+        #print(response.json())
         try:
             status = str(response.json()[1]['status'])
-            safe_print("ID " + str(response.json()[1]['id']) + "|" + response.json()[1]['status'])
+            safe_print("id: " + str(response.json()[1]['id']) + " | status: " + response.json()[1]['status'])
         except:
             safe_print("Error checking ID " + str(id))
             #safe_print(response.json())
             responseJson = response.json()
             errorMsg = responseJson[1]["error"]
             safe_print(errorMsg)
-            break
+            #break
+            sys.exit(1)
         time.sleep(15)
 
     st = list(response.json()[1].values())
@@ -78,14 +81,16 @@ def df_upload_restart(server_url, ea_id, df_ids, jwt, restart_test, client_cert)
     return response
 
 #Step 5(2): Send Supporting Documents
-def send_supp(comments, supporting_path, itar, server_url, client_cert, auth_header):
+def send_supp(comments, sdType, supporting_path, itar, server_url, client_cert, auth_header):
     cert_supp = []
     supp_name = os.path.basename(supporting_path)
     files=[('sdFile', (supp_name,
         open(supporting_path,'rb'),'application/pdf'))] 
     # changed 3/15/2022
     #payload={'itar': itar,'sdComments': comments}
-    payload={'isITAR': itar,'sdComments': comments}
+    #payload={'isITAR': itar,'sdComments': comments}
+    # added type 6/23/2022
+    payload={'isITAR': itar, 'sdType': sdType,'sdComments': comments}
     response = requests.request("POST", server_url + '/supportingDocumentation', cert = client_cert, headers=auth_header, data = payload, files=files)
     response_1 = response.json()[1]
     sd_id = response_1['sdId']

@@ -9,14 +9,18 @@
                 "/path/to/truerand_4bit.bin"
             ]
         },
-        "SupportingDocuments": {
-            "filePaths": [
-                "/path/to/Test PDF.pdf"
-            ],
-            "comments": [
-                ""
-            ]
-        },
+        "SupportingDocuments": [
+            {
+                "filePath": "/path/to/report_pud.pdf",
+                "comment": "This is a comment about our public use document",
+                "sdType": "PublicUseDocument"
+            },  
+			{
+                "filePath": "/path/to/report_ear.pdf",
+                "comment": "This is a comment about our entropy assessment report",
+                "sdType": "EntropyAssessmentReport"
+            }
+        ],
         "Certify": {
             "Certify": true,
             "moduleID": 1,
@@ -26,26 +30,8 @@
         },
         "Assessment": {
             "numberOfAssessments": 1,
-            "oeID": 1,
+            "oeID": [ 1 ] ,
             "limitEntropyAssessmentToSingleModule": false
-        },
-        "PreviousRun": {
-            "entr_jwt": "example",
-            "df_ids": [
-                "1",
-                "2",
-                "3",
-                "4"
-            ],
-            "ea_id": "1",
-            "cert_supp": [
-                [
-                    {
-                        "sdId": 1,
-                        "accessToken": "example"
-                    }
-                ]
-            ]
         }
     }
 ]
