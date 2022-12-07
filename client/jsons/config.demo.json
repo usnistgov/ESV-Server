@@ -3,5 +3,5 @@
     "CertPath" : "/path/to/demo.cer",
     "KeyPath" : "/path/to/demo.key",
     "ServerURL" : "https://demo.esvts.nist.gov:7443/esv/v1",
-    "EsvVersion": "1.0"
+	"EsvVersion": "1.0"
 }]  

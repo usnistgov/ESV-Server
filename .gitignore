@@ -1,2 +1,13 @@
+**/__pycache__/
 .DS_Store
-
+utilities/legacy.py
+launch.json
+jsons/configTesting.json
+jsons/runTesting.json
+jsons/*.local.json
+jsons/*.prod.json
+jsons/*.demo.json
+jsons/*.test.json
+*.test.docx
+*.test.pdf
+*.test.bin

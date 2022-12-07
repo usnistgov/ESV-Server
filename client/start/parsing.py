@@ -1,3 +1,6 @@
+import sys
+
+from requests import Response
 from utilities.utils import log, run_checks
 import json
 import utilities.esvutil as esvutil
@@ -10,7 +13,6 @@ def parse_config(config_path):
     try:
         config = open(config_path, 'r')
         config = json.load(config)
-
         client_cert = (config[0]['CertPath'], config[0]['KeyPath'])
         log("client_cert", client_cert)
         seed_path = config[0]['TOTPPath']
@@ -44,8 +46,7 @@ def parse_config(config_path):
         print("There was an error parsing your config file. Please try again")
         print(e)
 
-
-        exit()
+        sys.exit(1)
 
 #Parse the run file into usable variables
 def parse_run(run_path):
@@ -56,10 +57,18 @@ def parse_run(run_path):
         rawNoise = run_file[0]["DataFiles"]["rawNoisePath"]
         restartTest = run_file[0]["DataFiles"]["restartTestPath"]
         conditioned = run_file[0]["DataFiles"]["unvettedConditionedPaths"] #need to take sequence position into account
-        supporting_paths = run_file[0]["SupportingDocuments"]["filePaths"]
-        comments = run_file[0]["SupportingDocuments"]["comments"]
-        run_checks(comments, supporting_paths)
+        
+        #supportingDocuments = run_file[0]["SupportingDocuments"]
 
+        supporting_paths = [] # run_file[0]["SupportingDocuments"]["filePaths"]
+        comments = [] # run_file[0]["SupportingDocuments"]["comments"]
+        sdType = [] # run_file[0]["SupportingDocuments"]["sdType"]
+        for supportingDocument in run_file[0]["SupportingDocuments"]:
+            supporting_paths.append(supportingDocument["filePath"])
+            comments.append(supportingDocument["comment"])
+            sdType.append(supportingDocument["sdType"])
+
+        run_checks(comments, sdType, supporting_paths)
         singleMod = run_file[0]["Assessment"]['limitEntropyAssessmentToSingleModule']
         modId = None; vendId = None; oeId = None
 
@@ -69,28 +78,55 @@ def parse_run(run_path):
                 entropyId = run_file[0]["Certify"]['entropyID']
                 modId = run_file[0]["Certify"]['moduleID']
                 vendId = run_file[0]["Certify"]['vendorID']
+                itar = run_file[0]["Certify"]['itar']
+
             except:
                 print("Error: Entropy, Module and Vendor IDs are required for certification")
-                exit()
+                sys.exit(1)
         
         if certify and run_file[0]["Assessment"]['numberOfAssessments'] == 1: #Certifying only 1 assessment requires oeID
             try:
                 oeId = run_file[0]["Assessment"]['oeID']
             except:
                 print("Error: oeID field needed when certifying 1 assessment")
-                exit()
+                sys.exit(1)
+            numberOfOEs  = assessment_reg[1]['numberOfOEs']
+            if len(oeId) != numberOfOEs:
+                print("Error: Number of oeIDs provided must match numberOfOEs in Assessment Registration. numberOfOEs is ", numberOfOEs, " but provided number of oeIDs is ", len(oeId))
+                sys.exit(1)
+        responseList = []
+        if "PreviousRun" in run_file[0]:
+            if(globalenv.verboseMode):
+                print('PreviousRun detected')
+            for eachRun in run_file[0]["PreviousRun"]:
+                res = Response()
+                res.entr_jwt = eachRun["entr_jwt"]
+                res.df_ids = eachRun["df_ids"]
+                res.ea_id = eachRun["ea_id"]
+                # The supporting document info only goes in the first item in PreviousRun. No need to add it
+                # to others because the info is the same
+                if "cert_supp" in run_file[0]["PreviousRun"][0]:
+                    res.cert_supp = run_file[0]["PreviousRun"][0]["cert_supp"]
+                else:
+                    res.cert_supp = ""
+                responseList.append(res)
+            if(globalenv.verboseMode):
+                print('PreviousRun parsed')
+        else:
+            entr_jwt = ""
+            df_ids = ""
+            ea_id = ""
+            cert_supp = ""
+            if(globalenv.verboseMode):
+                print('No PreviousRun detected')
 
-        entr_jwt = run_file[0]["PreviousRun"]["entr_jwt"]
-        df_ids = run_file[0]["PreviousRun"]["df_ids"]
-        ea_id = run_file[0]["PreviousRun"]["ea_id"]
-        cert_supp = run_file[0]["PreviousRun"]["cert_supp"]
         if(globalenv.verboseMode):
             print('Run file successfully parsed')
-        return assessment_reg, rawNoise, restartTest, conditioned, supporting_paths, comments, modId, vendId, entropyId, oeId, certify, singleMod, entr_jwt, df_ids, ea_id, cert_supp
+        return assessment_reg, rawNoise, restartTest, conditioned, supporting_paths, comments, sdType, modId, vendId, entropyId, oeId, certify, singleMod, responseList, itar
 
     except:
         print("There was an error parsing your run file. Please try again")
-        exit()
+        sys.exit(1)
 
 def parse_certify_response(response):
     response = response.json()

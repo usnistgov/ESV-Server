@@ -10,6 +10,7 @@ The client runs on the command line and requires Python 3.8+
 2. **Workflow** 
 3. **Run-types** 
 4. **Pre-requisites: Configuration and Run Files** 
+5. **Alternative usages**
 
 ## 0. Some needed libraries 
 
@@ -17,7 +18,11 @@ The client runs on the command line and requires Python 3.8+
 pip3 install requests cryptography
 ```
 
-The `requests` library is used to call the Web API.  
+The `requests` library is used to call the Web API. Version 2.27.1+
+
+The `cryptography` library is used for Base64 and other methods related to TOTP. Version 36.0.1+
+
+(Older versions of these libraries may work, but if you encounter problems, please upgrade to at least the version number listed above.)
 
 ## 1. How to use
 
@@ -88,10 +93,13 @@ Note that only config.json and run.json are the only JSONs that should be filled
         "restartTestPath": "<absolute path to restart data file>",
         "unvettedConditionedPaths": ["<absolute path to first unvetted data file>", "<absolute path to second unvetted data file>"]
     },
-    "SupportingDocuments": {
-        "filePaths": ["<absolute path to supporting documentation file"],
-        "comments": ["..."]
-    },
+    "SupportingDocuments": [
+        {
+        "filePath": ["<absolute path to supporting documentation file"],
+        "comment": ["..."],
+        "sdType": ["EntropyAssessmentReport" or "PublicUseDocument" or "Other"]
+        }
+    ],
     "Certify": {
         "Certify": true,
         "moduleID": 1,
@@ -101,9 +109,9 @@ Note that only config.json and run.json are the only JSONs that should be filled
     },
     "Assessment": {
         "numberOfAssessments": 1,
-        "oeID": 1,
+        "oeID": [ 1 ] ,
         "limitEntropyAssessmentToSingleModule": false
-    }, 
+    },
     "PreviousRun": {
         "entr_jwt": "example",
         "df_ids": [
@@ -121,6 +129,14 @@ Note that only config.json and run.json are the only JSONs that should be filled
 	}
 }
 ```
+
+## 5. Alternative usages
+
+This client was designed to be all-inclusive, running the complete life cycle within itself from the initial submission through the certify request.  At each step, it saves information from the current stage in order to run future steps.
+
+It is possible to use the web client to submit and the Python client although manually editting of the configuration file will be required.  If you have submitted an entropy asssessment and data file(s) through the web client and wish to check on the status, you will need to edit the run.json file manually.
+
+In run.json, the "PreviousRun" property will need to be updated with information from the web client.  The ID of the Entropy Assessment will need to be added/modified at "ea_id". Any applicable data files will need to be placed at "df_ids" (as an array).
 
 # License
 
