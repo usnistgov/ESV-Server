@@ -238,7 +238,7 @@ Content-Type: multipart/form-data;
 Key: isITAR, Value: "on"/"off"
 Key: sdComments, Value: <string describing document, optional>
 Key: sdFile, Value: <file upload, .doc, .docx, .pdf>
-Key: sdType, Value: "EntropyAnalysisReport"/"PublicUseDocument"/"Other"
+Key: sdType, Value: "EntropyAssessmentReport"/"PublicUseDocument"/"Other"
 ```
 
 ## 5. Certify
