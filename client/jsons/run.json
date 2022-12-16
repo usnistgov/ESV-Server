@@ -15,7 +15,7 @@
                 "comment": "This is a comment about our public use document",
                 "sdType": "PublicUseDocument"
             },  
-			{
+	    {
                 "filePath": "/path/to/report_ear.pdf",
                 "comment": "This is a comment about our entropy assessment report",
                 "sdType": "EntropyAssessmentReport"
