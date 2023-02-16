@@ -146,7 +146,7 @@ to which the server shall respond with
         "esvVersion": "1.0"
     },
     {
-        "url": "/esvp/v1/entropyAssessments/<eaId>",
+        "url": "/esv/v1/entropyAssessments/<eaId>",
         "createdOn": "2021-01-01T00:00:00.0000000-05:00",
         "expiresOn": "2021-01-31T00:00:00.0000000-05:00",
         "dataFileUrls": [
