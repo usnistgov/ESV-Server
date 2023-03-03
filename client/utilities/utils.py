@@ -14,6 +14,8 @@ import os.path
 from urllib3.exceptions import InsecureRequestWarning, ResponseError
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
+VALID_SD_TYPES = ["EntropyAssessmentReport","PublicUseDocument","Other"]
+
 #Generates payload for JWT refresh
 def ref_payload(passw, jwt):
 
@@ -33,6 +35,14 @@ def run_checks(comments, sdType, supporting_paths):
         sys.exit(1)
     if len(sdType) < len(supporting_paths):
         print("Error: Supporting Documentation Types array must be the same length as that of the supporting file paths")
+
+def check_sd_type(sdType):
+    sdTypeNoWhitepsace = sdType.replace(" ","")
+    if sdTypeNoWhitepsace not in VALID_SD_TYPES:
+        print("Error: Supporting Documents Type (sdType) is '" + sdType + "', must be one of: ")
+        for valid_sd_type in VALID_SD_TYPES:
+            print("   " + valid_sd_type)
+        sys.exit(1)
 
 #Gets and prints eaIDs and dfIDs after sending registration
 def get_ids(response):
@@ -161,6 +171,8 @@ def add_to_prev_run(response):
         print("Exception: ")
         print(e.with_traceback)
 
+# The supporting document info only goes in the first item in PreviousRun. No need to add it
+# to others because the info is the same
 def add_cert_supp_to_prev_run(ea_id, cert_supp):
     with open(globalenv.run_path , "r+") as f2:
         run_file = json.load(f2)

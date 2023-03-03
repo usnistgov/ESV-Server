@@ -1,21 +1,24 @@
 [
     {
         "AssessmentRegistrationPath": "/path/to/entropy-source-metadata.json",
-        "DataFiles": {
-            "rawNoisePath": "/path/to/truerand_4bit.bin",
-            "restartTestPath": "/path/to/truerand_4bit.bin",
-            "unvettedConditionedPaths": [
-                "/path/to/truerand_4bit.bin",
-                "/path/to/truerand_4bit.bin"
-            ]
-        },
+        "DataFiles": [
+            {
+                "oeID": 1,
+                "rawNoisePath": "/path/to/truerand_4bit.bin",
+                "restartTestPath": "/path/to/truerand_4bit.bin",
+                "unvettedConditionedPaths": [
+                    "/path/to/truerand_4bit.bin",
+                    "/path/to/truerand_4bit.bin"
+                ]
+            }
+        ],
         "SupportingDocuments": [
             {
                 "filePath": "/path/to/report_pud.pdf",
                 "comment": "This is a comment about our public use document",
                 "sdType": "PublicUseDocument"
-            },  
-	    {
+            },
+            {
                 "filePath": "/path/to/report_ear.pdf",
                 "comment": "This is a comment about our entropy assessment report",
                 "sdType": "EntropyAssessmentReport"
@@ -30,7 +33,6 @@
         },
         "Assessment": {
             "numberOfAssessments": 1,
-            "oeID": [ 1 ] ,
             "limitEntropyAssessmentToSingleModule": false
         }
     }

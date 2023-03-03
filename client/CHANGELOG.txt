@@ -1,0 +1,30 @@
+[1.3] - Release date TBD
+
+ADDED
+
+   * HOut is now required to be collected for Conditioning Components, so "hOut" will need to be added for each "conditioningComponent" in entropy-source-metadata.json
+   * "AlphabetSize" is no longer used so can be safely removed from entropy-source-metadata.json
+   * Better error reporting when parsing "bad" configuration files
+   * Now allows for multiple sets of DataFiles for multiple Operating Environments
+      * This changes the structure of the run.json file.
+         * Datafiles is now an array of sets of DataFile locations and OE IDs instead of just an individual collection of DataFile locations.
+         * The array oeID is no longer located under "Assessments", now each oeID is associated with a set of DataFile locations.
+         * Example:
+ 
+        "DataFiles": [
+            {
+                "oeID": 1,
+                "rawNoisePath": "/path/to/truerand_4bit.bin",
+                "restartTestPath": "/path/to/truerand_4bit.bin",
+                "unvettedConditionedPaths": [
+                    "/path/to/truerand_4bit.bin",
+                    "/path/to/truerand_4bit.bin"
+                ]
+            }
+        ]
+ 
+
+
+
+[1.2] - 2022-12-07
+
