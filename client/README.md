@@ -88,11 +88,14 @@ Note that only config.json and run.json are the only JSONs that should be filled
 ```
 {
     "AssessmentRegistrationPath": "entropy-source-metadata.json",
-    "DataFiles": {
-        "rawNoisePath": "<absolute path to raw noise data file>",
-        "restartTestPath": "<absolute path to restart data file>",
-        "unvettedConditionedPaths": ["<absolute path to first unvetted data file>", "<absolute path to second unvetted data file>"]
-    },
+    "DataFiles": [
+        {
+            "oeID":  <INT referring to the ID of the Operating Environment>,
+            "rawNoisePath": "<absolute path to raw noise data file>",
+            "restartTestPath": "<absolute path to restart data file>",
+            "unvettedConditionedPaths": ["<absolute path to first unvetted data file>", "<absolute path to second unvetted data file>"]
+        }
+    ],
     "SupportingDocuments": [
         {
         "filePath": ["<absolute path to supporting documentation file"],
@@ -101,15 +104,14 @@ Note that only config.json and run.json are the only JSONs that should be filled
         }
     ],
     "Certify": {
-        "Certify": true,
-        "moduleID": 1,
-        "vendorID": 1,
-        "itar": false,
-        "entropyID": "E123"
+        "Certify": <BOOLEAN>,
+        "moduleID": <INT referring to ID of module>,
+        "vendorID": <INT referring to ID of vendor>,
+        "itar": <BOOLEAN>,
+        "entropyID": <STRING referring to ID of submitted Entropy ID>
     },
     "Assessment": {
         "numberOfAssessments": 1,
-        "oeID": [ 1 ] ,
         "limitEntropyAssessmentToSingleModule": false
     },
     "PreviousRun": {
@@ -129,6 +131,8 @@ Note that only config.json and run.json are the only JSONs that should be filled
 	}
 }
 ```
+
+Note that DataFiles is an array. For submitting for multiple Operating Environments, create addition sets of oeID/rawNoisePath/restartTestPath/unvettedConditionedPaths.
 
 ## 5. Alternative usages
 

@@ -1,7 +1,7 @@
 import sys
 
 from requests import Response
-from utilities.utils import log, run_checks
+from utilities.utils import check_sd_type, log, run_checks
 import json
 import utilities.esvutil as esvutil
 import certifi
@@ -44,7 +44,7 @@ def parse_config(config_path):
         return client_cert, seed_path, server_url, esv_version # modId, vendId, oeId, certify, singleMod
     except Exception as e:
         print("There was an error parsing your config file. Please try again")
-        print(e)
+        print("Error parsing: ", e)
 
         sys.exit(1)
 
@@ -54,9 +54,26 @@ def parse_run(run_path):
         run_file = open(run_path, 'r')
         run_file = json.load(run_file)
         assessment_reg = esvutil.loadObject(run_file[0]["AssessmentRegistrationPath"])
-        rawNoise = run_file[0]["DataFiles"]["rawNoisePath"]
-        restartTest = run_file[0]["DataFiles"]["restartTestPath"]
-        conditioned = run_file[0]["DataFiles"]["unvettedConditionedPaths"] #need to take sequence position into account
+        oeId = []
+        rawNoise = []
+        restartTest = []
+        conditioned = []
+
+        for dataFile in run_file[0]["DataFiles"]:
+            oeId.append(dataFile["oeID"])
+            rawNoise.append(dataFile["rawNoisePath"])
+            restartTest.append(dataFile["restartTestPath"])
+            conditioned.append(dataFile["unvettedConditionedPaths"])
+        
+        numberOfOEs  = assessment_reg[1]['numberOfOEs']
+        if len(oeId) != numberOfOEs:
+            print("Error: Number of oeIDs provided must match numberOfOEs in Assessment Registration. numberOfOEs is ", numberOfOEs, " but provided number of oeIDs is ", len(oeId))
+            sys.exit(1)
+
+
+        #rawNoise = run_file[0]["DataFiles"]["rawNoisePath"]
+        #restartTest = run_file[0]["DataFiles"]["restartTestPath"]
+        #conditioned = run_file[0]["DataFiles"]["unvettedConditionedPaths"] #need to take sequence position into account
         
         #supportingDocuments = run_file[0]["SupportingDocuments"]
 
@@ -66,11 +83,12 @@ def parse_run(run_path):
         for supportingDocument in run_file[0]["SupportingDocuments"]:
             supporting_paths.append(supportingDocument["filePath"])
             comments.append(supportingDocument["comment"])
+            check_sd_type(supportingDocument["sdType"])
             sdType.append(supportingDocument["sdType"])
 
         run_checks(comments, sdType, supporting_paths)
         singleMod = run_file[0]["Assessment"]['limitEntropyAssessmentToSingleModule']
-        modId = None; vendId = None; oeId = None
+        modId = None; vendId = None; #oeId = None
 
         certify = run_file[0]["Certify"]['Certify'] 
         if certify: #Certification requires module and vendor IDs
@@ -83,7 +101,7 @@ def parse_run(run_path):
             except:
                 print("Error: Entropy, Module and Vendor IDs are required for certification")
                 sys.exit(1)
-        
+        '''
         if certify and run_file[0]["Assessment"]['numberOfAssessments'] == 1: #Certifying only 1 assessment requires oeID
             try:
                 oeId = run_file[0]["Assessment"]['oeID']
@@ -94,6 +112,7 @@ def parse_run(run_path):
             if len(oeId) != numberOfOEs:
                 print("Error: Number of oeIDs provided must match numberOfOEs in Assessment Registration. numberOfOEs is ", numberOfOEs, " but provided number of oeIDs is ", len(oeId))
                 sys.exit(1)
+                '''
         responseList = []
         if "PreviousRun" in run_file[0]:
             if(globalenv.verboseMode):
@@ -124,8 +143,9 @@ def parse_run(run_path):
             print('Run file successfully parsed')
         return assessment_reg, rawNoise, restartTest, conditioned, supporting_paths, comments, sdType, modId, vendId, entropyId, oeId, certify, singleMod, responseList, itar
 
-    except:
+    except Exception as e:
         print("There was an error parsing your run file. Please try again")
+        print("Error parsing: ", e)
         sys.exit(1)
 
 def parse_certify_response(response):

@@ -107,9 +107,11 @@ if __name__ == "__main__":
         ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod, itar)
         ea.login()
         ea.send_reg()
+        responseCount=0
         for response in ea.responses:
-            ThreadWrapper.runner_data(server_url, response, conditioned, raw_noise, restart_test, client_cert)
+            ThreadWrapper.runner_data(server_url, response, conditioned[responseCount], raw_noise[responseCount], restart_test[responseCount], client_cert)
             ThreadWrapper.runner_stats(server_url, response, client_cert)
+            responseCount = responseCount + 1
         
         certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, ea.itar, server_url, client_cert, ea.auth_header)
         #i = 0
@@ -140,9 +142,11 @@ if __name__ == "__main__":
         ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod, itar)
         ea.login()
         ea.send_reg()
+        responseCount=0
         for response in ea.responses:
-            ThreadWrapper.runner_data(server_url, response, conditioned, raw_noise, restart_test, client_cert)
-
+            ThreadWrapper.runner_data(server_url, response, conditioned[responseCount], raw_noise[responseCount], restart_test[responseCount], client_cert)
+            responseCount = responseCount + 1
+            
     #Send Supporting Documentation
     if run_type == "support":
         #ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, oe_id, certify, single_mod)
