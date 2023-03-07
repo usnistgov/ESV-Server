@@ -89,41 +89,46 @@ class EntropyAssessment():
     def send_certify(self, cert_supp, client_cert, login_jwt, esv_version):
             
         if self.certify:
-            i=0
-            for response in self.responses:
-                print("\n*** Starting Certification Process")
-                auth_header = {'Authorization': 'Bearer ' + login_jwt}
+            #i=0
+            #for response in self.responses:
+            print("\n*** Starting Certification Process")
+            auth_header = {'Authorization': 'Bearer ' + login_jwt}
+            cert_temp = open('jsons/temp_certify.json', 'w')
 
-                cert_temp = open('jsons/temp_certify.json', 'w')
+            # TODO: Build this automatically 
+            cert_temp.write("[{\"esvVersion\": \"1.0\"},{\"entropyId\": \"E123\", \"limitEntropyAssessmentToSingleModule\": false,\"moduleId\": null,\"vendorId\": null,\"supportingDocumentation\": [],\"entropyAssessments\":[{\"eaId\": null,\"oeId\": null,\"accessToken\": \"<jwt-with-claims-for-eaId1>\"}]}]")
+            #cert_temp.write("[{\"esvVersion\": \"1.0\"},{\"itar\": false,\"limitEntropyAssessmentToSingleModule\": false,\"moduleId\": null,\"vendorId\": null,\"supportingDocumentation\": [],\"entropyAssessments\":[{\"entropyId\": null,\"oeId\": null,\"accessToken\": \"<jwt-with-claims-for-eaId1>\"}]}]")
 
-                # TODO: Build this automatically 
-                cert_temp.write("[{\"esvVersion\": \"1.0\"},{\"entropyId\": \"E123\", \"limitEntropyAssessmentToSingleModule\": false,\"moduleId\": null,\"vendorId\": null,\"supportingDocumentation\": [],\"entropyAssessments\":[{\"eaId\": null,\"oeId\": null,\"accessToken\": \"<jwt-with-claims-for-eaId1>\"}]}]")
-                #cert_temp.write("[{\"esvVersion\": \"1.0\"},{\"itar\": false,\"limitEntropyAssessmentToSingleModule\": false,\"moduleId\": null,\"vendorId\": null,\"supportingDocumentation\": [],\"entropyAssessments\":[{\"entropyId\": null,\"oeId\": null,\"accessToken\": \"<jwt-with-claims-for-eaId1>\"}]}]")
-
-                cert_temp.close()
-                cert_temp = open('jsons/temp_certify.json','r')
-                cert_file = json.load(cert_temp)
-                #import os; os.remove('jsons/temp_certify.json')
+            cert_temp.close()
+            cert_temp = open('jsons/temp_certify.json','r')
+            cert_file = json.load(cert_temp)
+            #import os; os.remove('jsons/temp_certify.json')
             
-                cert_json = cert_prep(cert_file, cert_supp, esv_version, self.single_mod, self.mod_id, self.vend_id, self.entropy_id, response.ea_id, self.oe_id[i], response.entr_jwt, self.itar)
-                if globalenv.verboseMode:
-                    print("Outgoing cert request = ")
-                    print(cert_json)
-                responseFromCert = requests.request("POST", self.server_url + '/certify', cert = client_cert, headers=auth_header, json=cert_json)
-                check_status(responseFromCert)
-                status, messageList, elementList = start.parsing.parse_certify_response(responseFromCert)
+            i=0
+            ea_ids = []
+            entr_jwts = []
+            for response in self.responses:
+                ea_ids.append(response.ea_id)
+                entr_jwts.append(response.entr_jwt)
+            cert_json = cert_prep(cert_file, cert_supp, esv_version, self.single_mod, self.mod_id, self.vend_id, self.entropy_id, ea_ids, self.oe_id, entr_jwts, self.itar)
+            if globalenv.verboseMode:
+                print("Outgoing cert request = ")
+                print(cert_json)
+            responseFromCert = requests.request("POST", self.server_url + '/certify', cert = client_cert, headers=auth_header, json=cert_json)
+            check_status(responseFromCert)
+            status, messageList, elementList = start.parsing.parse_certify_response(responseFromCert)
 
-                print("\nStatus: " + status + "\n")
-                print("Message List: ")
-                print(*messageList, sep = "\n")
-                print("")
-                print("Entropy Assessment:")
-                #print(*elementList, sep = "\n")
-                for element in elementList:
-                    print("Location:" + str(element["location"]))
-                    for message in element["messageList"]:
-                        print("   Message:" + message)
-                i+=1
+            print("\nStatus: " + status + "\n")
+            print("Message List: ")
+            print(*messageList, sep = "\n")
+            print("")
+            print("Entropy Assessment:")
+            #print(*elementList, sep = "\n")
+            for element in elementList:
+                print("Location:" + str(element["location"]))
+                for message in element["messageList"]:
+                    print("   Message:" + message)
+            #i+=1
             #print(json.dumps(response.json(), indent=4, sort_keys = True))
 
     # Used for login
