@@ -77,14 +77,16 @@ def get_ids(response):
         dfIDs.append(urls[0])
     return eaID, dfIDs
 
-def cert_prep(certify, certSup, esv_version, singleMod, modId, vendId, entropyId, eaID, oeId, entrjwt, itar): #  *Also uses other variables defined in main
+def cert_prep(certify, certSup, esv_version, singleMod, modId, vendId, entropyId, eaIDs, oeIds, entrjwts, itar): #  *Also uses other variables defined in main
     
     certify[0]["esvVersion"] = esv_version
-    certEntropy = certify[1]["entropyAssessments"][0]
-    certEntropy["accessToken"] = entrjwt     #Will need to change to a loop (like supp) if implementing >1 assessment
-    certEntropy["oeId"] = oeId
-    certEntropy["eaId"] = int(eaID) 
-
+    certEntropy = certify[1]["entropyAssessments"] = []
+    i = len(eaIDs)
+    for x in range(i):
+        #certEntropy["accessToken"] = entrjwts[x]    
+        #certEntropy["oeId"] = oeIds[x]
+        #certEntropy["eaId"] = int(eaIDs[x]) 
+        certEntropy.append({"eaId":int(eaIDs[x]), "oeId":oeIds[x], "accessToken":entrjwts[x]})
     certify[1]["itar"] = itar #assessment_reg[1]["itar"]
     certify[1]["limitEntropyAssessmentToSingleModule"] = singleMod
     certify[1]["moduleId"] = modId
