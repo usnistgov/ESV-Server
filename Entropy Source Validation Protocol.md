@@ -104,10 +104,8 @@ with a body like the following
         "primaryNoiseSource": "ring oscillators",
         "iidClaim": false,
         "bitsPerSample": 4,
-        "alphabetSize": 16,
         "hminEstimate": 3.1,
         "physical": true,
-        "itar": false,
         "numberOfRestarts": 1000,
         "samplesPerRestart": 1000,
         "additionalNoiseSources": false,
@@ -121,7 +119,8 @@ with a body like the following
                 "minNin": 16,
                 "minHin": 4,
                 "nw": 16,
-                "nOut": 8
+                "nOut": 8,
+                "hOut": 7.5
             },
             {
                 "sequencePosition": 2,
@@ -131,7 +130,8 @@ with a body like the following
                 "minNin": 128,
                 "minHin": 4,
                 "nw": 128,
-                "nOut": 128
+                "nOut": 128,
+                "hOut": 120
             }
         ]
     }
@@ -176,7 +176,6 @@ The valid properties within the top level of the registration are as follows
 | primaryNoiseSource     | 64 character description of the primary noise source                                       | string     |
 | iidClaim               | if the IUT claims the noise source produces [independent and identically distributed](https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables) samples       | boolean    |
 | bitsPerSample          | the number of bits per sample output by the noise source                                   | integer    |
-| alphabetSize           | the total number of distinct samples possibly output by the noise source                   | integer    |
 | hminEstimate           | an estimate of the number of bits of entropy output by the noise source over one sample    | float      |
 | physical               | if the noise source is physical or non-physical                                            | boolean    |
 | numberOfRestarts       | the number of restarts used to generate the restart bits data file                         | integer    |
@@ -184,7 +183,6 @@ The valid properties within the top level of the registration are as follows
 | additionalNoiseSources | if additional noise sources are incorporated in the entropy source                         | boolean    |
 | numberOfOEs            | (OPTIONAL) number of Operating Environments for this metadata (defaults to 1)              | integer    | 
 | conditioningComponent  | an array of conditioning component objects described below                                 | object     |
-| itar                   | whether or not the submission is applying under ITAR restrictions                          | boolean    |
 
 The valid properties for the conditioning components are as follows
 
@@ -195,10 +193,11 @@ The valid properties for the conditioning components are as follows
 | bijectiveClaim        | this non-vetted conditioning component is a bijective function                                                                                               | boolean    |
 | description           | brief description of the conditioning component, for a vetted conditioning component this shall be exactly the ACVTS name of the conditioning component mode | string     |
 | validationNumber      | the ACVTS validation certificate number of the vetted conditioning component                                                                                 | string     |
-| minNIn                | minimum bits input to the conditioning function                                                                                                           | integer    |
-| minHIn                | minimum amount of entropy input to the conditioning function per the number of bits input                                                              | float      |
+| minNIn                | minimum bits input to the conditioning function                                                                                                              | integer    |
+| minHIn                | minimum amount of entropy input to the conditioning function per the number of bits input                                                                    | float      |
 | nw                    | narrowest width of the conditioning function                                                                                                                 | integer    |
 | nOut                  | number of bits output by the conditioning function                                                                                                           | integer    |
+| hOut                  | number of btis of entropy output by the conditioning function                                                                                                | float      |
 
 When a conditioning component is vetted, many of the options are restricted to singular values in accordance to [SP800-90B Section 3.1.5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf).
 
