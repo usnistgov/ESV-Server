@@ -203,6 +203,20 @@ When a conditioning component is vetted, many of the options are restricted to s
 
 The `validationNumber` field is only applicable when `"vetted": true` is present. In this case, the `description` field must exactly match the ACVTS mode of the ConditioningComponent algorithm. The potential vetted functions can be found in [SP800-90B Section 3.1.5.1.1](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf).
 
+Current supported vetted conditioning components:
+
+| Conditioning Function | Vetted Conditioning Component(s) |
+|-----------------------|----------------------------------|
+| HMAC 	| HMAC_SHA1, HMAC_SHA2_224, HMAC_SHA2_256, HMAC_SHA2_384, HMAC_SHA2_512, HMAC_SHA2_512t224, HMAC_SHA2_512t256, HMAC_SHA3_224, HMAC_SHA3_256, HMAC_SHA3_384, HMAC_SHA3_512, SHA2_224_HMAC_DRBG, SHA2_256_HMAC_DRBG, SHA2_384_HMAC_DRBG, SHA2_512_HMAC_DRBG, SHA2_512t224_HMAC_DRBG, SHA2_512t256_HMAC_DRBG, SHA3_224_HMAC_DRBG, SHA3_256_HMAC_DRBG, SHA3_384_HMAC_DRBG, SHA3_512_HMAC_DRBG |
+| CMAC	| AES_CMAC |
+| CBC-MAC	| AES_CBC_MAC |
+| SHA1	| SHA1 |
+| SHA2	| SHA2_224, SHA2_224_Hash_DRBG, SHA2_256, SHA2_256_Hash_DRBG, SHA2_384, SHA2_384_Hash_DRBG, SHA2_512, SHA2_512_Hash_DRBG, SHA2_512t224, SHA2_512t224_Hash_DRBG, SHA2_512t256, SHA2_512t256_Hash_DRBG |
+| SHA3	| SHA3_224, SHA3_224_Hash_DRBG,	SHA3_256, SHA3_256_Hash_DRBG, SHA3_384,	SHA3_384_Hash_DRBG, SHA3_512, SHA3_512_Hash_DRBG |
+| AES	| AES_128_CTR_DRBG, AES_192_CTR_DRBG, AES_256_CTR_DRBG |
+| Hash_df	| Hash_DF |
+| BlockCipher_df	| BlockCipher_DF |
+
 The `bijectiveClaim` field is only applicable when `"vetted": false` is present. A bijective conditioning component is one that neither adds nor removes entropy from the inputs passed in, as every input to the bijective function maps to exactly one output.
 
 File upload is only allowed on non-vetted conditioning components.
