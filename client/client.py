@@ -1,12 +1,13 @@
 import sys
 import json
 import requests
-from utilities.utils import  clear_previous_run, get_ids, cert_prep, check_type, log, ref_payload, check_status, isTOTPExpired
+from utilities.utils import  clear_previous_run, get_ids, cert_prep, check_type, log, ref_payload, check_status, isTOTPExpired, didTOTPFail
 import os
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed, thread
 import argparse
+import traceback
 from threads.thread_runner import ThreadWrapper
 from totp.totp import generate_pass, login_payload
 from start.parsing import parse_config, parse_run
@@ -30,32 +31,35 @@ socket.getaddrinfo = new_getaddrinfo
 #Checks TOTP window and refresh jwt if not in previous window 
 def eajwt_refresh(ea_jwt, sec = int(time.time() / 30)-1):
     if sec == int(time.time() / 30): #if in same window, keep same token
-        print("inside if")
+        if(globalenv.verboseMode):
+            print("Same TOTP window, using previous token")
         auth_header = {'Authorization': 'Bearer ' + ea_jwt}
         return ea_jwt, auth_header
     try: #if trying refresh without login
-        payload = ref_payload(generate_pass(seed_path), ea_jwt)
-        
-        totpAlreadyUsed = False
-        retries = 0
-        response = ""
-        while not(totpAlreadyUsed) and retries < 3:
-            retries+=1
-            response = requests.post(server_url + '/login', cert=client_cert, json=payload, verify=False)
-            totpAlreadyUsed = not(isTOTPExpired(response))
-            if(not(totpAlreadyUsed)):
-                print("TOTP Window has already been used. Retrying...")
-                time.sleep(15)
-        check_status(response)
         if(globalenv.verboseMode):
-            print(response.json())
+            print("New TOTP window, renewing previous token")
+        totpCheck = True
+        response = ""
+        while(totpCheck):
+            payload = ref_payload(generate_pass(seed_path), ea_jwt)
+            response = requests.post(server_url + '/login', cert=client_cert, json=payload, verify=False)
+            if(globalenv.verboseMode):
+                print(response.json())
+            if isTOTPExpired(response) or didTOTPFail(response):
+                totpCheck = True
+                print("TOTP Window has already been used. Will retry...")
+                time.sleep(30)
+            else:
+                totpCheck = False
+                
         jwt_token = response.json()[1]['accessToken']
         auth_header = {'Authorization': 'Bearer ' + jwt_token}
-
         return jwt_token, auth_header
-    except:
+    except Exception as e:
+        print(e)
         auth_header = {'Authorization': 'Bearer ' + ea_jwt}
         return ea_jwt, auth_header
+
 
 #Gets stats from previous run
 def prev_run(server_url, ea_id, df_ids, jwt_token, client_cert):
@@ -123,17 +127,34 @@ if __name__ == "__main__":
 
     #Do a run from the log file
     if run_type == "status":
+
         #log_file = json.load(open('jsons\\log.json', 'r'))[0]
         client_cert, seed_path, server_url, esv_version = parse_config(config_path)
         assessment_reg, raw_noise, restart_test, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses, itar = parse_run(run_path)
+    
+        #print("Logging in...")
+        
+        #self.login_jwt = login_jwt 
+        #self.auth_header = auth_header
+        #print("\nLogin Success!")
+        if len(responses) > 1:
+            print("*** Multiple OE statuses, responses will be batched")
+            count = 1
         for response in responses:
+            if len(responses) > 1:
+                print("*** OE Batch " + str(count))
+                count = count + 1
             entr_jwt = response.entr_jwt
-            print("Refreshing Token"); jwt_token, _ = eajwt_refresh(entr_jwt)
-            print("\nUsing values from previous run...")
+            if(globalenv.verboseMode):
+                print("Refreshing Token")
+            jwt_token, _ = eajwt_refresh(entr_jwt)
+            if(globalenv.verboseMode):
+                print("\nUsing values from previous run...")
 
             ea_id = response.ea_id
             df_ids = response.df_ids
             prev_run(server_url, ea_id, df_ids, jwt_token, client_cert)
+
 
     #Send Registration and Data Files
     if run_type == "submit":
