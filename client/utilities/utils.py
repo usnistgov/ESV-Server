@@ -201,8 +201,19 @@ def isTOTPExpired(response):
     responseJson = response.json()
     errorMsg = responseJson[1]["error"]
 
-    print(errorMsg.lower())
+    #print(errorMsg.lower())
     if "totp" in errorMsg.lower() and "window" in errorMsg.lower():
+        return True
+    return False
+
+def didTOTPFail(response):
+    if int(response.status_code) != 403:
+        return False
+    responseJson = response.json()
+    errorMsg = responseJson[1]["error"]
+
+    #print(errorMsg.lower())
+    if "totp" in errorMsg.lower() and "failed" in errorMsg.lower():
         return True
     return False
 

@@ -34,13 +34,15 @@ def get_status(server_url, ea_id, id, entrjwt, client_cert):
             safe_print(errorMsg)
             #break
             sys.exit(1)
-        time.sleep(15)
+        if not any (x in status.lower() for x in substrings): 
+            time.sleep(15)
 
-    st = list(response.json()[1].values())
-    stLabel = list(response.json()[1].keys())
-    dataFiles.append(id); dataLabels.append(stLabel[0]); statLabels.append(stLabel[1]); stats.append(st[1])
+    # Removed 3/28/2023: This is just printing out the status that was already printed out on the previous iteration
+    #st = list(response.json()[1].values())
+    #stLabel = list(response.json()[1].keys())
+    #dataFiles.append(id); dataLabels.append(stLabel[0]); statLabels.append(stLabel[1]); stats.append(st[1])
 
-    safe_print(dataLabels[0] + ": " + str(dataFiles[0]) + " | " + statLabels[0] + ": " + str(stats[0])) # + " | Entropy Estimate: "
+    #safe_print(dataLabels[0] + ": " + str(dataFiles[0]) + " | " + statLabels[0] + ": " + str(stats[0])) # + " | Entropy Estimate: "
 
     return response
     

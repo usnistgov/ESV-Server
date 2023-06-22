@@ -70,13 +70,6 @@ def parse_run(run_path):
             print("Error: Number of oeIDs provided must match numberOfOEs in Assessment Registration. numberOfOEs is ", numberOfOEs, " but provided number of oeIDs is ", len(oeId))
             sys.exit(1)
 
-
-        #rawNoise = run_file[0]["DataFiles"]["rawNoisePath"]
-        #restartTest = run_file[0]["DataFiles"]["restartTestPath"]
-        #conditioned = run_file[0]["DataFiles"]["unvettedConditionedPaths"] #need to take sequence position into account
-        
-        #supportingDocuments = run_file[0]["SupportingDocuments"]
-
         supporting_paths = [] # run_file[0]["SupportingDocuments"]["filePaths"]
         comments = [] # run_file[0]["SupportingDocuments"]["comments"]
         sdType = [] # run_file[0]["SupportingDocuments"]["sdType"]
@@ -88,7 +81,7 @@ def parse_run(run_path):
 
         run_checks(comments, sdType, supporting_paths)
         singleMod = run_file[0]["Assessment"]['limitEntropyAssessmentToSingleModule']
-        modId = None; vendId = None; #oeId = None
+        entropyId = None; modId = None; vendId = None; itar = None
 
         certify = run_file[0]["Certify"]['Certify'] 
         if certify: #Certification requires module and vendor IDs
