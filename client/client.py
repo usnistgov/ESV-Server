@@ -102,13 +102,13 @@ if __name__ == "__main__":
             #Start (remember to change parse try statement)
         client_cert, seed_path, server_url, esv_version = parse_config(config_path)
         log("config_path", config_path)
-        assessment_reg, raw_noise, restart_test, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses, itar = parse_run(run_path)
+        assessment_reg, raw_noise, restart_test, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses = parse_run(run_path)
         log("run_path", run_path)
 
     if run_type == "full":
         print("*** Entropy Source Validation Client tool startup!")
         clear_previous_run()
-        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod, itar)
+        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
         ea.login()
         ea.send_reg()
         responseCount=0
@@ -117,7 +117,7 @@ if __name__ == "__main__":
             ThreadWrapper.runner_stats(server_url, response, client_cert)
             responseCount = responseCount + 1
         
-        certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, ea.itar, server_url, client_cert, ea.auth_header)
+        certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, server_url, client_cert, ea.auth_header)
         #i = 0
         #for response in ea.responses:
         client_cert, seed_path, server_url, esv_version = parse_config(config_path)
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
         #log_file = json.load(open('jsons\\log.json', 'r'))[0]
         client_cert, seed_path, server_url, esv_version = parse_config(config_path)
-        assessment_reg, raw_noise, restart_test, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses, itar = parse_run(run_path)
+        assessment_reg, raw_noise, restart_test, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses = parse_run(run_path)
     
         #print("Logging in...")
         
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     if run_type == "submit":
         clear_previous_run()
         #ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, oe_id, certify, single_mod)
-        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod, itar)
+        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
         ea.login()
         ea.send_reg()
         responseCount=0
@@ -171,9 +171,9 @@ if __name__ == "__main__":
     #Send Supporting Documentation
     if run_type == "support":
         #ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, oe_id, certify, single_mod)
-        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod, itar)
+        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
         ea.login()
-        certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, ea.itar, server_url, client_cert, ea.auth_header)
+        certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, server_url, client_cert, ea.auth_header)
         if(globalenv.verboseMode):
             print(certSup)
     
@@ -182,16 +182,16 @@ if __name__ == "__main__":
         print("Using values from previous run..\n")
         #log_file = json.load(open('jsons/log.json', 'r'))[0]
         client_cert, seed_path, server_url, esv_version = parse_config(config_path)
-        assessment_reg, raw_noise, restart_test, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses, itar = parse_run(run_path)
+        assessment_reg, raw_noise, restart_test, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses = parse_run(run_path)
         #ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, oe_id, certify, single_mod)
         #i = 0
         #for response in responses:
-        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod, itar)
+        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
         ea.responses = responses
         ea.login()
         #ea.ea_id = response.ea_id; ea.entr_jwt, _ = eajwt_refresh(response.entr_jwt)  #Uses old ID, refreshes eajwt
         #ea.entr_jwt, _ = eajwt_refresh(response.entr_jwt)
-        certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, ea.itar, server_url, client_cert, ea.auth_header)
+        certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, server_url, client_cert, ea.auth_header)
         ea.send_certify(certSup, client_cert, ea.login_jwt, esv_version)
         #i += 1
             #ea.send_certify(certSup, client_cert, ea.login_jwt, esv_version)

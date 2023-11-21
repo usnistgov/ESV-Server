@@ -16,6 +16,11 @@ requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
 VALID_SD_TYPES = ["EntropyAssessmentReport","PublicUseDocument","Other"]
 
+# Because there's sometimes misunderstandings of the definition of "megabyte" (1 million vs 2^20)
+# we'll error on the side of allowing a lower min and a larger max
+FILE_SIZE_MIN = 1000 * 1000 * 1
+FILE_SIZE_MAX = 1024 * 1024 * 2
+
 #Generates payload for JWT refresh
 def ref_payload(passw, jwt):
 
@@ -77,7 +82,7 @@ def get_ids(response):
         dfIDs.append(urls[0])
     return eaID, dfIDs
 
-def cert_prep(certify, certSup, esv_version, singleMod, modId, vendId, entropyId, eaIDs, oeIds, entrjwts, itar): #  *Also uses other variables defined in main
+def cert_prep(certify, certSup, esv_version, singleMod, modId, vendId, entropyId, eaIDs, oeIds, entrjwts): #  *Also uses other variables defined in main
     
     certify[0]["esvVersion"] = esv_version
     certEntropy = certify[1]["entropyAssessments"] = []
@@ -87,7 +92,6 @@ def cert_prep(certify, certSup, esv_version, singleMod, modId, vendId, entropyId
         #certEntropy["oeId"] = oeIds[x]
         #certEntropy["eaId"] = int(eaIDs[x]) 
         certEntropy.append({"eaId":int(eaIDs[x]), "oeId":oeIds[x], "accessToken":entrjwts[x]})
-    certify[1]["itar"] = itar #assessment_reg[1]["itar"]
     certify[1]["limitEntropyAssessmentToSingleModule"] = singleMod
     certify[1]["moduleId"] = modId
     certify[1]["vendorId"] = vendId
@@ -221,3 +225,14 @@ def create_log_file():
     f = open('jsons/log.json',"w")
     f.write("[{\"entr_jwt\": \"placeholder\",\"df_ids\": [\"1\",\"2\"],\"ea_id\": \"1\",\"server_url\": \"https://demo.esvts.nist.gov:7443/esv/v1\",\"client_cert\": [\"ESVTest.cer\",\"ESVTest.key\"],\"config_path\": \"config.json\",\"run_path\": \"run.json\",\"cert_supp\": [[{\"sdId\": 1,\"accessToken\": \"placeholder\"}]]}]")
     f.close()
+
+def checkDataFileSize(filepath):
+    #file = open(filepath, "r")
+    filesize = os.path.getsize(filepath)
+    if filesize < FILE_SIZE_MIN:
+        print("Error: '" + filepath + "' is too small (" + str(filesize) + " bytes). Minimum is " + str(FILE_SIZE_MIN) + ".")
+        sys.exit(1)
+    if filesize > FILE_SIZE_MAX:
+        print("Error: '" + filepath + "' is too large (" + str(filesize) + " bytes). Maximum is " + str(FILE_SIZE_MAX) + ".")
+        sys.exit(1)
+    #file.close()

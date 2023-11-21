@@ -83,21 +83,19 @@ def df_upload_restart(server_url, ea_id, df_ids, jwt, restart_test, client_cert)
     return response
 
 #Step 5(2): Send Supporting Documents
-def send_supp(comments, sdType, supporting_path, itar, server_url, client_cert, auth_header):
+def send_supp(comments, sdType, supporting_path, server_url, client_cert, auth_header):
     cert_supp = []
     supp_name = os.path.basename(supporting_path)
-    files=[('sdFile', (supp_name,
-        open(supporting_path,'rb'),'application/pdf'))] 
-    # changed 3/15/2022
-    #payload={'itar': itar,'sdComments': comments}
-    #payload={'isITAR': itar,'sdComments': comments}
-    # added type 6/23/2022
-    payload={'isITAR': itar, 'sdType': sdType,'sdComments': comments}
+    files=[('sdFile', (supp_name, open(supporting_path,'rb'),'application/pdf'))]
+    payload={'sdType': sdType,'sdComments': comments}
     response = requests.request("POST", server_url + '/supportingDocumentation', cert = client_cert, headers=auth_header, data = payload, files=files)
-    response_1 = response.json()[1]
-    sd_id = response_1['sdId']
-    print(supp_name + ": " + str(sd_id) + " | Status: " + str(response_1['status']))
-    # Changed 3/15/2022
-    cert_supp.append({"sdId" : sd_id, "accessToken": response_1["accessToken"]})    
     check_status(response)
+    response_1 = response.json()[1]
+    status = response_1['status']
+    if(status != "success"):
+        print (status)
+    else:
+        sd_id = response_1['sdId']
+        print(supp_name + ": " + str(sd_id) + " | Status: " + str(response_1['status']))
+        cert_supp.append({"sdId" : sd_id, "accessToken": response_1["accessToken"]})    
     return cert_supp, response

@@ -44,7 +44,7 @@ class ThreadWrapper:
             print("Data files submitted!\n")
 
     #Step 5: Runner for threading supporting docs uploads
-    def runner_supp(comments, sdType, supporting_paths, itar, server_url, client_cert, auth_header):
+    def runner_supp(comments, sdType, supporting_paths, server_url, client_cert, auth_header):
         threads= []
         cert_supp = []
         with ThreadPoolExecutor(max_workers=20) as executor:
@@ -56,7 +56,7 @@ class ThreadWrapper:
             print("Supporting Documentation ID(s): ")
             #cert_supp = [] #Get and format IDs and JWTs for certify
             for i in range(len(supporting_paths)):
-                threads.append(executor.submit(send_supp, comments[i], sdType[i], supporting_paths[i], itar, server_url, client_cert, auth_header))
+                threads.append(executor.submit(send_supp, comments[i], sdType[i], supporting_paths[i], server_url, client_cert, auth_header))
 
             for task in as_completed(threads):
                 #Check status code of responses and create cert_sup for certify

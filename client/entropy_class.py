@@ -10,7 +10,7 @@ import response_class
 
 class EntropyAssessment():
 
-    def __init__(self, client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropy_id, oe_id, certify, single_mod, itar): #, rawNoise, restartTest, conditioned, supporting_paths, comments):
+    def __init__(self, client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropy_id, oe_id, certify, single_mod): #, rawNoise, restartTest, conditioned, supporting_paths, comments):
         self.client_cert = client_cert
         self.server_url = server_url
         self.assessment_reg = assessment_reg
@@ -22,8 +22,7 @@ class EntropyAssessment():
         self.seed_path = seed_path
         self.certify = certify
         # Changed 9/14/2022 because itar is now set in certify not registration
-        #self.itar = assessment_reg[1]['itar']
-        self.itar = itar        
+        #self.itar = assessment_reg[1]['itar']        
         self.auth_header = ''
         self.cert_supp = ''
 
@@ -110,14 +109,16 @@ class EntropyAssessment():
             for response in self.responses:
                 ea_ids.append(response.ea_id)
                 entr_jwts.append(response.entr_jwt)
-            cert_json = cert_prep(cert_file, cert_supp, esv_version, self.single_mod, self.mod_id, self.vend_id, self.entropy_id, ea_ids, self.oe_id, entr_jwts, self.itar)
+            cert_json = cert_prep(cert_file, cert_supp, esv_version, self.single_mod, self.mod_id, self.vend_id, self.entropy_id, ea_ids, self.oe_id, entr_jwts)
             if globalenv.verboseMode:
                 print("Outgoing cert request = ")
                 print(cert_json)
             responseFromCert = requests.request("POST", self.server_url + '/certify', cert = client_cert, headers=auth_header, json=cert_json)
             check_status(responseFromCert)
             status, messageList, elementList = start.parsing.parse_certify_response(responseFromCert)
-
+            if globalenv.verboseMode:
+                print("Response coming back = ")
+                print(responseFromCert)
             print("\nStatus: " + status + "\n")
             print("Message List: ")
             print(*messageList, sep = "\n")
@@ -125,7 +126,7 @@ class EntropyAssessment():
             print("Entropy Assessment:")
             #print(*elementList, sep = "\n")
             for element in elementList:
-                print("Location:" + str(element["location"]))
+                print("Location:" + str(element["reference"]))
                 for message in element["messageList"]:
                     print("   Message:" + message)
             #i+=1
