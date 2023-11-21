@@ -6,6 +6,7 @@ import json
 import utilities.esvutil as esvutil
 import certifi
 import globalenv
+import utilities.utils as utils
 
 #Parse the config file into usable variables
 def parse_config(config_path):
@@ -65,6 +66,16 @@ def parse_run(run_path):
             restartTest.append(dataFile["restartTestPath"])
             conditioned.append(dataFile["unvettedConditionedPaths"])
         
+        for filepath in rawNoise:
+            utils.checkDataFileSize(filepath)
+
+        for filepath in restartTest:
+            utils.checkDataFileSize(filepath)
+
+        for conditionedFiles in conditioned:
+            for filepath in conditionedFiles:
+                utils.checkDataFileSize(filepath)
+
         numberOfOEs  = assessment_reg[1]['numberOfOEs']
         if len(oeId) != numberOfOEs:
             print("Error: Number of oeIDs provided must match numberOfOEs in Assessment Registration. numberOfOEs is ", numberOfOEs, " but provided number of oeIDs is ", len(oeId))
@@ -81,7 +92,7 @@ def parse_run(run_path):
 
         run_checks(comments, sdType, supporting_paths)
         singleMod = run_file[0]["Assessment"]['limitEntropyAssessmentToSingleModule']
-        entropyId = None; modId = None; vendId = None; itar = None
+        entropyId = None; modId = None; vendId = None
 
         certify = run_file[0]["Certify"]['Certify'] 
         if certify: #Certification requires module and vendor IDs
@@ -89,7 +100,6 @@ def parse_run(run_path):
                 entropyId = run_file[0]["Certify"]['entropyID']
                 modId = run_file[0]["Certify"]['moduleID']
                 vendId = run_file[0]["Certify"]['vendorID']
-                itar = run_file[0]["Certify"]['itar']
 
             except:
                 print("Error: Entropy, Module and Vendor IDs are required for certification")
@@ -134,7 +144,7 @@ def parse_run(run_path):
 
         if(globalenv.verboseMode):
             print('Run file successfully parsed')
-        return assessment_reg, rawNoise, restartTest, conditioned, supporting_paths, comments, sdType, modId, vendId, entropyId, oeId, certify, singleMod, responseList, itar
+        return assessment_reg, rawNoise, restartTest, conditioned, supporting_paths, comments, sdType, modId, vendId, entropyId, oeId, certify, singleMod, responseList
 
     except Exception as e:
         print("There was an error parsing your run file. Please try again")

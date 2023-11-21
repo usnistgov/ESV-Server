@@ -107,7 +107,6 @@ Note that only config.json and run.json are the only JSONs that should be filled
         "Certify": <BOOLEAN>,
         "moduleID": <INT referring to ID of module>,
         "vendorID": <INT referring to ID of vendor>,
-        "itar": <BOOLEAN>,
         "entropyID": <STRING referring to ID of submitted Entropy ID>
     },
     "Assessment": {
