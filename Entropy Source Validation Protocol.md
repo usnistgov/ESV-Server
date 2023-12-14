@@ -247,10 +247,9 @@ These are done with a `POST /esv/v1/supportingDocumentation` with the following 
 
 ```
 Content-Type: multipart/form-data;
-Key: isITAR, Value: "on"/"off"
-Key: sdComments, Value: <string describing document, optional>
 Key: sdFile, Value: <file upload, .doc, .docx, .pdf>
-Key: sdType, Value: "EntropyAssessmentReport"/"PublicUseDocument"/"Other"
+Key: sdType, Value: "EntropyAssessmentReport"/"PublicUseDocument"/"DataCollectionAttestation"/"Other"
+Key: sdComments, Value: <string describing document, optional>
 ```
 
 ## 5. Certify
