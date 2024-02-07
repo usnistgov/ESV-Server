@@ -285,6 +285,19 @@ A certify request may have multiple supporting documents, or multiple entropy as
 
 The response from the server will mirror the information sent, with the ACVTS IDs resolved to their values to allow quick confirmation of the data submitted.
 
+| JSON Property          | Description                                                                                | JSON Type  |
+|------------------------|--------------------------------------------------------------------------------------------|------------|
+| itar                   | boolean stating whether ITAR restrictions are applicable for this certification            | boolean    |
+| limitEntropyAssessmentToSingleModule | boolean stating whether the entropy assessment associated with this certification is applicable to a single module / vendor | boolean |
+| moduleId               | refers to the module ID number of the corresponding ACVTS environment                      | integer    |
+| entropyId              | analagous to the Test Identifier (TID) in the module validation process, used by submitter to track progress | string |
+| sdId (multiple)        | ID of the supporting document which was returned upon submission of supporting document(s) | integer    |
+| accessToken (supportingDocumentation) | the jwt with claims for the corresponding sdId                              | string     | 
+| eaId                   | corresponds to the response from the server during the POST /esv/v1/entropyAssessments request | integer |
+| oeId					 | refers to the operating environment ID number from the corresponding ACVTS environment     | integer    |
+| accessToken (entropyAssessments) | the jwt with claims for the corresponding eaId                                   | string |
+
+
 ## 6. Accessing the Demo Environment
 
 To access the demo server one needs an mTLS credential and a one-time password (OTP). 
