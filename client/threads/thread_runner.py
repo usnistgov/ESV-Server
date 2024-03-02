@@ -15,13 +15,28 @@ class ThreadWrapper:
         threads= []
         print("*** Getting Status")
         print("Waiting for data file tests to complete...")
-        with ThreadPoolExecutor(max_workers=20) as executor:
-            for id in df_ids:
-                threads.append(executor.submit(get_status, server_url, ea_id, id, entr_jwt, client_cert))
-        
-            #Check status codes of responses
-            for task in as_completed(threads):
-                check_status(task.result()) 
+        #Yvonne Cliff: Added file open to save SP 800-90B statistical test results to file
+        with open(globalenv.stats_90B_path, 'a', encoding="utf-8") as stats_file:
+            with ThreadPoolExecutor(max_workers=20) as executor:
+                for id in df_ids:
+                    threads.append(executor.submit(get_status, server_url, ea_id, id, entr_jwt, client_cert))
+            
+                #Check status codes of responses
+                for task in as_completed(threads):
+                    #Yvonne Cliff: Edited to save 90B statistical test results.
+                    # Previously, code was:
+                    #     check_status(task.result())
+                    # Code was edited to save task.result() in myRes, then check status separately, 
+                    # followed by printing the JSON code containing the 90B statistical test results.
+                    myRes = task.result()
+                    check_status(myRes)
+                    if(globalenv.verboseMode):
+                        print("[\'********** SP 800-90B Test Results **********\']")
+                        print(myRes.json()) 
+                        print("[\'********** END SP 800-90B Test Results **********\']")
+                    stats_file.write(str(myRes.json()))
+                    stats_file.write("\n\n")
+
                 
     #Step 3: Runner for threading data uploads       
     def runner_data(server_url, responses, conditioned, rawNoise, restartTest, client_cert):
