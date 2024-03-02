@@ -88,12 +88,17 @@ if __name__ == "__main__":
                     \n- (status) Check Data File Progress (of last run)\
                     \n- (submit) Submit Entropy Assessment and Data Files \n- (support) Upload Supporting Documentation\
                     \n- (certify) Certify (Uses IDs from the last run) \n\n")
+    # New argument added by Yvonne Cliff
+    parser.add_argument('--stats_90B_path', default= "jsons/stats_90B.json", help= "Input the path to output 90B statistical results json")
     parser.add_argument('--config_path', default= "jsons/config.json", help="Input the path to your configuration json")
     parser.add_argument('--run_path', default= "jsons/run.json", help= "Input the path to your run json")
     parser.add_argument("-v", "--verbose", action="store_true", help="Run in 'verbose' mode")
     args = parser.parse_args()
 
     globalenv.verboseMode = args.verbose
+
+    # New global variable stats_90B added by Yvonne Cliff
+    globalenv.stats_90B_path = args.stats_90B_path
 
     run_type = args.run.lower(); config_path = args.config_path; run_path = args.run_path; globalenv.run_path = args.run_path
     check_type(run_type)
@@ -106,6 +111,10 @@ if __name__ == "__main__":
         log("run_path", run_path)
 
     if run_type == "full":
+        # Added by Yvonne Cliff: Erase the stats_file ready for new data:
+        with open(globalenv.stats_90B_path, 'w', encoding="utf-8") as stats_file:
+            stats_file.close()
+
         print("*** Entropy Source Validation Client tool startup!")
         clear_previous_run()
         ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
@@ -127,6 +136,9 @@ if __name__ == "__main__":
 
     #Do a run from the log file
     if run_type == "status":
+        # Added by Yvonne Cliff: Erase the stats_file ready for new data:
+        with open(globalenv.stats_90B_path, 'w', encoding="utf-8") as stats_file:
+            stats_file.close()
 
         #log_file = json.load(open('jsons\\log.json', 'r'))[0]
         client_cert, seed_path, server_url, esv_version = parse_config(config_path)
