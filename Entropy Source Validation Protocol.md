@@ -304,6 +304,8 @@ The response from the server will mirror the information sent, with the ACVTS ID
 
 This certify request allows a user to add Operating Environments (OEs) to an existing certificate. The cost recovery associated with this request is the EntropyUpdate (EU). Note, the review will be performed to the current guidance, not necessarily the guidance available at the time of the original submission. The properties for the submission are the same as a Full Submission, except the `"moduleId"` is replaced with the existing `"entropyCertificate"`. 
 
+The request is a `POST` on `/esv/v1/certify/addOE` or `/esv/v1/certify/addOperatingEnvironment`.
+
 ```
 [
     {
@@ -336,6 +338,8 @@ This certify request allows a user to add Operating Environments (OEs) to an exi
 ### 5.3 PUDUpdate
 
 This certify request allows a user to request that a new Public Use Document (PUD) is attached to an existing certificate. This can be helpful for corrections or rebranding. There is no cost recovery associated with this request. When the PUD is uploaded to the supportingDocumentation endpoint, the document must be uploaded with the PUD document type. Please include a comment on what changed in the document compared to the existing PUD. This will greatly expedite the review process. 
+
+The request is a `POST` on `/esv/v1/certify/updatePUD` or `/esv/v1/certify/updatePublicUseDocument`.
 
 ```
 [
