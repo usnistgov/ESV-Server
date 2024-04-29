@@ -226,12 +226,13 @@ There are two types of files to be submitted to the server. Data files (files th
 
 ### Data Files
 
-Data files are submitted after the entropy assessment has been registered.
+Data files are submitted after the entropy assessment has been registered. Each file must contain exactly one million samples, padded to one byte per sample. In cases where the sample size of the data file does not match the overall entropy assessment bits per sample, the sample size of the data file can be specified via the key `dataFileSampleSize`. 
 
 These are done with a `POST /esv/v1/entropyAssessments/<eaId>/dataFiles/<dfId>` with the following body
 
 ```
 Content-Type: multipart/form-data;
+Key: dataFileSampleSize, Value: <1-8>, Optional. If this value is not present, the value will be assumed as min(BitsPerSample, 8). This value must never be greater than BitsPerSample, or 8. 
 Key: dataFile, Value: <binary data file upload>
 ```
 
@@ -254,6 +255,8 @@ Key: sdComments, Value: <string describing document, optional>
 
 ## 5. Certify
 
+### 5.1 Full Submission
+
 Certify requests are done by `POST /esv/v1/certify`. The `moduleId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. Thus, the "module" information and OE information must be previously registered to the ACVTS environment prior to this step. The EntropyID field is analagous to the Test Identifier (TID) in the module validation process. It helps the submitter track the entropy validation after it is submitted to the server. The `<eaId>` is determined by the response from the server during the `POST /esv/v1/entropyAssessments` request.
 
 A certify request may have multiple supporting documents, or multiple entropy assessments. Each must include their accompanying JWT access token. The tokens may need to be refreshed before submitting. An example is the following...
@@ -267,7 +270,7 @@ A certify request may have multiple supporting documents, or multiple entropy as
         "itar": false,
         "limitEntropyAssessmentToSingleModule": false,
         "moduleId": 1,	
-        "entropyId": 0000
+        "entropyId": "0000"
         "supportingDocumentation": [ 
             {"sdId": sdId1, "accessToken": "<jwt-with-claims-for-sdId1>"},
             ... may include other supporting documents
@@ -297,6 +300,80 @@ The response from the server will mirror the information sent, with the ACVTS ID
 | oeId					 | refers to the operating environment ID number from the corresponding ACVTS environment     | integer    |
 | accessToken (entropyAssessments) | the jwt with claims for the corresponding eaId                                   | string |
 
+### 5.2 OEAdd
+
+This certify request allows a user to add Operating Environments (OEs) to an existing certificate. The cost recovery associated with this request is the EntropyUpdate (EU). Note, the review will be performed to the current guidance, not necessarily the guidance available at the time of the original submission. The properties for the submission are the same as a Full Submission, except the `"moduleId"` is replaced with the existing `"entropyCertificate"`. 
+
+```
+[
+    {
+        "esvVersion": "1.0"
+    },
+    {
+        "itar": false,
+        "limitEntropyAssessmentToSingleModule": false,
+        "entropyCertificate": "E999",	
+        "entropyId": "0000"
+        "supportingDocumentation": [ 
+            {"sdId": sdId1, "accessToken": "<jwt-with-claims-for-sdId1>"},
+            ... may include other supporting documents
+        ],
+        "entropyAssessments": [			
+            {
+                "eaId": eaId1,
+                "oeId": 1,
+                "accessToken": "<jwt-with-claims-for-eaId1>"
+            }
+        ]          
+    }
+]
+```
+
+| JSON Property      | Description                                            | JSON Type |
+|--------------------|--------------------------------------------------------|-----------|
+| entropyCertificate | string representation of the certificate to be updated | string    |
+
+### 5.3 PUDUpdate
+
+This certify request allows a user to request that a new Public Use Document (PUD) is attached to an existing certificate. This can be helpful for corrections or rebranding. There is no cost recovery associated with this request. When the PUD is uploaded to the supportingDocumentation endpoint, the document must be uploaded with the PUD document type. Please include a comment on what changed in the document compared to the existing PUD. This will greatly expedite the review process. 
+
+```
+[
+    {
+        "esvVersion": "1.0"
+    },
+    {
+        "entropyCertificate": "E999",
+        "entropyId": "0000",
+        "supportingDocument":  
+        {
+            "sdId": sdId1,
+            "accessToken": "<jwt-with-claims-for-sdId1>"
+        }
+    }
+]
+```
+
+A positive response is the simple acknowledgement.
+
+```
+[
+    {
+        "esvVersion": "1.0"
+    },
+    {
+        "status": "received"
+    }
+]
+```
+
+| JSON Property                   | Description                                                                                                  | JSON Type |
+|---------------------------------|--------------------------------------------------------------------------------------------------------------|-----------|
+| entropyCertificate              | string representation of the certificate to be updated                                                       | string    |
+| entropyId                       | analagous to the Test Identifier (TID) in the module validation process, used by submitter to track progress | string    |
+| supportingDocument              | an object for the supporting document information                                                            | object    |
+| sdId (supportingDocument)       | ID of the supporting document which was returned upon submission of supporting document                      | integer   |
+| accessToken (supportingDocument | the jwt with claims for the corresponding sdId                                                               | string    |
 
 ## 6. Accessing the Demo Environment
 
