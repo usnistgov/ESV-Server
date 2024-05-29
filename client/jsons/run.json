@@ -34,6 +34,10 @@
         "Assessment": {
             "numberOfAssessments": 1,
             "limitEntropyAssessmentToSingleModule": false
+        },
+        "UpdatedPublicUseDocument": {
+            "entropyCertificate": "E1",
+            "filePath": "/path/to/report_pud_update.pdf"
         }
     }
 ]

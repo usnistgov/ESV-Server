@@ -4,6 +4,7 @@ import threading
 import os
 import time
 import sys
+import json
 
 #thread-safe printing
 def safe_print(*args, sep=" ", end="", **kwargs):
@@ -37,13 +38,6 @@ def get_status(server_url, ea_id, id, entrjwt, client_cert):
         if not any (x in status.lower() for x in substrings): 
             time.sleep(15)
 
-    # Removed 3/28/2023: This is just printing out the status that was already printed out on the previous iteration
-    #st = list(response.json()[1].values())
-    #stLabel = list(response.json()[1].keys())
-    #dataFiles.append(id); dataLabels.append(stLabel[0]); statLabels.append(stLabel[1]); stats.append(st[1])
-
-    #safe_print(dataLabels[0] + ": " + str(dataFiles[0]) + " | " + statLabels[0] + ": " + str(stats[0])) # + " | Entropy Estimate: "
-
     return response
     
 
@@ -52,32 +46,46 @@ def df_upload_cond(server_url, ea_id, df_ids, jwt, i, conditioned, client_cert):
     url = server_url + "/entropyAssessments/" + ea_id + "/dataFiles/" 
     auth_header = {'Authorization': 'Bearer ' + jwt}
     payload = {}
-
+    
     files=[('dataFile',(os.path.basename(conditioned[i]),open(conditioned[i],'rb'),'application/octet-stream'))]
     response = requests.request("POST", url + df_ids[i + 2], cert = client_cert, headers=auth_header, data = payload, files=files)
     check_status(response)
     return response
 
 #Submit data files (raw, threading)
-def df_upload_raw(server_url, ea_id, df_ids, jwt, raw_noise, client_cert):
+def df_upload_raw(server_url, ea_id, df_ids, jwt, raw_noise, client_cert, sampleSize):
     url = server_url + "/entropyAssessments/" + ea_id + "/dataFiles/" 
     auth_header = {'Authorization': 'Bearer ' + jwt}
     payload = {}
 
     #Send rawNoise
-    files=[('dataFile',(os.path.basename(raw_noise),open(raw_noise,'rb'),'application/octet-stream'))]
+    if(sampleSize != -1):
+        files= { 
+            'dataFile': (os.path.basename(raw_noise),open(raw_noise,'rb'),'application/octet-stream'),
+            'DataFileSampleSize': sampleSize }
+    else:
+        files=[('dataFile',(os.path.basename(raw_noise),open(raw_noise,'rb'),'application/octet-stream'))]
+    
+ 
     response = requests.request("POST", url + df_ids[0], cert = client_cert, headers=auth_header, data = payload, files=files)
+    
     check_status(response)
     return response
 
 #Submit data files (restart, threading)
-def df_upload_restart(server_url, ea_id, df_ids, jwt, restart_test, client_cert):
+def df_upload_restart(server_url, ea_id, df_ids, jwt, restart_test, client_cert, sampleSize):
     url = server_url + "/entropyAssessments/" + ea_id + "/dataFiles/" 
     auth_header = {'Authorization': 'Bearer ' + jwt}
     payload = {}
     
     #Send restartTest
-    files=[('dataFile',(os.path.basename(restart_test),open(restart_test,'rb'),'application/octet-stream'))]
+    if(sampleSize != -1):
+        files= { 
+            'dataFile': (os.path.basename(restart_test),open(restart_test,'rb'),'application/octet-stream'),
+            'DataFileSampleSize': sampleSize }
+    else:
+        files=[('dataFile',(os.path.basename(restart_test),open(restart_test,'rb'),'application/octet-stream'))]
+    
     response = requests.request("POST", url + df_ids[1], cert = client_cert, headers=auth_header, data = payload, files=files)
     check_status(response)
     return response
@@ -99,3 +107,31 @@ def send_supp(comments, sdType, supporting_path, server_url, client_cert, auth_h
         print(supp_name + ": " + str(sd_id) + " | Status: " + str(response_1['status']))
         cert_supp.append({"sdId" : sd_id, "accessToken": response_1["accessToken"]})    
     return cert_supp, response
+
+#Step X: Send Updated Public Use Document
+def send_updatedPud(previousCertSup, entropyCertificate, entropyID, pud_path, server_url, client_cert, auth_header):
+
+    previousCertSupJson = json.dumps(previousCertSup[0][0])
+    previousCertSupJson = json.loads(previousCertSupJson)
+    
+    cert_supp = []
+    pud_name = os.path.basename(pud_path)
+
+    payload = [ {'esvVersion': '1.0'}, {'entropyCertificate': entropyCertificate,
+                                        'entropyId': entropyID,
+                                        'supportingDocument': {'sdId': previousCertSupJson["sdId"],
+                                        'accessToken' : previousCertSupJson["accessToken"]}}]
+                                       
+    response = requests.request("POST", server_url + "/certify/updatePUD", cert = client_cert, headers=auth_header, json = payload)
+    check_status(response)
+    response_1 = response.json()[1]
+    status = response_1['status']
+    # Note that this endpoint uses "recieved", not "success" as positive result
+    if(status != "received"):
+        print ("Status: " + status)
+    else:
+        print("Updated Public Use Document successfully recieved by server")  
+    return cert_supp, response
+
+
+

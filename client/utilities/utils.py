@@ -82,7 +82,7 @@ def get_ids(response):
         dfIDs.append(urls[0])
     return eaID, dfIDs
 
-def cert_prep(certify, certSup, esv_version, singleMod, modId, vendId, entropyId, eaIDs, oeIds, entrjwts): #  *Also uses other variables defined in main
+def cert_prep(certify, certSup, esv_version, limitVendor, modId, vendId, entropyId, eaIDs, oeIds, entrjwts): #  *Also uses other variables defined in main
     
     certify[0]["esvVersion"] = esv_version
     certEntropy = certify[1]["entropyAssessments"] = []
@@ -92,7 +92,7 @@ def cert_prep(certify, certSup, esv_version, singleMod, modId, vendId, entropyId
         #certEntropy["oeId"] = oeIds[x]
         #certEntropy["eaId"] = int(eaIDs[x]) 
         certEntropy.append({"eaId":int(eaIDs[x]), "oeId":oeIds[x], "accessToken":entrjwts[x]})
-    certify[1]["limitEntropyAssessmentToSingleModule"] = singleMod
+    certify[1]["limitEntropyAssessmentToSingleModule"] = limitVendor
     certify[1]["moduleId"] = modId
     certify[1]["vendorId"] = vendId
     certify[1]["entropyId"] = entropyId #int(eaID) #entropyId
@@ -102,10 +102,29 @@ def cert_prep(certify, certSup, esv_version, singleMod, modId, vendId, entropyId
     
     return certify
 
+def cert_prep_add_oe(certify, certSup, esv_version, certificateID, limitVendor, entropyId, eaIDs, oeIds, entrjwts): #  *Also uses other variables defined in main
+    
+    certify[0]["esvVersion"] = esv_version
+    certEntropy = certify[1]["entropyAssessments"] = []
+    i = len(eaIDs)
+    for x in range(i):
+        #certEntropy["accessToken"] = entrjwts[x]    
+        #certEntropy["oeId"] = oeIds[x]
+        #certEntropy["eaId"] = int(eaIDs[x]) 
+        certEntropy.append({"eaId":int(eaIDs[x]), "oeId":oeIds[x], "accessToken":entrjwts[x]})
+    certify[1]["limitEntropyAssessmentToSingleModule"] = limitVendor
+    certify[1]["entropyId"] = entropyId #int(eaID) #entropyId
+    certify[1]["entropyCertificate"] = certificateID
+    for info in reversed(certSup): #add supporting document IDs and JWTs
+        certify[1]["supportingDocumentation"].append(info[0])
+    
+    return certify
+
+
 def check_type(run_type):
-    accepted = ["full", "status", "submit", "support", "certify"]
+    accepted = ["full", "status", "submit", "support", "certify", "updatepud", "certifynewoe", "fulladdoe"]
     if run_type not in accepted:
-        print("Error: Run type is not listed in possible runs")
+        print("Error: Run type '" + run_type + "' is not listed in possible runs")
         sys.exit(1)
 
     

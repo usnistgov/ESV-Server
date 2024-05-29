@@ -49,6 +49,12 @@ Below is the general workflow for a full run with the client
 5. Upload Supporting Documentation
 6. Certify (Optional)
 
+Post-certification
+
+7. Upload updated Public Use Document (Optional)
+8. Add new OE to existing certificate (Optional)
+
+
 ## 3. Run-types
 
 The client accepts different run-types, corresponding to a command, which are combinations of the above workflow. If certify is set to false in the configuration file, the full run will stop before the certify step. 
@@ -62,6 +68,12 @@ The full run performs the full workflow and the other run types correspond to di
 - (`submit`) Submit Entropy Assessment and Data Files
 - (`support`) Upload Supporting Documentation
 - (`certify`) Certify (Uses IDs from the last run)
+
+Post-certify
+- (`updatepud`) Upload updated Public Use Document
+- (`certifynewoe`) Add new OE to existing certificate
+- (`fulladdoe`) Do a full run for "certifynewoe" (i.e. automatically do all steps up to and including “certifynewoe”)
+
 
 ## 4. Pre-requisites: Configuration and Run Files
 
@@ -92,7 +104,9 @@ Note that only config.json and run.json are the only JSONs that should be filled
         {
             "oeID":  <INT referring to the ID of the Operating Environment>,
             "rawNoisePath": "<absolute path to raw noise data file>",
+			"rawNoiseSampleSize": <INT for raw noise sample size>, (This item is optional, if not used, the sample size for entropy assessment is used)
             "restartTestPath": "<absolute path to restart data file>",
+			"restartSampleSize": <INT for restart sample size>, (This item is optional, if not used, the sample size for entropy assessment is used)
             "unvettedConditionedPaths": ["<absolute path to first unvetted data file>", "<absolute path to second unvetted data file>"]
         }
     ],
@@ -107,11 +121,16 @@ Note that only config.json and run.json are the only JSONs that should be filled
         "Certify": <BOOLEAN>,
         "moduleID": <INT referring to ID of module>,
         "vendorID": <INT referring to ID of vendor>,
-        "entropyID": <STRING referring to ID of submitted Entropy ID>
+        "entropyID": <STRING referring to ID of submitted Entropy ID>,
+        "EntropyCertificateToUpdate": <OPTIONAL STRING referring to the ID of the Certificate to update in post-certification addition of Operating Environment to Certificate>
     },
     "Assessment": {
         "numberOfAssessments": 1,
         "limitEntropyAssessmentToSingleModule": false
+    },
+    "UpdatedPublicUseDocument": { (This item is optional and only for use when running “updatepud”)
+            "entropyCertificate": "<STRING referring to ID of Entropy Certificate being updated>",
+            "filePath": "<absolute path to updated Public Use Document>"
     },
     "PreviousRun": {
         "entr_jwt": "example",
@@ -127,11 +146,20 @@ Note that only config.json and run.json are the only JSONs that should be filled
                 }
             ]
         ]
-	}
+    }
 }
 ```
 
-Note that DataFiles is an array. For submitting for multiple Operating Environments, create addition sets of oeID/rawNoisePath/restartTestPath/unvettedConditionedPaths.
+* Note that DataFiles is an array.
+
+* For submitting for multiple Operating Environments, create addition sets of oeID/rawNoisePath/restartTestPath/unvettedConditionedPaths.
+
+* Note that the UpdatedPublicUseDocument section is optional
+
+* Note that the EntropyCertificateToUpdate key/value in Certify is optional
+
+* Note that rawNoiseSampleSize and restartSampleSize are optional.  If there are no values present, the sample size value for the entropy assessment will be used
+
 
 ## 5. Alternative usages
 
