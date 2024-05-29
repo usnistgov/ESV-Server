@@ -1,4 +1,51 @@
-[1.3] - Release date TBD
+[1.6]
+
+ADDED
+
+   * Added support for new endpoints For Updating Public Use Document and Adding Operating Environment to existing certificate (see README for how to use these endpoints)
+   * Added support for each data file having its own individual sample size
+   * Adding update for saving statistics information and combining certifiates for multiple conditioning functions (update courtesy Yvonne Cliff)
+
+CHANGES
+
+   * Update to verify correct uploading of one Public Use Document and one Entropy Assessment Report
+
+BUG FIX
+
+   * -v was skipping steps in cases where there were multiple EAs and EOs
+   * Various minor bug fixes and improvements
+
+[1.5]
+
+ADDED
+
+   * File sizes now automatically checked before submission
+
+
+CHANGES
+
+   * "itar" no longer used in registration
+   * Output cleaned up for multiple OE submissions
+   * Changes in server JSON reflected in client
+
+
+[1.4]
+
+ADDED
+
+   * Multiple OEs submissions now combined in a single certify request
+
+BUG FIX
+
+   * Fix bug with TOTP on multiple OEs JWT refresh
+
+
+CHANGES
+
+   * Changes in server JSON reflected in client
+   * Cleaned up output 
+
+[1.3] 
 
 ADDED
 
