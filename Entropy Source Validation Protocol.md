@@ -300,7 +300,7 @@ The response from the server will mirror the information sent, with the ACVTS ID
 | oeId					 | refers to the operating environment ID number from the corresponding ACVTS environment     | integer    |
 | accessToken (entropyAssessments) | the jwt with claims for the corresponding eaId                                   | string |
 
-### 5.2 OEAdd
+### 5.2 AddOE
 
 This certify request allows a user to add Operating Environments (OEs) to an existing certificate. The cost recovery associated with this request is the EntropyUpdate (EU). Note, the review will be performed to the current guidance, not necessarily the guidance available at the time of the original submission. The properties for the submission are the same as a Full Submission, except the `"moduleId"` is replaced with the existing `"entropyCertificate"`. 
 
@@ -335,7 +335,7 @@ The request is a `POST` on `/esv/v1/certify/addOE` or `/esv/v1/certify/addOperat
 |--------------------|--------------------------------------------------------|-----------|
 | entropyCertificate | string representation of the certificate to be updated | string    |
 
-### 5.3 PUDUpdate
+### 5.3 UpdatePUD
 
 This certify request allows a user to request that a new Public Use Document (PUD) is attached to an existing certificate. This can be helpful for corrections or rebranding. There is no cost recovery associated with this request. When the PUD is uploaded to the supportingDocumentation endpoint, the document must be uploaded with the PUD document type. Please include a comment on what changed in the document compared to the existing PUD. This will greatly expedite the review process. 
 
@@ -378,6 +378,28 @@ A positive response is the simple acknowledgement.
 | supportingDocument              | an object for the supporting document information                                                            | object    |
 | sdId (supportingDocument)       | ID of the supporting document which was returned upon submission of supporting document                      | integer   |
 | accessToken (supportingDocument | the jwt with claims for the corresponding sdId                                                               | string    |
+
+### 5.4 Getting entropy certificate information
+
+To look up entropy certificate information through the API, a user may send the following request.
+
+`GET` on `/esv/v1/entropyCertificate/E#` where `#` is the certificate number as shown on https://csrc.nist.gov. 
+
+The response on a valid certificate is the following basic information about the certificate. 
+
+```
+[
+    {
+        "esvVersion": "1.0"
+    },
+    {
+        "certificateId": 1,
+        "certificateNumber": 999,
+        "isPhysical": false,
+        "isReusable": true
+    }
+]
+```
 
 ## 6. Accessing the Demo Environment
 
