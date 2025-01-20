@@ -14,7 +14,7 @@ import os.path
 from urllib3.exceptions import InsecureRequestWarning, ResponseError
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
-VALID_SD_TYPES = ["EntropyAssessmentReport","PublicUseDocument","Other"]
+VALID_SD_TYPES = ["EntropyAssessmentReport","PublicUseDocument","DataCollectionAttestation","Other"]
 
 # Because there's sometimes misunderstandings of the definition of "megabyte" (1 million vs 2^20)
 # we'll error on the side of allowing a lower min and a larger max
