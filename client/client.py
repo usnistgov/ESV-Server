@@ -200,7 +200,7 @@ if __name__ == "__main__":
         ea.send_reg()
         responseCount=0
         for response in ea.responses:
-            ThreadWrapper.runner_data(server_url, response, conditioned[responseCount], raw_noise[responseCount], restart_test[responseCount], client_cert, rawNoiseSampleSize)
+            ThreadWrapper.runner_data(server_url, response, conditioned[responseCount], raw_noise[responseCount], restart_test[responseCount], client_cert, rawNoiseSampleSize, restartSampleSize)
             responseCount = responseCount + 1
             
     #Send Supporting Documentation
