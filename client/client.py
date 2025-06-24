@@ -295,4 +295,18 @@ if __name__ == "__main__":
         #i += 1
             #ea.send_certify(certSup, client_cert, ea.login_jwt, esv_version)
 
+
+    #Send updated Supporting Documentation (PUD)
+    if run_type == "updatepud":
+        if(pudEntropyCertificate == "" or  pudFilePath == ""):
+            print("Error: valid Public Use Document information not in run config file")
+            sys.exit(1)
+        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
+        ea.login()
+        comments = ["Updated PUD"]
+        sdType = ["Public Use Document"]
+        supporting_paths = [pudFilePath]
+        certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, server_url, client_cert, ea.auth_header)
+        updateSup = ThreadWrapper.runner_updatedPud(certSup, pudEntropyCertificate, entropyId, pudFilePath, server_url, client_cert, ea.auth_header)
+
     sys.exit(0) #exit with 0 if program succeeds
