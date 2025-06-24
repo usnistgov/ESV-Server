@@ -191,5 +191,42 @@ def parse_run_sup(run_path):
         return cert_sup
     except Exception as e:
         print("There was an error parsing your run file. Please try again")
+        if(globalenv.verboseMode):
+            print("Run file must contain PreviousRun/cert_supp")
         print("Error parsing: ", e)
         sys.exit(1)
+
+#Parse the run file into usable variables
+def parse_run_update_pud(run_path):
+    try:
+        run_file = open(run_path, 'r')
+        run_file = json.load(run_file)
+        try: 
+            updatedPud = run_file[0]["UpdatedPublicUseDocument"]
+            pudEntropyCertificate = updatedPud["entropyCertificate"]
+            pudFilePath = updatedPud["filePath"]
+            entropyId = updatedPud["entropyID"]
+        except Exception as e:
+            print('ERROR: No valid Updated Public Use Document in run config.')
+            if(globalenv.verboseMode):
+                print("UpdatedPublicUseDocument must contain entropyCertificate, filePath and entropyID")
+            print("Error parsing: ", e)
+            sys.exit(1)
+
+        if(globalenv.verboseMode):
+            print('Run file successfully parsed')
+        return pudEntropyCertificate, pudFilePath, entropyId
+
+    except Exception as e:
+        print("ERROR: There was an error parsing your run file. Please try again")
+        print("Error parsing: ", e)
+        sys.exit(1)
+
+def parse_print_certificate(json):
+    print("Certificate Information:\n")
+    print("Certificate ID: " + str(json[1]["certificateId"]))
+    print("Certificate Number: " + str(json[1]["certificateNumber"]))
+    print("Description: " + str(json[1]["description"]))
+    print("Physical: " + str(json[1]["isPhysical"]))
+    print("Reusable: " + str(json[1]["isReusable"]))
+    
