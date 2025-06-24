@@ -2,10 +2,19 @@ from cryptography.hazmat.primitives import hashes, hmac
 import time
 import base64
 
+def convertToAscii(convert):
+     for x in convert:
+        if f"'{x}'" == ascii(x):
+            pass
+        else:
+            convert = convert.replace(x, "")
+     return convert
+
 #Generates an 8-digit TOTP password from the seed path
 def generate_pass(seed_path):
     #prep seed
     seed = open(seed_path).read()
+    seed = convertToAscii(seed) # Added because "invisible" non-ASCII characters like Byte Order Mark were causing chaos
     seed = seed.replace("\n", "") #remove any extra lines
     seed = base64.b64decode(seed) #Decode because TOTP seed given in base 64
 
