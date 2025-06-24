@@ -26,9 +26,11 @@ The `cryptography` library is used for Base64 and other methods related to TOTP.
 
 ## 1. How to use
 
-The client takes in 3 arguments: The *run type*, the configuration file path (`--config_path`), and the run file path(`--run_path`).
+During normal running, the client takes in 3 arguments: The *run type*, the configuration file path (`--config_path`), and the run file path(`--run_path`).
 
 There is a 4th optional argument for verbose mode: --verbose
+
+There is a 5th argument for use in a "getcertificate" run: --certificateID [ID]
 
 The configuration and run file paths are optional and are only required if the user is not doing run types (status) or (certify). However, the files must still be in the same location as in the previous run.
 
@@ -53,7 +55,7 @@ Post-certification
 
 7. Upload updated Public Use Document (Optional)
 8. Add new OE to existing certificate (Optional)
-
+9. View certificate (Optional)
 
 ## 3. Run-types
 
@@ -73,7 +75,7 @@ Post-certify
 - (`updatepud`) Upload updated Public Use Document
 - (`certifynewoe`) Add new OE to existing certificate
 - (`fulladdoe`) Do a full run for "certifynewoe" (i.e. automatically do all steps up to and including “certifynewoe”)
-
+- (`getcertificate`) View an existing certificate.  Use with argument: --certificateID [ID]
 
 ## 4. Pre-requisites: Configuration and Run Files
 
@@ -122,7 +124,7 @@ Note that only config.json and run.json are the only JSONs that should be filled
         "moduleID": <INT referring to ID of module>,
         "vendorID": <INT referring to ID of vendor>,
         "entropyID": <STRING referring to ID of submitted Entropy ID>,
-        "EntropyCertificateToUpdate": <OPTIONAL STRING referring to the ID of the Certificate to update in post-certification addition of Operating Environment to Certificate>
+        "EntropyCertificateToUpdate": <OPTIONAL STRING referring to the ID of the Certificate to update in post-certification addition of Operating Environment to Certificate. See below>
     },
     "Assessment": {
         "numberOfAssessments": 1,
@@ -130,7 +132,9 @@ Note that only config.json and run.json are the only JSONs that should be filled
     },
     "UpdatedPublicUseDocument": { (This item is optional and only for use when running “updatepud”)
             "entropyCertificate": "<STRING referring to ID of Entropy Certificate being updated>",
+            "entropyID": "<STRING referring to ID of submitted Entropy ID>",
             "filePath": "<absolute path to updated Public Use Document>"
+
     },
     "PreviousRun": {
         "entr_jwt": "example",
@@ -156,9 +160,11 @@ Note that only config.json and run.json are the only JSONs that should be filled
 
 * Note that the UpdatedPublicUseDocument section is optional
 
-* Note that the EntropyCertificateToUpdate key/value in Certify is optional
+* Note that the EntropyCertificateToUpdate key/value in Certify is optional. The value is a string beginning with E and concatenated with the Entropy Certificate Number, i.e., the value for Entropy Certificate Number 1 is "E1".  
 
 * Note that rawNoiseSampleSize and restartSampleSize are optional.  If there are no values present, the sample size value for the entropy assessment will be used
+
+* A JSON schema for entropy-source-metadata.json is available in the "json" directory.  Please note that this is not fully comprehensive and some values correctness is determined by values in other fields. 
 
 
 ## 5. Alternative usages

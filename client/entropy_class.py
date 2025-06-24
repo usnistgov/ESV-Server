@@ -188,8 +188,12 @@ class EntropyAssessment():
         if globalenv.verboseMode:
             print ("JWT Refresh Outgoing:")
             print (payload)
-        
-        response = requests.post(server_url + '/login', cert=client_cert, json=payload)
+        try:
+            response = requests.post(server_url + '/login', cert=client_cert, json=payload)
+        except requests.exceptions.SSLError as e:
+            print("SSL Error:", e)
+            print("Verify certificate is valid and accepted by server.")
+            exit(1)
         if globalenv.verboseMode:
             print ("JWT Refresh Incoming:")
             print (response)

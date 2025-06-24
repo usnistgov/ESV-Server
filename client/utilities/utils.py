@@ -14,7 +14,7 @@ import os.path
 from urllib3.exceptions import InsecureRequestWarning, ResponseError
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
-VALID_SD_TYPES = ["EntropyAssessmentReport","PublicUseDocument","Other"]
+VALID_SD_TYPES = ["EntropyAssessmentReport","PublicUseDocument","DataCollectionAttestation","Other"]
 
 # Because there's sometimes misunderstandings of the definition of "megabyte" (1 million vs 2^20)
 # we'll error on the side of allowing a lower min and a larger max
@@ -122,7 +122,7 @@ def cert_prep_add_oe(certify, certSup, esv_version, certificateID, limitVendor, 
 
 
 def check_type(run_type):
-    accepted = ["full", "status", "submit", "support", "certify", "updatepud", "certifynewoe", "fulladdoe"]
+    accepted = ["full", "status", "submit", "support", "certify", "updatepud", "certifynewoe", "fulladdoe","getcertificate"]
     if run_type not in accepted:
         print("Error: Run type '" + run_type + "' is not listed in possible runs")
         sys.exit(1)
@@ -213,7 +213,13 @@ def check_status(response):
     if int(response.status_code) / 100 >= 4:
         try:
             print("Error: Status code " + str(response.status_code))
-            print(response.json())
+            try:
+                print(response.json())
+            except:
+                if globalenv.verboseMode:
+                    print(response.content)    
+            if int(response.status_code) == 403 and "TOTP" not in str(response.content):
+               print("Access denied error.  Verify certificate is valid and accepted by server.")
             sys.exit(1)
         except:
             sys.exit(1)

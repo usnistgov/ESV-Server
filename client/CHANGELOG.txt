@@ -1,3 +1,23 @@
+[1.7]
+
+ADDED
+
+   * Better formatted output
+   * Get certificate option
+   * UpdatedPUD option
+   * Now included example entropy source metadata files
+   * Primitive JSON schema for entropy source metadata JSON file
+   * Output statistics when datafiles submitted
+   * Better error messages on: invalid user certs, incomplete configuration files, 
+
+
+BUG FIX
+
+   * "restartSampleSize" information was being dropped on pure "submit" option (Thanks to HLRichardson-Git for fix)
+   * Bug where a non-ASCII byte order mark on the TOTP.txt file could cause parsing problems
+   * Minor bugfixes
+
+
 [1.6]
 
 ADDED

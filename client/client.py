@@ -10,7 +10,7 @@ import argparse
 import traceback
 from threads.thread_runner import ThreadWrapper
 from totp.totp import generate_pass, login_payload
-from start.parsing import parse_config, parse_run, parse_run_sup
+from start.parsing import parse_config, parse_run, parse_run_sup, parse_run_update_pud, parse_print_certificate
 from entropy_class import EntropyAssessment
 import globalenv
 
@@ -89,12 +89,14 @@ if __name__ == "__main__":
                     \n- (submit) Submit Entropy Assessment and Data Files \n- (support) Upload Supporting Documentation\
                     \n- (certify) Certify (Uses IDs from the last run)\
                     \n- (certifyNewOE) Add new OE to existing certificare)\
+                    \n- (getcertificate) Get completed certificate (needs certificateID)\
                     \n- (updatePUD) Sending an updated PUD for an already certified assessment\n\n")
     # New argument added by Yvonne Cliff
     parser.add_argument('--stats_90B_path', default= "jsons/stats_90B.json", help= "Input the path to output 90B statistical results json")
     parser.add_argument('--config_path', default= "jsons/config.json", help="Input the path to your configuration json")
     parser.add_argument('--run_path', default= "jsons/run.json", help= "Input the path to your run json")
     parser.add_argument("-v", "--verbose", action="store_true", help="Run in 'verbose' mode")
+    parser.add_argument('--certificateID', help="The ID of the certificate requested")
     args = parser.parse_args()
 
     globalenv.verboseMode = args.verbose
@@ -104,12 +106,56 @@ if __name__ == "__main__":
     run_type = args.run.lower(); config_path = args.config_path; run_path = args.run_path; globalenv.run_path = args.run_path
     check_type(run_type)
 
+    #Send updated Supporting Documentation (PUD)
+    if run_type == "updatepud":
+        client_cert, seed_path, server_url, esv_version = parse_config(config_path)
+        pudEntropyCertificate, pudFilePath, entropyId = parse_run_update_pud(run_path)
+        if(pudEntropyCertificate == "" or  pudFilePath == ""):
+            print("Error: valid Public Use Document information not in run config file")
+            sys.exit(1)
+        assessment_reg = ""
+        mod_id = ""
+        vend_id = ""
+        oe_id = ""
+        certify = "" 
+        single_mod = ""
+        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
+        ea.login()
+        comments = ["Updated PUD"]
+        sdType = ["Public Use Document"]
+        supporting_paths = [pudFilePath]
+        certSup = ThreadWrapper.runner_supp(comments, sdType, supporting_paths, server_url, client_cert, ea.auth_header)
+        updateSup = ThreadWrapper.runner_updatedPud(certSup, pudEntropyCertificate, entropyId, pudFilePath, server_url, client_cert, ea.auth_header)
+        sys.exit(0)
+
     if run_type != "status" or run_type != "certify":
-            #Start (remember to change parse try statement)
         client_cert, seed_path, server_url, esv_version = parse_config(config_path)
         log("config_path", config_path)
         assessment_reg, raw_noise, rawNoiseSampleSize, restart_test, restartSampleSize, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses, pudEntropyCertificate, pudFilePath, entropyCertificate = parse_run(run_path)
         log("run_path", run_path)
+
+    if run_type == "getcertificate":
+        print("*** Entropy Source Validation Client tool startup!")
+
+        client_cert, seed_path, server_url, esv_version = parse_config(config_path)
+        certificateLookupID = args.certificateID
+        if(certificateLookupID == None):
+            print("Error: Certificate ID not found.  Use --certificateID [ID] on commandline to set")
+            sys.exit(1)
+        ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
+        ea.login()
+        print("*** Requesting Certificate information for certificate ID: " + certificateLookupID)
+        url = server_url + "/entropyCertificate/" + certificateLookupID
+        if(globalenv.verboseMode):
+            print("Destination URL: " + url)
+        auth_header = {'Authorization': 'Bearer ' + ea.login_jwt}
+        response = requests.request("GET", url, cert = client_cert, headers=auth_header)
+        check_status(response)
+        if(globalenv.verboseMode):
+            print("Raw response:")
+            print(response.json())
+        parse_print_certificate(response.json())
+        sys.exit(0) 
 
     if run_type == "full":
         # Added by Yvonne Cliff: Erase the stats_file ready for new data:
@@ -157,7 +203,6 @@ if __name__ == "__main__":
         #    i+=1
         #print("Just ran certify request number ", i)
 
-
     #Do a run from the log file
     if run_type == "status":
         # Added by Yvonne Cliff: Erase the stats_file ready for new data:
@@ -200,7 +245,8 @@ if __name__ == "__main__":
         ea.send_reg()
         responseCount=0
         for response in ea.responses:
-            ThreadWrapper.runner_data(server_url, response, conditioned[responseCount], raw_noise[responseCount], restart_test[responseCount], client_cert, rawNoiseSampleSize[responseCount],restartSampleSize[responseCount])
+            ThreadWrapper.runner_data(server_url, response, conditioned[responseCount], raw_noise[responseCount], restart_test[responseCount], client_cert, rawNoiseSampleSize[responseCount], restartSampleSize[responseCount])
+            ThreadWrapper.runner_stats(server_url, response, client_cert)
             responseCount = responseCount + 1
             
     #Send Supporting Documentation
