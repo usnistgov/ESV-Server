@@ -207,14 +207,16 @@ Current supported vetted conditioning components:
 
 | Conditioning Function | Vetted Conditioning Component(s) |
 |-----------------------|----------------------------------|
-| Hash	| SHA1, SHA2-224, SHA2-256, SHA2-384, SHA2-512, SHA2-512t224, SHA2-512t256, SHA3-224, SHA3-256, SHA3-384, SHA3-512 |
-| HMAC 	| HMAC-SHA1, HMAC-SHA2-224, HMAC-SHA2-256, HMAC-SHA2-384, HMAC-SHA2-512, HMAC-SHA2-512t224, HMAC-SHA2-512t256, HMAC-SHA3-224, HMAC-SHA3-256, HMAC-SHA3-384, HMAC-SHA3-512 |
-| Cipher	| AES-CMAC, AES-CBC-MAC |
-| CTR-DRBG	| AES-128-CTR-DRBG, AES-192-CTR-DRBG, AES-256-CTR-DRBG |
-| Hash-DRBG | SHA2-224-Hash-DRBG, SHA2-256-Hash-DRBG, SHA2-384-Hash-DRBG, SHA2-512-Hash-DRBG, SHA2-512t224-Hash-DRBG, SHA2-512t256-Hash-DRBG, SHA3-224-Hash-DRBG, SHA3-256-Hash-DRBG, SHA3-384-Hash-DRBG, SHA3-512-Hash-DRBG |
-| HMAC-DRBG | SHA2-224-HMAC-DRBG, SHA2-256-HMAC-DRBG, SHA2-384-HMAC-DRBG, SHA2-512-HMAC-DRBG, SHA2-512t224-HMAC-DRBG, SHA2-512t256-HMAC-DRBG, SHA3-224-HMAC-DRBG, SHA3-256-HMAC-DRBG, SHA3-384-HMAC-DRBG, SHA3-512-HMAC-DRBG |
-| Hash_df	| Hash_DF |
-| BlockCipher_df	| BlockCipher_DF |
+| Hash	         | SHA1, SHA2-224, SHA2-256, SHA2-384, SHA2-512, SHA2-512t224, SHA2-512t256, SHA3-224, SHA3-256, SHA3-384, SHA3-512 |
+| HMAC 	         | HMAC-SHA1, HMAC-SHA2-224, HMAC-SHA2-256, HMAC-SHA2-384, HMAC-SHA2-512, HMAC-SHA2-512t224, HMAC-SHA2-512t256, HMAC-SHA3-224, HMAC-SHA3-256, HMAC-SHA3-384, HMAC-SHA3-512 |
+| Cipher	     | AES-CMAC, AES-CBC-MAC |
+| CTR-DRBG	     | AES-128-CTR-DRBG, AES-192-CTR-DRBG, AES-256-CTR-DRBG |
+| Hash-DRBG      | SHA2-224-Hash-DRBG, SHA2-256-Hash-DRBG, SHA2-384-Hash-DRBG, SHA2-512-Hash-DRBG, SHA2-512t224-Hash-DRBG, SHA2-512t256-Hash-DRBG, SHA3-224-Hash-DRBG, SHA3-256-Hash-DRBG, SHA3-384-Hash-DRBG, SHA3-512-Hash-DRBG |
+| HMAC-DRBG      | SHA2-224-HMAC-DRBG, SHA2-256-HMAC-DRBG, SHA2-384-HMAC-DRBG, SHA2-512-HMAC-DRBG, SHA2-512t224-HMAC-DRBG, SHA2-512t256-HMAC-DRBG, SHA3-224-HMAC-DRBG, SHA3-256-HMAC-DRBG, SHA3-384-HMAC-DRBG, SHA3-512-HMAC-DRBG |
+| Hash_df	     | Hash_DF |
+| BlockCipher_df | BlockCipher_DF |
+| SHAKE          | SHAKE-128, SHAKE-256 |
+| Ascon          | Ascon-Hash256 |
 
 The `bijectiveClaim` field is only applicable when `"vetted": false` is present. A bijective conditioning component is one that neither adds nor removes entropy from the inputs passed in, as every input to the bijective function maps to exactly one output.
 
