@@ -1,8 +1,6 @@
 # Entropy Source Validation Client
 
-The Entropy Source Validation Client is a means of automating the process in which third-party companies, vendors, and labs can communicate with the ESV server and receive an entropy source validation certificate. 
-
-The client runs on the command line and requires Python 3.8+ 
+The Entropy Source Validation Client is a means of automating the process in which third-party companies, vendors, and labs can communicate with the ESV server and receive an entropy source validation certificate. The client runs on the command line and requires Python 3.8+. 
 
 #### Contents: 
 
@@ -18,11 +16,7 @@ The client runs on the command line and requires Python 3.8+
 pip3 install requests cryptography
 ```
 
-The `requests` library is used to call the Web API. Version 2.27.1+
-
-The `cryptography` library is used for Base64 and other methods related to TOTP. Version 36.0.1+
-
-(Older versions of these libraries may work, but if you encounter problems, please upgrade to at least the version number listed above.)
+The `requests` library is used to call the Web API. Version 2.27.1+ required. The `cryptography` library is used for Base64 and other methods related to TOTP. Version 36.0.1+ required. Older versions of these libraries may work, but if you encounter problems, please upgrade to at least the version number listed above.
 
 ## 1. How to use
 

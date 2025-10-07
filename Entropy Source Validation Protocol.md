@@ -398,7 +398,7 @@ These are done with a `POST /esv/v1/supportingDocumentation` with the following 
 
 ```
 Content-Type: multipart/form-data;
-Key: sdFile, Value: <file upload, .doc, .docx, .pdf>
+Key: sdFile, Value: <file upload: .doc, .docx, .pdf>
 Key: sdType, Value: "EntropyAssessmentReport" or "PublicUseDocument" or "DataCollectionAttestation" or "RandomBitGeneratorReport" or "Other"
 Key: sdComments, Value: <string describing document, optional but recommended when updating a Public Use Document>
 ```

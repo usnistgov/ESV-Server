@@ -3,6 +3,7 @@
 		"esvVersion": "1.0"
 	},
 	{
+		"oeId": 0,
 		"primaryNoiseSource": <string, brief description of noise source (64 characters)>,
 		"iidClaim": <true or false, whether an IID claim is made on the noise source>,
 		"bitsPerSample": <integer, number of bits in a sample output of the full entropy source [1, 8], if above 8, please use 8>,
@@ -12,6 +13,8 @@
 		"samplesPerRestart": <integer, number of samples generated per restart to perform the restart tests>,
 		"additionalNoiseSources": <true or false, whether the entropy source includes additional noise sources according to Section 3.1.6 of SP 800-90B>,
 		"numberOfOEs": <integer, number of OEs>,
+		"rawNoiseFile": "file path",
+		"restartFile": "file path",
 		"conditioningComponent": [
 			{
 				"sequencePosition": <integer, ordered list with other conditioning components on where in the sequence of operations the individual component occurs, must be 1, 2, ...n for n elements in this array>
@@ -23,7 +26,8 @@
                 "minHin": <double, minimum amount of entropy required to run the conditioning component>,
                 "nw": <integer, narrowest width of the conditioning component>,
                 "nOut": <integer, output size in bits of the conditioning component>
-				"hOut": <integer, output size in bits of the entropy>
+				"hOut": <integer, output size in bits of the entropy>,
+				"conditionedFile": "file path"
 			}
 		]
 	}

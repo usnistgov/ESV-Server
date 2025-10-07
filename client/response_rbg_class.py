@@ -1,10 +1,9 @@
 import json
 
-class Response():
+class ResponseRBG():
 
-    def __init__(self, ea_id, df_ids, entr_jwt, cert_supp):
-        self.ea_id = ea_id
-        self.df_ids = df_ids
+    def __init__(self, rbg_id, entr_jwt, cert_supp):
+        self.rbg_id = rbg_id
         self.entr_jwt = entr_jwt
         self.cert_supp = cert_supp
 
