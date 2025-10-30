@@ -4,22 +4,22 @@ from utilities.utils import check_status, pretty_print
 import globalenv
 
 # File sets come in as [(ea_id, df_id, jwt)]
-def runner_stats(file_sets):
-    threads= []
+def runner_stats(file_sets, retry=True):
+    threads = []
     print("*** Getting Status")
     print("Waiting for data file tests to complete...")
     
     # Yvonne Cliff: Added file open to save SP 800-90B statistical test results to file
     with ThreadPoolExecutor(max_workers=20) as executor:
         for file_tuple in file_sets:
-            threads.append(executor.submit(send_get_data_file_status, file_tuple[0], file_tuple[1], file_tuple[2]))
+            threads.append(executor.submit(send_get_data_file_status, file_tuple[0], file_tuple[1], file_tuple[2], retry=True))
 
         #Check status codes of responses
         for task in as_completed(threads):
 
             myRes = task.result()
             check_status(myRes)
-            if(globalenv.verboseMode):
+            if globalenv.verboseMode:
                 print("[\'********** SP 800-90B Test Results **********\']")
                 pretty_print(myRes.json()[1]) 
                 print("[\'********** END SP 800-90B Test Results **********\']")

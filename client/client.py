@@ -1,7 +1,5 @@
-import sys
 from authentication.login import login
-from client_actions import certify_entropy_assessment, certify_update_public_use_document, clear_history, register_entropy_assessment, submit_supporting_documentation
-from request_types.certificates import send_get_entropy_certificate
+from client_actions import certify_combined_rbg_ea, certify_entropy_assessment, certify_entropy_assessment_add_oe, certify_random_bit_generator, certify_update_public_use_document, clear_history, display_data_file_status, display_entropy_certificate, get_random_bit_generator, refresh_tokens, register_entropy_assessment, register_random_bit_generator, submit_supporting_documentation
 import argparse
 from utilities.parsing import parse_config, parse_run
 #from rbg_class import RandomBitGenerator
@@ -19,46 +17,29 @@ import socket
 old_getaddrinfo = socket.getaddrinfo
 def new_getaddrinfo(*args, **kwargs):
     responses = old_getaddrinfo(*args, **kwargs)
-    return [response
-            for response in responses
-            if response[0] == socket.AF_INET]
+    return [response for response in responses if response[0] == socket.AF_INET]
 socket.getaddrinfo = new_getaddrinfo
-
-
-# Gets stats from previous run
-def prev_run(server_url, ea_id, df_ids, jwt_token, client_cert):
-    try:
-        response = requests.Response
-        response.ea_id = ea_id
-        response.df_ids = df_ids
-        response.entr_jwt = jwt_token
-
-        ThreadWrapper.runner_stats(server_url, response, client_cert)
-    except Exception as e:
-        if str(e) == "list index out of range":
-            print("Error: It is likely that your Entropy Assessment JWT has expired")
-        else:
-            print(e)
-        sys.exit(1)  
 
 if __name__ == "__main__":
 
-    # run is required, but config_path and run_path are not needed when doing runs 2 or 5
-    # Therefore, config_path and run_path have -- prefixes
+    #run is required, but config_path and run_path are not needed when doing runs 2 or 5
+    #Therefore, config_path and run_path have -- prefixes
     parser = argparse.ArgumentParser()
     parser.add_argument('run', default="full", help="Choose a run type:\
                     \n- (full) Full run of an initial entropy source submission\
                     \n- (fullAddOE) Full run to add an OE to an existing entropy source certificate\
                     \n- (status) Check Data File Progress (of last run)\
-                    \n- (submit) Submit Entropy Assessment and Data Files\
+                    \n- (submit) Submit Entropy Assessment and Data Files, does not certify\
                     \n- (support) Upload Supporting Documentation\
                     \n- (submitRBG) Submit Random Bit Generator\
-                    \n- (submitRBG_EA) Submit both an Entropy Assessment and Random Bit Generator\
-                    \n- (certify) Certify an Entropy Assessment (Uses IDs from previous run)\
-                    \n- (certifyRBG) Certify an RBG (Uses IDs from previous run)\
-                    \n- (certifyNewOE) Add new OE to existing entropy source certificate)\
-                    \n- (getCertificate) Get completed entropy source or random bit generator certificate (needs certificateID)\
-                    \n- (updatePUD) Update the PUD for an already certified entropy source\n\n")
+                    \n- (fulltRBG_EA) Submit and certify both an Entropy Assessment and Random Bit Generator\
+                    \n- (fullRBG) Submit and certify a Random Bit Generator\
+                    \n- (certify) Certify an Entropy Assessment (Uses IDs from history)\
+                    \n- (certifyRBG) Certify an RBG (Uses IDs from history)\
+                    \n- (certifyAddOE) Add new OE to existing entropy source certificate)\
+                    \n- (getCertificate) Get completed entropy source or random bit generator certificate (needs certificateId, does not need a --run_path)\
+                    \n- (updatePUD) Update the PUD for an already certified entropy source\
+                    \n- (refresh) Refreshes all tokens in a run file\n\n")
     
     # TODO add option to refresh all access tokens in a run file
 
@@ -66,8 +47,11 @@ if __name__ == "__main__":
     parser.add_argument('--config_path', help="Input the path to your configuration json")
     parser.add_argument('--run_path', help= "Input the path to your run json")
     parser.add_argument("-v", "--verbose", action="store_true", help="Run in 'verbose' mode")
-    parser.add_argument('--certificateID', help="The number of the certificate requested")
+    parser.add_argument('--certificateId', help="The number of the certificate requested")
     args = parser.parse_args()
+
+    # Determine actions based on run type
+    run_type = args.run.lower()
 
     # Set up globals based on command line arguments
     globalenv.verboseMode = args.verbose
@@ -78,172 +62,101 @@ if __name__ == "__main__":
         globalenv.record_90B_stats = True
         globalenv.stats_90B_path = args.stats_90B_path
 
-    globalenv.run_path = args.run_path
-    parse_run(args.run_path)        # Sets globalenv.run_data
+    # Don't need a run file to get a certificate
+    if run_type != "getcertificate":
+        globalenv.run_path = args.run_path
+        parse_run(args.run_path)        # Sets globalenv.run_data
+    
     parse_config(args.config_path)  # Sets globalenv config properties
-
-    # Define the actions that will occur for this run
-    flags = {
-        "clear_history": False,
-        "ea_registration": False,
-        "supporting_document_upload": False,
-        "ea_certify": False,
-        "ea_add_oe_certify": False,
-        "update_pud_certify": False,
-        "get_entropy_certificate": False
-    }
 
     # Perform a login
     login()
 
-    # Determine actions based on run type
-    run_type = args.run.lower()
+    # Perform actions
+    # if run_type == "run type":
+    #   actions should begin with either `clear_history()` or `refresh_tokens()`.
+    #   `clear_history()` will ensure that the history object is empty (it won't erase it if it exists)
+    #       so the following commands can write to the history.
+    #   `refresh_tokens()` will refresh all tokens in the run file to be used by subsequent actions.
+    #   
+    #   Actions that rely on others to complete, i.e. a certify requests requires the submitted data files to complete testing
+    #       will retry infinitely on the status check until a terminal status is obtained (could still be an error).
+    #
+    #   Users may define their own actions stitching together already-defined functions as needed.
 
     if run_type == "full":              # A complete entropy source submission
-        flags["clear_history"] = True
-        flags["ea_registration"] = True
-        flags["supporting_document_upload"] = True
-        flags["ea_certify"] = True
+        clear_history()
+        register_entropy_assessment()
+        submit_supporting_documentation()
+        display_data_file_status(retry=True)
+        certify_entropy_assessment()
 
     elif run_type == "submit":          # Register an entropy source and upload data files
-        flags["clear_history"] = True
-        flags["ea_registration"] = True
+        clear_history()
+        register_entropy_assessment()
     
     elif run_type == "support":         # Upload supporting documentation
-        flags["clear_history"] = True
-        flags["supporting_document_upload"] = True
+        submit_supporting_documentation()
 
     elif run_type == "certify":         # Certify a previously registered entropy source
-        flags["ea_certify"] = True
+        refresh_tokens()
+        display_data_file_status(retry=True)
+        certify_entropy_assessment()
 
-    elif run_type == "fulladdoe":       # Add an OE to an existing validated entropy source
-        flags["clear_history"] = True
-        flags["ea_registration"] = True
-        flags["supporting_document_upload"] = True
-        flags["ea_add_oe_certify"] = True
+    elif run_type == "fulladdoe":       # Register and add an OE to an existing entropy source certificate
+        clear_history()
+        register_entropy_assessment()
+        submit_supporting_documentation()
+        display_data_file_status(retry=True)
+        certify_entropy_assessment_add_oe()
 
-    elif run_type == "certifynewoe":    # Add an OE to an existing entropy source certificate
-        flags["ea_add_oe_certify"] = True
+    elif run_type == "certifyaddoe":    # Add an OE to an existing entropy source certificate
+        refresh_tokens()
+        display_data_file_status(retry=True)
+        certify_entropy_assessment_add_oe()
 
     elif run_type == "updatepud":       # Update the Public Use Document on an existing entropy source certificate
-        flags["supporting_document_upload"] = True
-        flags["update_pud_certify"] = True
+        clear_history()
+        submit_supporting_documentation()
+        certify_update_public_use_document()
 
     elif run_type == "status":          # Check the status of previously submitted data files
-
-        # TODO
-        # Added by Yvonne Cliff: Erase the stats_file ready for new data:
-        with open(globalenv.stats_90B_path, 'w', encoding="utf-8") as stats_file:
-            stats_file.close()
-
-        assessment_reg, raw_noise, rawNoiseSampleSize, restart_test, restartSampleSize, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses, pudEntropyCertificate, pudFilePath, entropyCertificate = parse_run(run_path)
-    
-        if len(responses) > 1:
-            print("*** Multiple OE statuses, responses will be batched")
-            count = 1
-        for response in responses:
-            if len(responses) > 1:
-                print("*** OE Batch " + str(count))
-                count = count + 1
-            entr_jwt = response.entr_jwt
-            if globalenv.verboseMode:
-                print("Refreshing Token")
-            jwt_token, _ = eajwt_refresh(entr_jwt)
-            if globalenv.verboseMode:
-                print("\nUsing values from previous run...")
-
-            ea_id = response.ea_id
-            df_ids = response.df_ids
-            prev_run(server_url, ea_id, df_ids, jwt_token, client_cert)
-
-        exit(0)
+        refresh_tokens()
+        display_data_file_status(retry=True)
 
     elif run_type == "getcertificate":  # View an entropy source certificate
-        flags["get_entropy_certificate"] = True
+        display_entropy_certificate(args.certificateId)
 
-        # Get certificate number to look up
-        certificateLookupID = args.certificateID
+    elif run_type == "refresh":         # Refresh all tokens in a run file
+        refresh_tokens()
 
-        if certificateLookupID == None:
-            print("Error: Certificate ID not provided. Use --certificateID [ID] on commandline to set. For example --certificateID E0\n")
-            exit(1)
+    elif run_type == "submitrbg":       # Register a random bit generator
+        clear_history()
+        register_random_bit_generator()
 
-        send_get_entropy_certificate(certificateLookupID)
-        
-        exit(0)
+    elif run_type == "fullrbg":         # Register and certify a random bit generator
+        clear_history()
+        register_random_bit_generator()
+        submit_supporting_documentation()
+        get_random_bit_generator(retry=True)
+        certify_random_bit_generator()
 
-    # Register a random bit generator
-    elif run_type == "submitrbg":
-        
-        # TODO
-        clear_previous_run()
-        #ea = EntropyAssessment(client_cert, server_url, assessment_reg, seed_path, mod_id, vend_id, oe_id, certify, single_mod)
-        random_bit_generator_reg = loadObject(run_path[0]["RandomBitGeneratorRegistrationPath"])
-        rbg = RandomBitGenerator(client_cert, server_url, random_bit_generator_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
-        rbg.login()
-        rbg.send_reg()
-        responseCount=0
-        #for response in rbg.responses:
-            # TODO
-        #    ThreadWrapper.runner_data(server_url, response, conditioned[responseCount], raw_noise[responseCount], restart_test[responseCount], client_cert, rawNoiseSampleSize[responseCount], restartSampleSize[responseCount])
-        #    ThreadWrapper.runner_stats(server_url, response, client_cert)
-        #    responseCount = responseCount + 1
-        exit(0)
-
-    # Register a random bit generator and entropy source with data files
-    elif run_type == "submitrbg_ea":
-
-        # TODO
-        clear_previous_run()
-        combined_reg = loadObject(run_path[0]["CombinedRegistrationPath"])
-        ea = Combined_EntropyAssessment_RBG(client_cert, server_url, combined_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
-        ea.login()
-        ea.send_reg()
-        responseCount=0
-        #for response in ea.responses:
-            # TODO
-        #    ThreadWrapper.runner_data(server_url, response, conditioned[responseCount], raw_noise[responseCount], restart_test[responseCount], client_cert, rawNoiseSampleSize[responseCount], restartSampleSize[responseCount])
-        #    ThreadWrapper.runner_stats(server_url, response, client_cert)
-        #    responseCount = responseCount + 1
-
-        exit(0)
-
-    # Certify a previously registered random bit generator
-    elif run_type == "certifyrbg":
-
-        # TODO
-        print("Using values from previous run..\n")
-
-        client_cert, seed_path, server_url, esv_version = parse_config(config_path)
-        assessment_reg, raw_noise, rawNoiseSampleSize, restart_test, restartSampleSize, conditioned, supporting_paths, comments, sdType, mod_id, vend_id, entropyId, oe_id, certify, single_mod, responses, pudEntropyCertificate, pudFilePath, entropyCertificate = parse_run(run_path)
-
-        rbg = RandomBitGenerator(client_cert, server_url, random_bit_generator_reg, seed_path, mod_id, vend_id, entropyId, oe_id, certify, single_mod)
-        rbg.responses = responses
-        rbg.login()
-        
-        certSup = sendAllSupportingDocuments(comments, sdType, supporting_paths, server_url, client_cert, ea.auth_header)
-        rbg.send_certify(certSup, client_cert, ea.login_jwt, esv_version)
+    elif run_type == "fullrbg_ea":    # Register and certify a random bit generator and entropy source with data files
+        clear_history()
+        register_entropy_assessment()
+        register_random_bit_generator()
+        submit_supporting_documentation()
+        display_data_file_status(retry=True)
+        get_random_bit_generator(retry=True)
+        certify_combined_rbg_ea()
     
-        exit(0)
+    elif run_type == "certifyrbg":    # Certify a previously registered random bit generator
+        refresh_tokens()
+        get_random_bit_generator(retry=True)
+        certify_random_bit_generator()
 
     else:
         print(f"Unable to find run type {run_type}, no actions performed")
         exit(1)
-
-    # Perform actions
-    if flags["clear_history"]:
-        clear_history()
-
-    if flags["ea_registration"]:
-        register_entropy_assessment()
-
-    if flags["supporting_document_upload"]:
-        submit_supporting_documentation()
-
-    if flags["ea_certify"]:
-        certify_entropy_assessment()
-
-    if flags["update_pud_certify"]:
-        certify_update_public_use_document()
 
     exit(0)

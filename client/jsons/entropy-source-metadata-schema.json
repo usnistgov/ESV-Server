@@ -56,19 +56,6 @@
           "description": "whether the entropy source includes additional noise sources according to Section 3.1.6 of SP 800-90B",
           "type": "boolean"
         },
-        "numberOfOEs": {
-          "description": "number of Operating Environments",
-          "type": "integer",
-          "minimum": 1
-        },
-        "rawNoiseSHA256": {
-          "description": "SHA256 hash of raw noise submission",
-          "type": "string"
-        },
-        "restartBitsSHA256": {
-          "description": "SHA256 hash of restart submission",
-          "type": "string"
-        },
         "conditioningComponent": {
           "type": "array",
           "items": {
@@ -109,16 +96,11 @@
                 "description": "output size in bits of the conditioning component",
                 "type": "integer",
                 "minimum": 0
-              },
-              "conditionedBitsSHA256": {
-                "description": "SHA256 hash of conditioned bits submission",
-                "type": "string"
               }
             },
             "required": [
               "sequencePosition",
               "vetted",
-              "bijectiveClaim",
               "description",
               "minNin",
               "minHin",
@@ -132,14 +114,11 @@
         "primaryNoiseSource",
         "iidClaim",
         "bitsPerSample",
-        "alphabetSize",
         "hminEstimate",
         "physical",
-        "itar",
         "numberOfRestarts",
         "samplesPerRestart",
-        "additionalNoiseSources",
-        "conditioningComponent"
+        "additionalNoiseSources"
       ]
     }
   ]

@@ -38,27 +38,3 @@ def generate_pass(seed_path):
     passw = int(passw, 2) % 100000000           # mod 10^8 to get 8 digit passcode
     
     return str.rjust(str(passw), 8, '0')        # Pad to 8 characters
-
-def is_totp_expired(response):
-    if int(response.status_code) != 403:
-        return False
-    
-    responseJson = response.json()
-    errorMsg = responseJson[1]["error"]
-
-    if "totp" in errorMsg.lower() and "window" in errorMsg.lower():
-        return True
-    
-    return False
-
-def did_totp_fail(response):
-    if int(response.status_code) != 403:
-        return False
-    
-    responseJson = response.json()
-    errorMsg = responseJson[1]["error"]
-
-    if "totp" in errorMsg.lower() and "failed" in errorMsg.lower():
-        return True
-    
-    return False
