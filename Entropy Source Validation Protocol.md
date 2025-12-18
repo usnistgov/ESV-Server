@@ -454,6 +454,8 @@ A `GET` request can be sent to the server to check on the status of a previously
 
 ```GET /esv/v1/rbgs/<rbgId>```
 
+with the `accessToken` set in the header `Authorization` field as a bearer token. 
+
 This will return the full set of random bit generators associated with that ID. 
 
 ```
@@ -576,9 +578,7 @@ An entropy source and random bit generator(s) may be provided as part of the sam
     },
     {
         "90B": { <register entropy source payload above> },
-        "90C": {
-            <register random bit generator payload array above>
-        }
+        "90C": { <register random bit generator payload array above> }
     }
 ]
 ```
@@ -626,13 +626,13 @@ After a file has been submitted, a user may issue a `GET /esv/v1/entropyAssessme
 
 ### 6.2. Supporting Documentation Files
 
-Supporting documentation files are documents that explain the model behind the noise source in addition to other non-testable requirements of SP 800-90B. The clients shall only upload Microsoft Word or PDF files: `.doc`, `.docx`, or `.pdf`. 
+Supporting documentation files are documents that explain the model behind the noise source in addition to other non-testable requirements of SP 800-90B. The clients shall only upload PDF files: `.pdf`. 
 
 These are done with a `POST /esv/v1/supportingDocumentation` with the following body
 
 ```
 Content-Type: multipart/form-data;
-Key: sdFile, Value: <file upload: .doc, .docx, .pdf>
+Key: sdFile, Value: <file upload: .pdf>
 Key: sdType, Value: "EntropyAssessmentReport" or "PublicUseDocument" or "DataCollectionAttestation" or "RandomBitGeneratorReport" or "Other"
 Key: sdComments, Value: <string describing document, optional but recommended when updating a Public Use Document>
 ```
