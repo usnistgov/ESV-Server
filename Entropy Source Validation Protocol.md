@@ -801,13 +801,11 @@ A certify request may have multiple supporting documents, or multiple entropy as
         "supportingDocumentation": [ 
             {"sdId": <sdId1>, "accessToken": "<jwt-with-claims-for-sdId1>"}
         ]
-        "rbg": [			
-            {
-                "rbgId": <rbgId1>,
-                "oeIds": [1],
-                "accessToken": "<jwt-with-claims-for-rbgId1>"
-            }
-        ]          
+        "rbg": {
+            "rbgId": <rbgId1>,
+            "oeIds": [1],
+            "accessToken": "<jwt-with-claims-for-rbgId1>"
+        }       
     }
 ]
 ```
@@ -850,13 +848,11 @@ An entropy source can be certified with a random bit generator with a `POST /esv
                 "accessToken": "<jwt-with-claims-for-eaId1>"
             }
         ],
-        "rbg": [			
-            {
-                "rbgId": <rbgId1>,
-                "oeIds": [1],
-                "accessToken": "<jwt-with-claims-for-rbgId1>"
-            }
-        ]          
+        "rbg": {
+            "rbgId": <rbgId1>,
+            "oeIds": [1],
+            "accessToken": "<jwt-with-claims-for-rbgId1>"
+        }         
     }
 ]
 ```
