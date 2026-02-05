@@ -326,8 +326,9 @@ To create the object referencing one or more existing entropy sources the follow
                     "sources": 
                     [
                         {
-                            "entropyValidations": ["E#"],
-                            "operatingEnvironments": [0]
+                            "entropyValidation": "E#",
+                            "entropyOperatingEnvironments": [0],
+                            "rbgOperatingEnvironments":[0]
                         }
                     ],
                     "combinationMethod": "Method1 or Method2",
@@ -342,8 +343,12 @@ To create the object referencing one or more existing entropy sources the follow
                     },
                 },
                 "drbg": {
-                    "validationNumbers": ["A#"],
-                    "algorithm": "CTR_DRBG, Hash_DRBG, HMAC_DRBG",
+                    "validations": [
+                        {
+                            "validatioNumber": "A1",
+                            "algorithmOperatingEnvironments": [1]
+                        }
+                    ],                    "algorithm": "CTR_DRBG, Hash_DRBG, HMAC_DRBG",
                     "derivationFunction": true,
                     "seed": [
                         {
@@ -376,7 +381,12 @@ To create the object referencing an existing random bit generator the following 
                 "allowsReseedRequests": true,
                 "randomnessSource": "G#",
                 "drbg": {
-                    "validationNumbers": ["A#"],
+                    "validations": [
+                        {
+                            "validatioNumber": "A1",
+                            "algorithmOperatingEnvironments": [1]
+                        }
+                    ],
                     "algorithm": "",
                     "derivationFunction": true,
                     "seed": [
@@ -414,35 +424,38 @@ In both cases the response will be the resulting object and status
 
 Here is a full list of the properties included in each `rbg` object:
 
-| JSON Property                   | Description                                                                                                                     | JSON Type    |
-|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------|--------------|
-| construction                    | The specific RBG Construction from SP 800-90C being validated                                                                   | string       |
-| allowsReseedRequests            | Whether the RBG allows reseed requests from users                                                                               | boolean      |
-| entropySources                  | An optional object outlining the entropy sources used. Only one of `entropySources` and `randomnessSource` shall be present.    | object       |
-| --sources                       | An array of existing entropy validation certificates used by the RBG                                                            | string array |
-| ----entropyValidations          | An array of entropy validation certificates (E#) used by the RBG                                                                | string array |
-| ----operatingEnvironments       | An array of operating environments that appear on the corresponding E# that are used by the RBG                                 | int array    |
-| --combinationMethod             | The method by which the entropy sources are combined. Required only if multiple values are present in the `sources` list.       | string       |
-| --externalConditioningComponent | An optional object outlining an external conditioning component                                                                 | object       |
-| ----procedure                   | The method from SP 800-90C stating how the conditioning component is run                                                        | string       |
-| ----validationNumbers           | The algorithm validation number of the function used in the conditioning component                                              | string       |
-| ----algorithm                   | The algorithm name used in the conditioning component                                                                           | string       |
-| ----minNin                      | The minimum number of bits used as input for each call of the conditioning component                                            | int          |
-| ----nOut                        | The number of bits provided as output from each call of the conditioning component                                              | int          |
-| ----minHin                      | The minimum number of entropy bits used as input for each call of the conditioning component                                    | float        |
-| ----hOut                        | The number of entropy bits provided as output from each call to the conditioning component                                      | float        |
-| randomnessSource                | An existing random bit generator certificate that is used as input to the current random bit generator                          | string       |
-| drbg                            | An object describing the deterministic random bit generator supported by the random bit generator                               | object       |
-| --validationNumbers             | An array of algorithm validation numbers of the deterministic random bit generator                                              | string array |
-| --algorithm                     | The algorithm name of the deterministic random bit generator                                                                    | string       |
-| --derivationFunction            | Whether a derivation function is used by the deterministic random bit generator                                                 | boolean      |
-| --seed                          | An array of objects describing how the deterministic random bit generator is seeded                                             | object array |
-| ----securityStrength            | Lists the security strength supported by the following properties while seeding                                                 | int          |
-| ----minNin                      | The minimum number of bits used as input to seed the deterministic random bit generator to the listed security strength         | int          |
-| ----minHin                      | The minimum number of entropy bits used as input to seed the deterministic random bit generator to the listed security strength | float        |
-| --reseed                        | Whether the deterministic random bit generator can be reseeded during operation                                                 | boolean      |
-| --reseedFrequency               | How frequently the deterministic random bit generator is reseeded                                                               | string       |
-| operatingEnvironments           | An array of `operatingEnvironment` IDs from ACVTS supported by the random bit generator                                         | int array    |
+| JSON Property                      | Description                                                                                                                     | JSON Type    |
+|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|--------------|
+| construction                       | The specific RBG Construction from SP 800-90C being validated                                                                   | string       |
+| allowsReseedRequests               | Whether the RBG allows reseed requests from users                                                                               | boolean      |
+| entropySources                     | An optional object outlining the entropy sources used. Only one of `entropySources` and `randomnessSource` shall be present.    | object       |
+| --sources                          | An array of existing entropy validation certificates used by the RBG                                                            | object array |
+| ----entropyValidation              | An entropy validation certificate (E#) used by the RBG                                                                          | string       |
+| ----entropyOperatingEnvironments   | An array of operating environments that appear on the corresponding E# that are used by the RBG                                 | int array    |
+| ----rbgOperatingEnvironments       | An array of operating environments for the RBG that use this entropy source                                                     | int array    |
+| --combinationMethod                | The method by which the entropy sources are combined. Required only if multiple values are present in the `sources` list.       | string       |
+| --externalConditioningFunction     | An optional object outlining an external conditioning function                                                                  | object       |
+| ----procedure                      | The method from SP 800-90C stating how the conditioning function is run                                                         | string       |
+| ----validationNumbers              | The algorithm validation number of the function used in the conditioning function                                               | string       |
+| ----algorithm                      | The algorithm name used in the conditioning function                                                                            | string       |
+| ----minNin                         | The minimum number of bits used as input for each call of the conditioning function                                             | int          |
+| ----nOut                           | The number of bits provided as output from each call of the conditioning function                                               | int          |
+| ----minHin                         | The minimum number of entropy bits used as input for each call of the conditioning function                                     | float        |
+| ----hOut                           | The number of entropy bits provided as output from each call to the conditioning function                                       | float        |
+| randomnessSource                   | An existing random bit generator certificate that is used as input to the current random bit generator                          | string       |
+| drbg                               | An object describing the deterministic random bit generator supported by the random bit generator                               | object       |
+| --validations                      | An array of algorithm validation numbers of the deterministic random bit generator                                              | object array |
+| ----validationNumber               | An algorithm validation (usually A#) for the DRBG                                                                               | string       |
+| ----algorithmOperatingEnvironments | An array of OEs used on the algorithm certificate for the DRBG                                                                  | int array    |
+| --algorithm                        | The algorithm name of the deterministic random bit generator                                                                    | string       |
+| --derivationFunction               | Whether a derivation function is used by the deterministic random bit generator                                                 | boolean      |
+| --seed                             | An array of objects describing how the deterministic random bit generator is seeded                                             | object array |
+| ----securityStrength               | Lists the security strength supported by the following properties while seeding                                                 | int          |
+| ----minNin                         | The minimum number of bits used as input to seed the deterministic random bit generator to the listed security strength         | int          |
+| ----minHin                         | The minimum number of entropy bits used as input to seed the deterministic random bit generator to the listed security strength | float        |
+| --reseed                           | Whether the deterministic random bit generator can be reseeded during operation                                                 | boolean      |
+| --reseedFrequency                  | How frequently the deterministic random bit generator is reseeded                                                               | string       |
+| operatingEnvironments              | An array of `operatingEnvironment` IDs from ACVTS supported by the random bit generator                                         | int array    |
 
 In this table `--` represents indentation, indicating that the property is an element of the immediate property above with less indentation. For example a `sources` object will only exist within an `entropySources` object. 
 
@@ -473,29 +486,20 @@ This will return the full set of random bit generators associated with that ID.
             "entropySources": {
                 "sources": [
                     {
-                        "entropyValidations": [
-                            "E1"
-                        ],
-                        "operatingEnvironments": [
-                            1
-                        ]
+                        "entropyValidation": "E1",
+                        "entropyOperatingEnvironments": [1],
+                        "rbgOperatingEnvironments": [2]
                     },
                     {
-                        "entropyValidations": [
-                            "E2"
-                        ],
-                        "operatingEnvironments": [
-                            1
-                        ]
+                        "entropyValidation": "E2"
+                        "entropyOperatingEnvironments": [3],
+                        "rbgOperatingEnvironments": [4]
                     }
                 ],
                 "combinationMethod": "method1",
-                "externalConditioningComponent": {
+                "externalConditioningFunction": {
                     "procedure": "getConditionedInput",
-                    "validationNumbers": [
-                        "A1",
-                        "A2"
-                    ],
+                    "validationNumbers": ["A1", "A2"],
                     "algorithm": "Algo123",
                     "minNin": 0,
                     "nOut": 0,
@@ -504,25 +508,25 @@ This will return the full set of random bit generators associated with that ID.
                 }
             },
             "drbg": {
-                "validationNumbers": [
-                    "A1",
-                    "A2"
-                ],
+                "validations": [
+                    {
+                        "validationNumber": "A1",
+                        "algorithmOperatingEnvironments": [2, 4]
+                    }
+                ]
                 "algorithm": "CTR_DRBG",
                 "derivationFunction": true,
                 "seed": [
                     {
                         "securityStrength": 128,
-                        "minHin": 0.0,
-                        "minNin": 0.0
+                        "minHin": 165.2,
+                        "minNin": 256
                     }
                 ],
                 "reseed": true,
                 "reseedFrequency": "string"
             },
-            "operatingEnvironments": [
-                1
-            ]
+            "operatingEnvironments": [2, 4]
         },
         {
             "id": 1,
@@ -531,9 +535,11 @@ This will return the full set of random bit generators associated with that ID.
             "construction": "RBG2(NP)",
             "allowsReseedRequests": false,
             "drbg": {
-                "validationNumbers": [
-                    "A3",
-                    "A4"
+                "validations": [
+                    {
+                        "validatioNumber": "A1",
+                        "algorithmOperatingEnvironments": [1]
+                    }
                 ],
                 "algorithm": "HMAC_DRBG",
                 "derivationFunction": false,
