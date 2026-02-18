@@ -5,9 +5,9 @@
 	{
 		"primaryNoiseSource": <string, brief description of noise source (64 characters)>,
 		"iidClaim": <true or false, whether an IID claim is made on the noise source>,
-		"bitsPerSample": <integer, number of bits in a sample output of the full entropy source [1, 8], if above 8, please use 8>,
-		"hminEstimate": <double, estimate of the entropy in one sample out of the full entropy source>,
-		"physical": <true or false, whether the entropy source is physical or non-physical>,
+		"bitsPerSample": <integer, number of bits in a sample output of the noise source [1, 8], if above 8, please use 8>,
+		"hminEstimate": <double, estimate of the entropy in one sample out of the noise source>,
+		"physical": <true or false, whether the noise source is physical or non-physical>,
 		"numberOfRestarts": <integer, number of restarts used to perform the restart tests>,
 		"samplesPerRestart": <integer, number of samples generated per restart to perform the restart tests>,
 		"additionalNoiseSources": <true or false, whether the entropy source includes additional noise sources according to Section 3.1.6 of SP 800-90B>,
