@@ -20,7 +20,7 @@ def get_status(server_url, ea_id, id, entrjwt, client_cert):
     status = ""
     substrings = ['error', 'runsuccessful'] 
 
-    while not any (x in status.lower() for x in substrings): #check for a certain value in status
+    while not any (x in status.lower().replace(" ", "") for x in substrings): #check for a certain value in status
         response = requests.get(datafileUrl + id, headers = auth_header, cert=client_cert)
         #print("Raw status")
         #print(response.json())
