@@ -625,10 +625,11 @@ In the above case, the `<eaId>` and `<dfId>` are determined by the response from
 
 After a file has been submitted, a user may issue a `GET /esv/v1/entropyAssessments/<eaId>/dataFiles/<dfId>` to view the status of the submission through the testing process. Normally the file will complete entirely in about 5 minutes. There may be a handful of potential statuses displayed: 
 
+* "EntropyAssessment is not yet processed, please try again. Parameters: eaId=." - states that the entropyAssessment has not yet been processed internally, try again in 30 seconds. 
 * "Uploaded" - states that the file was received and no action has been taken yet. 
-* "RunStarted" - indicates the testing has begun. 
-* "Successful" - indicates the testing completed and will also display the results. 
-* "Error" - will provide additional error information.
+* "Run Started" - indicates the testing has begun. 
+* "Run Successful" - indicates the testing completed and will also display the results. 
+* "Run Failed", "Run Cancelled", "Error" - will provide additional error information.
 
 ### 6.2. Supporting Documentation Files
 
