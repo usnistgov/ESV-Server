@@ -336,6 +336,7 @@ To create the object referencing one or more existing entropy sources the follow
                         "procedure": "getConditionedInput or getConditionedFullEntropyInput",
                         "validationNumbers": ["A#"],
                         "algorithm": "",
+                        "keyLen": 0,
                         "minNIn": 0,
                         "nOut": 0,
                         "minHIn": 0.0,
@@ -438,6 +439,7 @@ Here is a full list of the properties included in each `rbg` object:
 | ----procedure                      | The method from SP 800-90C stating how the conditioning function is run                                                         | string       |
 | ----validationNumbers              | The algorithm validation number of the function used in the conditioning function                                               | string       |
 | ----algorithm                      | The algorithm name used in the conditioning function                                                                            | string       |
+| ----keyLen                         | The key length of the algorithm used. Required only for HMAC, and AES-based conditioning functions.                             | int          |
 | ----minNin                         | The minimum number of bits used as input for each call of the conditioning function                                             | int          |
 | ----nOut                           | The number of bits provided as output from each call of the conditioning function                                               | int          |
 | ----minHin                         | The minimum number of entropy bits used as input for each call of the conditioning function                                     | float        |
