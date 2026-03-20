@@ -669,7 +669,7 @@ Any other status than `"success"` indicates a failure.
 
 ### 7.1. Full Submission
 
-Certify requests are done by `POST /esv/v1/certify`. The `moduleId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. Thus, the "module" information and OE information must be previously registered to the ACVTS environment prior to this step. The EntropyID field is analagous to the Test Identifier (TID) in the module validation process. It helps the submitter track the entropy validation after it is submitted to the server. The `<eaId>` is determined by the response from the server during the `POST /esv/v1/entropyAssessments` request.
+Certify requests are done by `POST /esv/v1/certify`. The `moduleId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. Thus, the "module" information and OE information must be previously registered to the ACVTS environment prior to this step. The EntropyID field is analagous to the Test Identifier (TID) in the module validation process. It helps the submitter track the entropy validation after it is submitted to the server. The `<eaId>` is determined by the response from the server during the `POST /esv/v1/entropyAssessments` request. Exactly one each of an Entropy Assessment Report and Public Use Document supporting documentation types are required. Up to one Data Collection Attestation is expected. Any number of Other documents may be provided. 
 
 A certify request may have multiple supporting documents, or multiple entropy assessments. Each must include their accompanying JWT `accessToken`. The tokens may need to be refreshed before submitting. An example is the following...
 
@@ -713,7 +713,7 @@ The following properties are supported by the payload:
 
 ### 7.2. AddOE
 
-This certify request allows a user to add Operating Environments (OEs) to an existing certificate. The cost recovery associated with this request is the EntropyUpdate (EU, ESVUP). Note, the review will be performed to the current guidance, not necessarily the guidance available at the time of the original submission. The properties for the submission are the same as a Full Submission, except the `"moduleId"` is replaced with the existing `"entropyCertificate"`. 
+This certify request allows a user to add Operating Environments (OEs) to an existing certificate. The cost recovery associated with this request is the EntropyUpdate (EU, ESVUP). Note, the review will be performed to the current guidance, not necessarily the guidance available at the time of the original submission. The properties for the submission are the same as a Full Submission, except the `"moduleId"` is replaced with the existing `"entropyCertificate"`. Exactly one each of an Entropy Assessment Report and Public Use Document supporting documentation types are required. Up to one Data Collection Attestation is expected. Any number of Other documents may be provided. 
 
 The request is a `POST` on `/esv/v1/certify/addOE` or `/esv/v1/certify/addOperatingEnvironment`.
 
@@ -794,7 +794,7 @@ The following properties are supported by an UpdatePUD request.
 
 ### 7.4 RandomBitGenerator
 
-Certify requests are done by `POST /esv/v1/certify/rbg`. The `moduleId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. Thus, the "module" information and OE information must be previously registered to the ACVTS environment prior to this step. The EntropyID field is analagous to the Test Identifier (TID) in the module validation process. It helps the submitter track the entropy validation after it is submitted to the server. The `<rbgId>` is determined by the response from the server during the `POST /esv/v1/rbgs` request.
+Certify requests are done by `POST /esv/v1/certify/rbg`. The `moduleId` and `oeId` fields use ID numbers from the corresponding ACVTS environment. Thus, the "module" information and OE information must be previously registered to the ACVTS environment prior to this step. The EntropyID field is analagous to the Test Identifier (TID) in the module validation process. It helps the submitter track the entropy validation after it is submitted to the server. The `<rbgId>` is determined by the response from the server during the `POST /esv/v1/rbgs` request. The only allowed supporting documentation types during this step are exactly one RBG Report and any number of Other documents. 
 
 A certify request may have multiple supporting documents, or multiple entropy assessments. Each must include their accompanying JWT `accessToken`. The tokens may need to be refreshed before submitting. An example is the following...
 
@@ -804,7 +804,6 @@ A certify request may have multiple supporting documents, or multiple entropy as
         "esvVersion": <esv-version>
     },
     {
-        "limitEntropyAssessmentToSingleModule": false,
         "moduleId": 1,	
         "entropyId": "0000"
         "supportingDocumentation": [ 
@@ -825,7 +824,6 @@ The following properties are supported by the payload:
 
 | JSON Property          | Description                                                                                | JSON Type  |
 |------------------------|--------------------------------------------------------------------------------------------|------------|
-| limitEntropyAssessmentToSingleModule | boolean stating whether the entropy assessment associated with this certification is applicable to a single module / vendor | boolean |
 | moduleId               | refers to the module ID number of the corresponding ACVTS environment                      | integer    |
 | entropyId              | analagous to the Test Identifier (TID) in the module validation process, used by submitter to track review progress | string |
 | sdId (multiple)        | ID of the supporting document which was returned upon submission of supporting document(s) | integer    |
