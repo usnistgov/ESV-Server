@@ -811,7 +811,6 @@ A certify request may have multiple supporting documents, or multiple entropy as
         ]
         "rbg": {
             "rbgId": <rbgId1>,
-            "oeIds": [1],
             "accessToken": "<jwt-with-claims-for-rbgId1>"
         }       
     }
@@ -822,15 +821,14 @@ The response from the server will mirror the information sent, with the ACVTS ID
 
 The following properties are supported by the payload:
 
-| JSON Property          | Description                                                                                | JSON Type  |
-|------------------------|--------------------------------------------------------------------------------------------|------------|
-| moduleId               | refers to the module ID number of the corresponding ACVTS environment                      | integer    |
-| entropyId              | analagous to the Test Identifier (TID) in the module validation process, used by submitter to track review progress | string |
-| sdId (multiple)        | ID of the supporting document which was returned upon submission of supporting document(s) | integer    |
-| accessToken (supportingDocumentation) | the jwt with claims for the corresponding sdId                              | string     | 
-| rbgId                   | corresponds to the response from the server during the POST /esv/v1/rbgs request | integer |
-| oeId					 | refers to the operating environment ID number from the corresponding ACVTS environment     | integer    |
-| accessToken (rbgs) | the jwt with claims for the corresponding rbgId                                   | string |
+| JSON Property                         | Description                                                                                                         | JSON Type |
+|---------------------------------------|---------------------------------------------------------------------------------------------------------------------|-----------|
+| moduleId                              | refers to the module ID number of the corresponding ACVTS environment                                               | integer   |
+| entropyId                             | analagous to the Test Identifier (TID) in the module validation process, used by submitter to track review progress | string    |
+| sdId (multiple)                       | ID of the supporting document which was returned upon submission of supporting document(s)                          | integer   |
+| accessToken (supportingDocumentation) | the jwt with claims for the corresponding sdId                                                                      | string    | 
+| rbgId                                 | corresponds to the response from the server during the POST /esv/v1/rbgs request                                    | integer   |
+| accessToken (rbgs)                    | the jwt with claims for the corresponding rbgId                                                                     | string    |
 
 ### 7.5 Combined Certify
 
@@ -857,7 +855,6 @@ An entropy source can be certified with a random bit generator with a `POST /esv
         ],
         "rbg": {
             "rbgId": <rbgId1>,
-            "oeIds": [1],
             "accessToken": "<jwt-with-claims-for-rbgId1>"
         }         
     }
