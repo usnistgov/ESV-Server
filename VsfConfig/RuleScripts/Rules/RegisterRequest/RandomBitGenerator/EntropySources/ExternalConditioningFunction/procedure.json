@@ -1,0 +1,50 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Procedure must be either GetConditionedInput or GetConditionedFullEntropyInput",
+			"parameters": {
+				"ruleText": "currentProperty != ConditionedInputProcedureType.None"
+			}
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3XOR"
+								}
+							},
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "EntropyCertificateList.Any(e => As(e, \"EntropyCertificate\").OperatingEnvironmentProperties.Any(oe => !As(oe, \"EntropyCertificateOperatingEnvironmentProperties\").FullEntropy))"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "ExternalConditioningFunction shall use the GetConditionedFullEntropyInput method if used within an RBG3(XOR)",
+								"references": ["SP 800-90C Section 6.4"],
+								"parameters": {
+									"ruleText": "currentProperty == ConditionedInputProcedureType.GetConditionedFullEntropyInput"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,245 @@
+[
+	{
+		"modelName": "EntropyAssessmentRegisterPayload",
+		"rootNode": {
+			"dataType": "NIST.CVP.ESV.Shared.Libraries.Models.EntropyAssessmentRegisterPayload",
+			"nodeData": {
+				"vsfScriptFiles": [
+					{ "scriptFile": "CommonRules/notNull.json" }
+				]
+			},
+			"nodes": [
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "PrimaryNoiseSource"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/RegisterRequest/primaryNoiseSource.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "IidClaim"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{
+								"scriptFile": "CommonRules/notNull.json"
+							}
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "BitsPerSample"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/RegisterRequest/bitsPerSample.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "HMinEstimate"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/RegisterRequest/hMinEstimate.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "IsPhysical"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/notNull.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "AdditionalNoiseSources"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/notNull.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "NumberOfRestarts"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/RegisterRequest/Shared/minRestart.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "SamplesPerRestart"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/RegisterRequest/Shared/minRestart.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "list",
+					"property": {
+						"internalIdentifier": "ConditioningComponents"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/requiredCase.json" },
+							{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/optionalCase.json" }
+						]
+					},
+					"listItem": {
+						"branchNodeData": {
+							"runBeforeListItem": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "CommonRules/notNull.json" }
+								]
+							},
+							"runAfterListItem": {
+								"vsfScriptFiles": [
+									{	"scriptFile": "Rules/RegisterRequest/ConditioningComponent/ccRules.json"	}
+								]
+							}
+						},
+						"nodes": [
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "IsVetted"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/isVettedRequiredCase.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/isVettedOptionalCase.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "Description"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/description.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/NonVetted/description.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "IsBijectiveClaim"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/bijectiveClaimIsNotApplicable.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/NonVetted/isBijectiveClaim.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "ValidationNumber"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/validationNumber.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/NonVetted/validationNumberIsNotApplicable.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "MinNIn"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/minNin.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/NonVetted/minNin.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "MinHIn"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/minHin.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "Nw"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/nw.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/NonVetted/nw.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "NOut"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/nOut.json" },
+										{ "scriptFile": "Rules/RegisterRequest/ConditioningComponent/NonVetted/nOut.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "HOut"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" }
+									]
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	}
+]

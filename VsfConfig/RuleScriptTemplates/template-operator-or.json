@@ -1,0 +1,13 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Operator",
+			"operatorType": "Or",
+			"description": "",
+			"parameters": {
+				"scriptLines": [
+				]
+			}
+		}
+	]
+}

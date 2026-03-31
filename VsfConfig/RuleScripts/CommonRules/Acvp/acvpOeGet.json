@@ -1,0 +1,31 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "oeService != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "oeObj",
+				"value": "As(oeService,\"IOEService\").GetOE(currentProperty.GetValueOrDefault())"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "oeObj != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "oeObj is a proper type.",
+			"parameters": {
+				"ruleText": "Is(oeObj, \"OperatingEnvironmentWithDependencies\")"
+			}
+		}	
+	]
+}

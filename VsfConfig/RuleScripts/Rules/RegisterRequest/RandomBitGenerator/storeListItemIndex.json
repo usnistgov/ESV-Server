@@ -1,0 +1,25 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "vsfListItemIndex != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "Is(vsfListItemIndex, \"Int32\")"
+			}
+		},
+		{
+			"lineType": "State",
+			"description": "Store the current RBG index",
+			"parameters": {
+				"scope": "Node",
+				"key": "rootRbgItemIndex",
+				"value": "vsfListItemIndex"
+			}
+		}
+	]
+}

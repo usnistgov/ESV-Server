@@ -1,0 +1,36 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"description": "",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+						]
+					},
+					"then": {
+						"scriptLines": [
+							]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+						]
+					},
+					"then": {
+						"scriptLines": [
+						]
+					}
+				},
+				{
+					"else": {
+						"scriptLines": [
+						]
+					}
+				}
+			]
+		}
+	]
+}

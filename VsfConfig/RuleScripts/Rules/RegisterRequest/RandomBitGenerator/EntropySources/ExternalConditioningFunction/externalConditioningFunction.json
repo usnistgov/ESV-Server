@@ -1,0 +1,75 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3XOR"
+								}
+							},
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "EntropyCertificateList.Any(e => As(e, \"EntropyCertificate\").OperatingEnvironmentProperties.Any(oe => !As(oe, \"EntropyCertificateOperatingEnvironmentProperties\").FullEntropy))"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "ExternalConditioningFunction shall be used if the construction is RBG3(XOR) and any entropy sources do not provide full entropy output",
+								"references": ["SP 800-90C Section 6.4.2 Requirement 1"],
+								"parameters": {
+									"ruleText": "currentProperty != null"
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBGC"
+								}
+							},
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "EntropyCertificateList.Any(e => As(e, \"EntropyCertificate\").OperatingEnvironmentProperties.Any(oe => !As(oe, \"EntropyCertificateOperatingEnvironmentProperties\").FullEntropy))"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "ExternalConditioningFunction shall be used if the construction is RBGC and any entropy sources do not provide full entropy output",
+								"references": ["SP 800-90C Section 7.3.2 Requirement 5"],
+								"parameters": {
+									"ruleText": "currentProperty != null"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

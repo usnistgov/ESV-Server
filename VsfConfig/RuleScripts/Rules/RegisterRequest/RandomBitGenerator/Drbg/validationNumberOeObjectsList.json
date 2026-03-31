@@ -1,0 +1,12 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Each algorithm validation number used shall appear only once",
+			"parameters": {
+				"ruleText": "currentProperty.Select(v => v.ValidationNumber).Distinct().Count() == currentProperty.Count()"
+			}
+		}
+	]
+}

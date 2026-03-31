@@ -1,0 +1,20 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "State",
+			"description": "",
+			"parameters": {
+				"scope": "Private|Node|Global",
+				"key": "StateKey",
+				"value": "As(ExternalObject, \"Type\").Method(Params)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "",
+			"parameters": {
+				"ruleText": "StateKey != null"
+			}
+		}
+	]
+}

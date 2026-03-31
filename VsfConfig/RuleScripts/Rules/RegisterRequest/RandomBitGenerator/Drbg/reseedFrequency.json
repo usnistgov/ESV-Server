@@ -1,0 +1,64 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.Reseed == false"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If the DRBG does not allow reseeding, reseeding frequency shall be null",
+								"parameters": {
+									"ruleText": "currentProperty == null"
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "currentProperty != null"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "ReseedFrequency length shall be between 2 and 64 characters",
+								"parameters": {
+									"ruleText": "currentProperty.Length >= 2 && currentProperty.Length <= 64"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

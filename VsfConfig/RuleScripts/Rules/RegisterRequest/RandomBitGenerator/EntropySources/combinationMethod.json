@@ -1,0 +1,127 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "The combination method must always be either Method1 or Method2",
+			"references": ["SP 800-90C Section 2.3"],
+			"parameters": {
+				"ruleText": "currentProperty != EntropyCombinationMethodType.None"
+			}
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG2P"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "RBG2P shall use Method1",
+								"references": ["SP 800-90C Section 5.1", "SP 800-90C Section 5.3 Requirement 9"],
+								"parameters": {
+									"ruleText": "currentProperty == EntropyCombinationMethodType.Method1"
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG2NP"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "RBG2NP shall use Method2",
+								"references": ["SP 800-90C Section 5.1", "SP 800-90C Section 5.3 Requirement 10"],
+								"parameters": {
+									"ruleText": "currentProperty == EntropyCombinationMethodType.Method2"
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3RS || rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3XOR"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "RBG3RS and RBG3XOR shall use Method1",
+								"references": ["SP 800-90C Section 6.1", "SP 800-90C Section 6.3 Requirement 1"],
+								"parameters": {
+									"ruleText": "currentProperty == EntropyCombinationMethodType.Method1"
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "currentProperty == EntropyCombinationMethodType.Method1"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If Method1 is used, a physical entropy source must be present",
+								"references": ["SP 800-90C Section 2.3"],
+								"parameters": {
+									"ruleText": "EntropyCertificateList.Any(e => As(e, \"EntropyCertificate\").IsPhysical)"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

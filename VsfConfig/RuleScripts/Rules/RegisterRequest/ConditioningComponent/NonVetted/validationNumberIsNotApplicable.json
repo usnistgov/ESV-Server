@@ -1,0 +1,49 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.IsVetted == false"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Operator",
+								"operatorType": "Or",
+								"parameters": {
+									"scriptLines": [
+										{
+											"lineType": "Rule",
+											"ruleType": "External",
+											"parameters": {
+												"ruleText": "currentProperty == null"
+											}
+										},
+										{
+											"lineType": "Rule",
+											"ruleType": "External",
+											"parameters": {
+												"ruleText": "string.IsNullOrWhiteSpace(currentProperty)"
+											}
+										}
+									]
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+
+}

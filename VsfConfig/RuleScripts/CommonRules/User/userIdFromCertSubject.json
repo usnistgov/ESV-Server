@@ -1,0 +1,44 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "userCertSubject != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "externalUserService != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "userId",
+				"value": "As(externalUserService, \"IExternalUserService\").GetUserIDFromCertificateSubject(userCertSubject)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "userId != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "userId is a proper type.",
+			"parameters": {
+				"ruleText": "Is(userId, \"System.Int64\")"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "userId is not -1.",
+			"parameters": {
+				"ruleText": "userId != -1"
+			}
+		}
+	]
+}

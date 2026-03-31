@@ -1,0 +1,59 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].AllowsReseedRequests == true"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If the RBG allows reseed requests, the DRBG shall support reseeding",
+								"parameters": {
+									"ruleText": "currentProperty == true"
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "currentProperty == false"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If the DRBG does not allow reseeding, the RBG shall not support reseed requests",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].AllowsReseedRequests == false"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

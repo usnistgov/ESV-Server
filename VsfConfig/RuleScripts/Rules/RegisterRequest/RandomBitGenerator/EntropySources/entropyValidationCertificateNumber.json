@@ -1,0 +1,78 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Entropy certificates begin with E followed by digits",
+			"parameters": {
+				"ruleText": "Regex.IsMatch(currentProperty, \"^E[0-9]*$\")"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "EntropyCertificateNumber",
+				"value": "Int32.Parse(currentProperty.Replace(\"E\", \"\"))"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy Certificate is not a default or incorrect value",
+			"parameters": {
+				"ruleText": "EntropyCertificateNumber > 0"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "EntropyCertificateExists",
+				"value": "As(entropyCertificateService, \"IEntropyCertificateService\").CertificateNumberExists(EntropyCertificateNumber)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy certificate exists",
+			"parameters": {
+				"ruleText": "EntropyCertificateExists.Exists == true"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "CurrentEntropyCertificate",
+				"appendValues": false,
+				"value": "As(entropyCertificateService, \"IEntropyCertificateService\").GetEntropyCertificateWithOeProperties(EntropyCertificateNumber)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy certificate OE data exists",
+			"parameters": {
+				"ruleText": "As(CurrentEntropyCertificate, \"EntropyCertificate\").OperatingEnvironmentProperties.Count() >= 1"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "EntropyCertificateList",
+				"scope": "Global",
+				"appendValues": true,
+				"value": "CurrentEntropyCertificate"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy certificate list exists",
+			"parameters": {
+				"ruleText": "EntropyCertificateList != null"
+			}
+		},
+		{
+			"lineType": "Information",
+			"description": "EntropyCertificateList",
+			"parameters": {
+				"ruleText": "String.Format(\"Entropy Certificate List: Count = {0}, Certificates = E[{1}].\", EntropyCertificateList.Count(), String.Join(' ', EntropyCertificateList.Select(e => e.CertificateNumber).ToArray()))"
+			}
+		}
+	]
+}

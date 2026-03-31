@@ -1,0 +1,18 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/vfsscript.json"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "Rules/PayloadSpecific/vfsscript.json"
+			}
+		}
+	]
+}

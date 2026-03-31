@@ -1,0 +1,61 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.ConstructionType == RandomBitGeneratorConstructionType.RBG1"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "RBG1 cannot allow reseed requests",
+								"references": ["SP 800-90C Table 1"],
+								"parameters": {
+									"ruleText": "currentProperty == false"
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.ConstructionType == RandomBitGeneratorConstructionType.RBG3RS || parentProperty.ConstructionType == RandomBitGeneratorConstructionType.RBG3XOR"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "RBG3 must allow reseed requests",
+								"references": ["SP 800-90C Table 1"],
+								"parameters": {
+									"ruleText": "currentProperty == true"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

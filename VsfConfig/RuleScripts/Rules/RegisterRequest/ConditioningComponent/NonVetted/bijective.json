@@ -1,0 +1,54 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.HOut >= 0.0"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.HOut <= currentProperty.NOut"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.MinHIn == currentProperty.HOut"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.HOut <= currentProperty.MinNIn"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.MinNIn <= currentProperty.NOut"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.NOut == currentProperty.Nw"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.Nw == currentProperty.MinNIn"
+			}
+		}
+	]
+}	
+

@@ -1,0 +1,81 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "currentProperty.IsVetted == true && (currentProperty.IsBijectiveClaim == null || currentProperty.IsBijectiveClaim == false)"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "ImportScript",
+								"parameters": {
+									"scriptFile": "Rules/RegisterRequest/ConditioningComponent/Vetted/nonBijective.json",
+									"breakOnError": false
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "currentProperty.IsVetted == false && currentProperty.IsBijectiveClaim == true"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "ImportScript",
+								"parameters": {
+									"scriptFile": "Rules/RegisterRequest/ConditioningComponent/NonVetted/bijective.json",
+									"breakOnError": false
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "currentProperty.IsVetted == false && currentProperty.IsBijectiveClaim == false"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "ImportScript",
+								"parameters": {
+									"scriptFile": "Rules/RegisterRequest/ConditioningComponent/NonVetted/nonBijective.json",
+									"breakOnError": false
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

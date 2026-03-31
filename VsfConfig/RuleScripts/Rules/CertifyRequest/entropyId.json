@@ -1,0 +1,84 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/notNull.json"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/notNullAndNotwhitespace.json"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.Length == 4"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "EntropyId should only contain alphanumeric characters.",
+			"parameters": {
+				"ruleText": "Regex.IsMatch(currentProperty, \"^[a-zA-Z0-9]+$\")"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/User/userIdFromCertSubject.json"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/User/labIdFromUserId.json"
+			}
+		},
+		{
+			"lineType": "Branch",
+			"description": "",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "certifyRequestConfig.VerifyEntropyIdIsUniqueWithinLab"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "As(certifyRequestService,\"ICertifyRequestService\").VerifyEntropyIDIsUniqueWithinLab(currentProperty, labId).Success"
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"lineType": "Information",
+			"description": "EID - Entropy ID used to identify the review",
+			"parameters": {
+				"ruleText": "String.Format(\"EID-{0}-{1}\", labId.ToString(\"00\"), currentProperty)"
+			}
+		}
+	]
+}

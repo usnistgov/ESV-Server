@@ -1,0 +1,49 @@
+{ 
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "MinNIn shall not be less than MinHIn",
+			"parameters": {
+				"ruleText": "currentProperty.MinNIn >= currentProperty.MinHIn"
+			}
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "DrbgAttributes.Name.Contains(\"CTR_DRBG\")"
+								}
+							},
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].Drbg.DerivationFunction == false"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If a CTR_DRBG is used without deriviation function, full entropy must be provided to seed and/or reseed the DRBG",
+								"parameters": {
+									"ruleText": "currentProperty.MinNIn == currentProperty.MinHIn"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

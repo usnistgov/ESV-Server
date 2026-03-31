@@ -1,0 +1,39 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "implementationService != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "implementationObj",
+				"value": "As(implementationService, \"IImplementationService\").GetImplementation(currentProperty)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "implementationObj != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "implementationObj is a proper type.",
+			"parameters": {
+				"ruleText": "Is(implementationObj, \"Implementation\")"
+			}
+		}	 ,
+		{
+			"lineType": "State",
+			"description": "implementation name.",
+			"parameters": {
+				"scope": "Node",
+				"key": "implementationName",
+				"value": "As(implementationObj, \"Implementation\").Name"
+			}
+		}	
+	]
+}

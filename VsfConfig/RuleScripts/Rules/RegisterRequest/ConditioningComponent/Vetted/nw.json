@@ -1,0 +1,93 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.IsVetted == true"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "State",
+								"parameters": {
+									"key": "ccAttribute",
+									"value": "ConditioningComponentAttributesHelper.GetCcAttributes(parentProperty.Description)"
+								}
+							},
+							{
+								"lineType": "Assert",
+								"parameters": {
+									"ruleText": "ccAttribute != null"
+								}
+							},
+							{
+								"lineType": "Branch",
+								"conditions": [
+									{
+										"if": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "As(ccAttribute, \"VettedConditioningComponentAttributes\").NOutMaxBits == null"
+													}
+												}
+											]
+										},
+										"then": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "Array.IndexOf(As(ccAttribute, \"VettedConditioningComponentAttributes\").Nw, currentProperty) > -1"
+													}
+												}
+											]
+										}
+									},
+									{
+										"elseif": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "As(ccAttribute, \"VettedConditioningComponentAttributes\").NwIsAMultipleOfBits != null"
+													}
+												}
+											]
+										},
+										"then": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "currentProperty % As(ccAttribute, \"VettedConditioningComponentAttributes\").NwIsAMultipleOfBits == 0"
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}
+

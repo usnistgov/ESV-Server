@@ -1,0 +1,51 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Seed array shall contain at least 1 element and at most 3 elements",
+			"parameters": {
+				"ruleText": "currentProperty.Count() >= 1 && currentProperty.Count() <= 3"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "SecurityStrength values must be unique for each Seed element",
+			"parameters": {
+				"ruleText": "currentProperty.Select(s => s.SecurityStrength).ToList().Distinct().Count() == currentProperty.Count()"
+			}
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3RS || rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3XOR"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If an RBG3 is used, only one security strength shall be supported",
+								"references": ["SP 800-90C Section 2.8.3.1", "SP 800-90C Section 6.1"],
+								"parameters": {
+									"ruleText": "currentProperty.Count() == 1"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "At most, a chain of 3 RBGs can be present at a time, at least one must be present.",
+			"parameters": {
+				"ruleText": "currentProperty.Count() <= 3 && currentProperty.Count() >= 1"
+			}
+		}
+	]
+}

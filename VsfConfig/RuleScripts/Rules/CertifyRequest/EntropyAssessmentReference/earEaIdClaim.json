@@ -1,0 +1,50 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"parameters": {
+				"scriptFile": "CommonRules/notNull.json"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "userCertSubject != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "jwtService != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "claimVerifierObj",
+				"value": "ReferenceIdClaimVerifier(currentProperty.GetValueOrDefault(), \"eaId\")"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "claimVerifierObj != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"description": "Get claims from sdr access token.",
+			"parameters": {
+				"key": "claims",
+				"value": "As(jwtService, \"IJwtService\").GetClaimsFromJwt(parentProperty.AccessToken)"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "As(claimVerifierObj,\"ClaimsVerifierBase\").AreClaimsValid(claims)"
+			}
+		}
+	]
+}

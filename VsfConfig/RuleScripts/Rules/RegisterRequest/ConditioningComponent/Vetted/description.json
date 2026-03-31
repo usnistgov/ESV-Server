@@ -1,0 +1,35 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.IsVetted == true"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If vetted is True, this is one of the vetted conditioning components.",
+								"parameters": {
+									"ruleText": "ConditioningComponentAttributesHelper.GetCcAttributes(currentProperty) != null"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+
+}

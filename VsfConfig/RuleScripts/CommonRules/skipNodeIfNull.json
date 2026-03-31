@@ -1,0 +1,31 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"parameters": {
+									"ruleText": "currentProperty == null"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Exit",
+								"parameters": {
+									"exitType": "Node"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

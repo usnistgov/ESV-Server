@@ -1,0 +1,28 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Must be one of the allowed vetted conditioning components",
+			"references": ["SP 800-90C Section 3.2.1.1"],
+			"parameters": {
+				"ruleText": "ConditioningComponentAttributesHelper.GetRbgCcAttributes(currentProperty.Algorithm) != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "ConditioningComponentAttributes",
+				"value": "ConditioningComponentAttributesHelper.GetRbgCcAttributes(currentProperty.Algorithm)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Must be one of the allowed vetted conditioning components",
+			"parameters": {
+				"ruleText": "ConditioningComponentAttributes != null"
+			}
+		}
+	]
+}

@@ -1,0 +1,28 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "State",
+			"description": "",
+			"parameters": {
+				"scope": "Private",
+				"key": "eaIdDistinctCount",
+				"value": "currentProperty.Where(x => x.EaID.HasValue).Select(s => s.EaID).Distinct().Count()"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "",
+			"parameters": {
+				"ruleText": "eaIdDistinctCount != null"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "eaIds are distinct.",
+			"parameters": {
+				"ruleText": "eaIdDistinctCount == currentProperty.Count()"
+			}
+		}
+	]
+}

@@ -1,0 +1,46 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/notNull.json"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty > 0"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/Acvp/acvpImplementationExists.json"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "",
+			"parameters": {
+				"ruleText": "Is(implementationExists,\"System.Boolean\") == true"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/Acvp/acvpImplementationGetName.json"
+			}
+		},
+		{
+			"lineType": "Information",
+			"description": "Display module name.",
+			"parameters": {
+				"ruleText": "String.Format(\"module name is {0}\", As(implementationName, \"System.String\"))"
+			}
+		}
+	]
+}
