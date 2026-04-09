@@ -261,8 +261,8 @@ Current supported vetted conditioning components (also reflected via [SP 800-90 
 | CTR-DRBG	     | AES-128-CTR-DRBG, AES-192-CTR-DRBG, AES-256-CTR-DRBG |
 | Hash-DRBG      | SHA2-224-Hash-DRBG, SHA2-256-Hash-DRBG, SHA2-384-Hash-DRBG, SHA2-512-Hash-DRBG, SHA2-512/224-Hash-DRBG, SHA2-512/256-Hash-DRBG, SHA3-224-Hash-DRBG, SHA3-256-Hash-DRBG, SHA3-384-Hash-DRBG, SHA3-512-Hash-DRBG |
 | HMAC-DRBG      | SHA2-224-HMAC-DRBG, SHA2-256-HMAC-DRBG, SHA2-384-HMAC-DRBG, SHA2-512-HMAC-DRBG, SHA2-512/224-HMAC-DRBG, SHA2-512/256-HMAC-DRBG, SHA3-224-HMAC-DRBG, SHA3-256-HMAC-DRBG, SHA3-384-HMAC-DRBG, SHA3-512-HMAC-DRBG |
-| Hash_df	     | Hash_DF-SHA-1, Hash_DF-SHA2-224, Hash_DF-SHA2-256, Hash_DF-SHA2-384, Hash_DF-SHA2-512, Hash_DF-SHA2-512/224, Hash_DF-SHA2-512/256, Hash_DF-SHA3-224, Hash_DF-SHA3-256, Hash_DF-SHA3-384, Hash_DF-SHA3-512 |
-| BlockCipher_df | BlockCipher_DF |
+| Hash_DF	     | Hash_DF-SHA-1, Hash_DF-SHA2-224, Hash_DF-SHA2-256, Hash_DF-SHA2-384, Hash_DF-SHA2-512, Hash_DF-SHA2-512/224, Hash_DF-SHA2-512/256, Hash_DF-SHA3-224, Hash_DF-SHA3-256, Hash_DF-SHA3-384, Hash_DF-SHA3-512 |
+| BlockCipher_DF | BlockCipher_DF-AES-128, BlockCipher_DF-AES-192, BlockCipher_DF-AES-256 |
 
 The `bijectiveClaim` field is only applicable when `"vetted": false` is present. A bijective conditioning component is one that neither adds nor removes entropy from the inputs passed in, as every input to the bijective function maps to exactly one output and vice versa. The `validationNumber` field is only applicable when `"vetted": true` is present. The value will be the [CAVP certificate number](https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program/validation-search) awarded to the conditioning component algorithm. 
 
@@ -438,7 +438,7 @@ Here is a full list of the properties included in each `rbg` object:
 | --externalConditioningFunction     | An optional object outlining an external conditioning function                                                                  | object       |
 | ----procedure                      | The method from SP 800-90C stating how the conditioning function is run                                                         | string       |
 | ----validationNumbers              | The algorithm validation number of the function used in the conditioning function                                               | string       |
-| ----algorithm                      | The algorithm name used in the conditioning function                                                                            | string       |
+| ----algorithm                      | The algorithm name used in the conditioning function (see Table of vetted conditioning components above)                        | string       |
 | ----keyLen                         | The key length of the algorithm used. Required only for HMAC, and AES-based conditioning functions.                             | int          |
 | ----minNin                         | The minimum number of bits used as input for each call of the conditioning function                                             | int          |
 | ----nOut                           | The number of bits provided as output from each call of the conditioning function                                               | int          |
