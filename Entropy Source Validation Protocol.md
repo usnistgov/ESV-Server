@@ -240,8 +240,8 @@ The valid properties for the conditioning components are as follows
 | bijectiveClaim        | this non-vetted conditioning component is a bijective function                                                                                               | boolean    |
 | description           | brief description of the conditioning component, for a vetted conditioning component this shall be exactly the ACVTS name of the conditioning component mode | string     |
 | validationNumber      | the ACVTS validation certificate number of the vetted conditioning component                                                                                 | string     |
-| minNIn                | minimum bits input to the conditioning function                                                                                                              | integer    |
-| minHIn                | minimum amount of entropy input to the conditioning function per the number of bits input                                                                    | float      |
+| minNin                | minimum bits input to the conditioning function                                                                                                              | integer    |
+| minHin                | minimum amount of entropy input to the conditioning function per the number of bits input                                                                    | float      |
 | nw                    | narrowest width of the conditioning function                                                                                                                 | integer    |
 | nOut                  | number of bits output by the conditioning function                                                                                                           | integer    |
 | hOut                  | number of bits of entropy output by the conditioning function                                                                                                | float      |
@@ -337,9 +337,9 @@ To create the object referencing one or more existing entropy sources the follow
                         "validationNumbers": ["A#"],
                         "algorithm": "",
                         "keyLen": 0,
-                        "minNIn": 0,
+                        "minNin": 0,
                         "nOut": 0,
-                        "minHIn": 0.0,
+                        "minHin": 0.0,
                         "hOut": 0.0,
                     },
                 },
@@ -354,8 +354,8 @@ To create the object referencing one or more existing entropy sources the follow
                     "seed": [
                         {
                             "securityStrength": 128,
-                            "minHIn": 0.0,
-                            "minNIn": 0
+                            "minHin": 0.0,
+                            "minNin": 0
                         }
                     ],
                     "reseed": true,
@@ -393,8 +393,8 @@ To create the object referencing an existing random bit generator the following 
                     "seed": [
                         {
                             "securityStrength": 128,
-                            "minHIn": 0.0,
-                            "minNIn": 0
+                            "minHin": 0.0,
+                            "minNin": 0
                         }
                     ],
                     "reseed": true,
