@@ -28,17 +28,19 @@
           "type": "boolean"
         },
         "bitsPerSample": {
-          "description": "number of bits in a sample output of the noise source [1, ..]",
+          "description": "number of bits in a sample output of the noise source",
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 256
         },
         "hminEstimate": {
           "description": "estimate of the entropy in one sample out of the noise source, value must be between 0.0 and value of bitsPerSample",
           "type": "number",
-          "minimum": 0.0
+          "minimum": 0.0,
+          "maximum": 256.0
         },
         "physical": {
-          "description": "whether the entropy source is physical or non-physical",
+          "description": "whether the noise source is physical or non-physical",
           "type": "boolean"
         },
         "numberOfRestarts": {
@@ -62,7 +64,8 @@
             "properties": {
               "sequencePosition": {
                 "description": "ordered list with other conditioning components on where in the sequence of operations the individual component occurs, must be 1, 2, ...n for n elements in this array",
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1
               },
               "vetted": {
                 "description": "whether the conditioning components meets the SP 800-90B definition of vetted",
@@ -84,22 +87,22 @@
               "minHin": {
                 "description": "minimum amount of entropy required to run the conditioning component",
                 "type": "number",
-                "minimum": 0
+                "minimum": 0.0
               },
               "nw": {
                 "description": "narrowest width of the conditioning component",
                 "type": "integer",
-                "minimum": 0
+                "minimum": 1
               },
               "nOut": {
                 "description": "output size in bits of the conditioning component",
                 "type": "integer",
-                "minimum": 0
+                "minimum": 1
               },
               "hOut": {
                 "description": "amount of entropy in bits output by the conditioning component",
                 "type": "number",
-                "minimum": 0
+                "minimum": 0.0
               }
             },
             "required": [

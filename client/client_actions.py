@@ -34,15 +34,23 @@ def register_entropy_assessment():
         print(f"dataFiles not found in {globalenv.run_path}")
         exit(1)
 
+    if "numberOfOEs" in globalenv.run_data["entropyAssessment"]:
+        print("numberofOEs must be removed from the entropyAssessment, it will be computed automatically by the data files provided")
+        exit(1)
+
     # Parse EntropyAssessment
     entropy_assessment = globalenv.run_data["entropyAssessment"]
     data_files = globalenv.run_data["dataFiles"]
     numberOfOes = len(data_files)
 
+    if globalenv.verboseMode:
+        print(f"Number of OEs detected: {numberOfOes}")
+
     # Send Entropy registration(s) to server
+    # Client sends each OE individually, so there should only ever be one object in the returned array
     processed_eas = []
     for i in range(numberOfOes):
-        processed_eas.append(send_post_entropy_registration(entropy_assessment))
+        processed_eas.append(send_post_entropy_registration(entropy_assessment)[0])
 
     # Send data files to server
     if len(data_files) != len(processed_eas):
@@ -73,7 +81,7 @@ def register_entropy_assessment():
         for cc in data_files[i].get("conditioned", []):
             for ea in processed_eas[i].conditioned:
 
-                if cc["sequencePosition"] == ea.sequence_position:
+                if int(cc["sequencePosition"]) == ea.sequence_position:
                     cc_bits_per_sample = 0
                     if "bitsPerSample" in cc:
                         cc_bits_per_sample = cc["bitsPerSample"]

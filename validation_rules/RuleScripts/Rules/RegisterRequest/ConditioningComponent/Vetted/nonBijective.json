@@ -9,8 +9,8 @@
 		},
 		{
 			"lineType": "Assert",
+			"description": "Unable to find Conditioning Component with the provided description",
 			"parameters": {
-				"description": "A vetted conditioning component as specified through the conditioning component description property must exist.",
 				"ruleText": "ccAttribute != null"
 			}
 		},

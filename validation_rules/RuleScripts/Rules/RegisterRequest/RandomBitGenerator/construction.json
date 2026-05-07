@@ -221,13 +221,56 @@
 					"then": {
 						"scriptLines": [
 							{
-								"lineType": "Rule",
-								"ruleType": "External",
-								"description": "RBGC shall use a full entropy source if seeded by an entropy source",
-								"references": ["SP 800-90C Table 1", "SP 800-90C Section 7.3.2 Requirements 4-5"],
-								"parameters": {
-									"ruleText": "EntropyCertificateList.Any(e => As(e, \"EntropyCertificate\").OperatingEnvironmentProperties.Any(oe => As(oe, \"EntropyCertificateOperatingEnvironmentProperties\").FullEntropy)) || FullEntropyConditioningFunction == true"
-								}
+								"lineType": "Branch",
+								"conditions": [
+									{
+										"if": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].EntropySources.ExternalConditioningFunction != null"
+													}
+												}
+											]
+										},
+										"then": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"description": "RBGC shall use a full-entropy source, or a full-entropy conditioning function, if seeded by an entropy source with external conditioning function",
+													"references": [
+														"SP 800-90C Table 1",
+														"SP 800-90C Section 7.3.2 Requirements 4-5"
+													],
+													"parameters": {
+														"ruleText": "FullEntropyConditioningFunction == true"
+													}
+												}
+											]
+										}
+									},
+									{
+										"else": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"description": "RBGC shall use a full-entropy source if seeded directly by an entropy source",
+													"references": [
+														"SP 800-90C Table 1",
+														"SP 800-90C Section 7.3.2 Requirements 4-5"
+													],
+													"parameters": {
+														"ruleText": "EntropyCertificateList.Any(e => As(e, \"EntropyCertificate\").OperatingEnvironmentProperties.Any(oe => As(oe, \"EntropyCertificateOperatingEnvironmentProperties\").FullEntropy))"
+													}
+												}
+											]
+										}
+									}
+								]
 							}
 						]
 					}

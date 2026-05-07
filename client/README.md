@@ -1,16 +1,16 @@
 # Entropy Source Validation Client
 
-The Entropy Source Validation Client is a means of automating the process in which third-party companies, vendors, and labs can communicate with the ESV server and receive an entropy source validation certificate. The client runs on the command line and requires Python 3.8+. 
+The Entropy Source Validation Client is a means of automating the process in which third-party companies, vendors, and labs can communicate with the ESV Server and receive an entropy source validation certificate. The client runs on the command line and requires Python 3.8+.
 
-#### Contents: 
+#### Contents:
 
-1. **How to use** 
-2. **Workflow** 
-3. **Run-types** 
-4. **Pre-requisites: Configuration and Run Files** 
+1. **How to use**
+2. **Workflow**
+3. **Run-types**
+4. **Pre-requisites: Configuration and Run Files**
 5. **Alternative usages**
 
-## 0. Some needed libraries 
+## 0. Some needed libraries
 
 ```
 pip3 install requests cryptography
@@ -20,15 +20,16 @@ The `requests` library is used to call the Web API. Version 2.27.1+ required. Th
 
 ## 1. How to use
 
-During normal running, the client takes in 3 arguments: The *run type*, the configuration file path (`--config_path`), and the run file path(`--run_path`).
+During normal running, the client takes in 1 required argument (the run type) and several sometimes optional arguments:
 
-There is a 4th optional argument for verbose mode: --verbose
+- `run`: The type of operation to perform (e.g., `full`, `submit`, `status`).
+- `--config_path`: Path to your configuration JSON file. This is required.
+- `--run_path`: Path to your run JSON file. This is required.
+- `--certificateId`: The number of the certificate requested (required for `getcertificate`).
+- `--stats_90B_path`: Output file path for 90B statistical results JSON.
+- `-v` or `--verbose`: Enable verbose mode for detailed logging.
 
-There is a 5th argument for use in a "getcertificate" run: --certificateID [ID]
-
-The configuration and run file paths are optional and are only required if the user is not doing run types (status) or (certify). However, the files must still be in the same location as in the previous run.
-
-An example command with the arguments is:
+An example command:
 
 ```
 python3 client.py full --config_path config.json --run_path run.json --verbose
@@ -36,138 +37,183 @@ python3 client.py full --config_path config.json --run_path run.json --verbose
 
 ## 2. Workflow
 
-Below is the general workflow for a full run with the client
-
+### Entropy Assessment Workflow
 1. Login / Authentication
 2. Send Entropy Assessment Registration
 3. Upload Data Files (Raw, Restart Test, Conditioning)
 4. Check Data File Status
 5. Upload Supporting Documentation
-6. Certify (Optional)
+6. Certify
 
-Post-certification
+### Random Bit Generator (RBG) Workflow
+1. Login / Authentication
+2. Register Random Bit Generator
+3. Upload Supporting Documentation
+4. Check RBG Status
+5. Certify RBG
 
-7. Upload updated Public Use Document (Optional)
-8. Add new OE to existing certificate (Optional)
-9. View certificate (Optional)
+### Post-certification Workflows
+- Upload updated Public Use Document
+- Add new Operating Environment (OE) to existing certificate
+- View certificate
 
 ## 3. Run-types
 
-The client accepts different run-types, corresponding to a command, which are combinations of the above workflow. If certify is set to false in the configuration file, the full run will stop before the certify step. 
+The client accepts different run-types, which are combinations of the workflow steps.
 
-IDs such as Entropy Assessment and Data File IDs are printed as the client runs. They can also be found in the log file (located in the jsons folder), which stores values from the most recent run. 
+### Entropy Assessment
+- `full`: Full Run (Initial submission through certification).
+- `submit`: Submit Entropy Assessment and Data Files (does not certify).
+- `certify`: Certify a previously registered entropy source (Uses IDs from history).
+- `fullAddOE`: Full run to add an OE to an existing entropy source certificate, and certify.
+- `certifyAddOE`: Certify an added OE to an existing entropy source certificate (Uses IDs from history).
+- `updatePUD`: Update the Public Use Document on an existing entropy source certificate.
+- `status`: Check the status of previously submitted data files.
 
-The full run performs the full workflow and the other run types correspond to different sections of the workflow in the case that the user wants to perform another job at a different time (ex. submitting data files but not yet uploading supporting documentation).
+### Random Bit Generator (RBG)
+- `submitRBG`: Register a random bit generator.
+- `fullRBG`: Register and certify a random bit generator.
+- `certifyRBG`: Certify a previously registered random bit generator.
 
-- (`full`) Full Run
-- (`status`) Check Data File Progress (of last run)
-- (`submit`) Submit Entropy Assessment and Data Files
-- (`support`) Upload Supporting Documentation
-- (`certify`) Certify (Uses IDs from the last run)
+### Combined
+- `fullRBG_EA`: Register and certify both a random bit generator and an entropy source with data files.
 
-Post-certify
-- (`updatepud`) Upload updated Public Use Document
-- (`certifynewoe`) Add new OE to existing certificate
-- (`fulladdoe`) Do a full run for "certifynewoe" (i.e. automatically do all steps up to and including “certifynewoe”)
-- (`getcertificate`) View an existing certificate.  Use with argument: --certificateID [ID]
+### Utilities
+- `support`: Upload Supporting Documentation.
+- `getCertificate`: View an existing certificate. Requires `--certificateId`.
+- `refresh`: Refreshes all tokens in the run file.
 
 ## 4. Pre-requisites: Configuration and Run Files
 
-The configuration and run files are JSONs that contain fields that the user must fill out before starting a run. Empty samples are available in the github folder 'jsons'. An example of each are shown below.
-
-Note that only config.json and run.json are the only JSONs that should be filled out. The logs.json file should not be modified by hand.
+The configuration and run files are JSONs that contain fields the user must fill out. Empty samples are available in the `jsons` folder.
 
 ## config file example
 
-```
+```json
 [
     {
-        "TOTPPath": "<absolute path to totp seed>",
-        "CertPath": "<absolute path to cert",
-        "KeyPath": "<absolute path to key",
+        "TOTPPath": "/path/to/totp.seed",
+        "CertPath": "/path/to/certificate.pem",
+        "KeyPath": "/path/to/private.key",
         "ServerURL": "https://demo.esvts.nist.gov:7443/esv/v1",
-	    "EsvVersion": "1.0"
+        "EsvVersion": "1.0"
     }
 ]
 ```
 
 ## run file example
 
-```
+```json
 {
-    "AssessmentRegistrationPath": "entropy-source-metadata.json",
-    "DataFiles": [
+    "entropyAssessment": {
+        "primaryNoiseSource": "Example Source",
+        "iidClaim": false,
+        "bitsPerSample": 8,
+        "hminEstimate": 1.0,
+        "physical": true,
+        "numberOfRestarts": 1000,
+        "samplesPerRestart": 1000,
+        "additionalNoiseSources": false,
+        "conditioningComponent": [
+            {
+                "sequencePosition": 1,
+                "vetted": false,
+                "description": "Example CC",
+                "bijectiveClaim": false,
+                "minNin": 256,
+                "minHin": 32.0,
+                "nw": 128,
+                "nOut": 128,
+                "hOut": 31.997
+            }
+        ]
+    },
+    "dataFiles": [
         {
-            "oeID":  <INT referring to the ID of the Operating Environment>,
-            "rawNoisePath": "<absolute path to raw noise data file>",
-			"rawNoiseSampleSize": <INT for raw noise sample size>, (This item is optional, if not used, the sample size for entropy assessment is used)
-            "restartTestPath": "<absolute path to restart data file>",
-			"restartSampleSize": <INT for restart sample size>, (This item is optional, if not used, the sample size for entropy assessment is used)
-            "unvettedConditionedPaths": ["<absolute path to first unvetted data file>", "<absolute path to second unvetted data file>"]
-        }
-    ],
-    "SupportingDocuments": [
-        {
-        "filePath": ["<absolute path to supporting documentation file"],
-        "comment": ["..."],
-        "sdType": ["EntropyAssessmentReport" or "PublicUseDocument" or "Other"]
-        }
-    ],
-    "Certify": {
-        "Certify": <BOOLEAN>,
-        "moduleID": <INT referring to ID of module>,
-        "vendorID": <INT referring to ID of vendor>,
-        "entropyID": <STRING referring to ID of submitted Entropy ID>,
-        "EntropyCertificateToUpdate": <OPTIONAL STRING referring to the ID of the Certificate to update in post-certification addition of Operating Environment to Certificate. See below>
-    },
-    "Assessment": {
-        "numberOfAssessments": 1,
-        "limitEntropyAssessmentToSingleModule": false
-    },
-    "UpdatedPublicUseDocument": { (This item is optional and only for use when running “updatepud”)
-            "entropyCertificate": "<STRING referring to ID of Entropy Certificate being updated>",
-            "entropyID": "<STRING referring to ID of submitted Entropy ID>",
-            "filePath": "<absolute path to updated Public Use Document>"
-
-    },
-    "PreviousRun": {
-        "entr_jwt": "example",
-        "df_ids": [
-            "1"                
-        ],
-        "ea_id": "1",
-        "cert_supp": [
-            [
+            "oeId": 1,
+            "rawNoise": {
+                "filePath": "/path/to/raw.bin",
+                "bitsPerSample": 8
+            },
+            "restart": {
+                "filePath": "/path/to/restart.bin",
+                "bitsPerSample": 8
+            },
+            "conditioned": [
                 {
-                    "sdId": 1,
-                    "accessToken": "example"
+                    "sequencePosition": 1,
+                    "filePath": "/path/to/conditioned.bin",
+                    "bitsPerSample": 8
                 }
             ]
-        ]
+        }
+    ],
+    "randomBitGenerators": [
+        {
+            "construction": "RBG1",
+            "allowsReseedRequests": true,
+            "entropySources": {
+                "combinationMethod": "Method1",
+                "sources": [
+                    {
+                        "entropyValidations": "E1",
+                        "entropyOperatingEnvironments": [1],
+                        "rbgOperatingEnvironments": [1]
+                    }
+                ]
+            },
+            "drbg": {
+                "validations": [
+                    {
+                        "validationNumber": "A1",
+                        "algorithmOperatingEnvironments": [1]
+                    }
+                ],
+                "algorithm": "HMAC_DRBG SHA2-256",
+                "derivationFunction": true,
+                "seed": [
+                    {
+                        "securityStrength": 128,
+                        "minHin": 256,
+                        "minNin": 256
+                    }
+                ],
+                "reseed": true,
+                "reseedFrequency": "hourly"
+            },
+            "operatingEnvironments": [1]
+        }
+    ],
+    "supportingDocumentation": [
+        {
+            "filePath": "/path/to/doc.pdf",
+            "comment": "Public Use Document",
+            "sdType": "PublicUseDocument"
+        }
+    ],
+    "certify": {
+        "moduleId": 1,
+        "vendorId": 1,
+        "entropyId": "1234",
+        "entropyCertificate": "E1"
+    },
+    "updatePublicUseDocument": {
+        "entropyCertificate": "E1",
+        "entropyId": "5678"
     }
 }
 ```
 
-* Note that DataFiles is an array.
-
-* For submitting for multiple Operating Environments, create addition sets of oeID/rawNoisePath/restartTestPath/unvettedConditionedPaths.
-
-* Note that the UpdatedPublicUseDocument section is optional
-
-* Note that the EntropyCertificateToUpdate key/value in Certify is optional. The value is a string beginning with E and concatenated with the Entropy Certificate Number, i.e., the value for Entropy Certificate Number 1 is "E1".  
-
-* Note that rawNoiseSampleSize and restartSampleSize are optional.  If there are no values present, the sample size value for the entropy assessment will be used
-
-* A JSON schema for entropy-source-metadata.json is available in the "json" directory.  Please note that this is not fully comprehensive and some values correctness is determined by values in other fields. 
-
+* Note that `dataFiles` and `randomBitGenerators` are arrays.
+* For multiple Operating Environments, create additional entries in the `dataFiles` array.
+* The `updatePublicUseDocument` section is optional and used for the `updatePUD` run type.
+* The `entropyCertificate` in the `certify` block is only expected for AddOE submissions. Its value is a string starting with 'E' followed by the certificate number (e.g., "E1").
 
 ## 5. Alternative usages
 
-This client was designed to be all-inclusive, running the complete life cycle within itself from the initial submission through the certify request.  At each step, it saves information from the current stage in order to run future steps.
+This client is designed to be all-inclusive. However, it is possible to use the web client for submission and the Python client for status checks or certification.
 
-It is possible to use the web client to submit and the Python client although manually editting of the configuration file will be required.  If you have submitted an entropy asssessment and data file(s) through the web client and wish to check on the status, you will need to edit the run.json file manually.
-
-In run.json, the "PreviousRun" property will need to be updated with information from the web client.  The ID of the Entropy Assessment will need to be added/modified at "ea_id". Any applicable data files will need to be placed at "df_ids" (as an array).
+To do this, the `run.json` file must be manually updated. The `PreviousRun` (or equivalent historical tracking) property will need the correct `ea_id` (Entropy Assessment ID) and `df_ids` (Data File IDs) as an array, as obtained from the web client.
 
 # License
 

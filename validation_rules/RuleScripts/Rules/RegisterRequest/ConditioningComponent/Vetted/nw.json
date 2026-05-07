@@ -26,6 +26,7 @@
 							},
 							{
 								"lineType": "Assert",
+								"description": "Unable to find Conditioning Component with the provided description",
 								"parameters": {
 									"ruleText": "ccAttribute != null"
 								}
@@ -90,4 +91,3 @@
 		}
 	]
 }
-

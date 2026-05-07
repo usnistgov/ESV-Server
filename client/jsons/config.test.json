@@ -1,0 +1,7 @@
+{
+    "TOTPPath" : "../postman-certs/ACVP/test/NIST_Chris_Celi_Test_totp.txt",
+    "CertPath" : "../postman-certs/ACVP/test/NIST_Chris_Celi_Test.cer",
+    "KeyPath" : "../postman-certs/ACVP/test/NIST_Chris_Celi_Test.key",
+    "ServerURL" : "https://test.esvts.nist.gov:7443/esv/v1",
+	"EsvVersion": "1.0"
+}

@@ -12,7 +12,6 @@ CHANGES
 ADDED
    * Support for 90C
 
-
 [1.7]
 
 ADDED

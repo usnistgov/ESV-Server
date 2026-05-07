@@ -11,7 +11,7 @@
 			"parameters": {
 				"scope": "Node",
 				"key": "oeObj",
-				"value": "As(oeService,\"IOEService\").GetOE(currentProperty.GetValueOrDefault())"
+				"value": "As(oeService, \"IOEService\").GetOE(As(currentProperty, \"long?\").GetValueOrDefault())"
 			}
 		},
 		{

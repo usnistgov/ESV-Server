@@ -20,9 +20,14 @@ def send_post_entropy_registration(assessment_reg):
         print("\n\nEntropy Registration Response:")
         pretty_print(json_response)
 
-    ea_id, raw_noise_id, restart_id, conditioned = get_ids(json_response)
-    access_token = json_response["accessToken"]
-    return Entropy_Assessment(ea_id, raw_noise_id=raw_noise_id, restart_id=restart_id, conditioned=conditioned, access_token=access_token)
+    # Reponse will be an array of entropy assessments based on the numberOfOEs, even if only one is present
+    entropy_assessments = []
+    for ea in json_response:
+        ea_id, raw_noise_id, restart_id, conditioned = get_ids(ea)
+        access_token = ea["accessToken"]
+        entropy_assessments.append(Entropy_Assessment(ea_id, raw_noise_id=raw_noise_id, restart_id=restart_id, conditioned=conditioned, access_token=access_token))
+
+    return entropy_assessments
 
 # Gets and prints eaIDs and dfIDs after sending registration
 def get_ids(response):
@@ -44,7 +49,7 @@ def get_ids(response):
             restart_id = obj["restartTestBits"].split("/")[-1]
 
         if "conditionedBits" in obj:
-            conditioned.append(Conditioned_File(obj["conditionedBits"].split("/")[-1], obj["sequencePosition"]))
+            conditioned.append(Conditioned_File(obj["conditionedBits"].split("/")[-1], int(obj["sequencePosition"])))
 
     print(f"Entropy Assessment ID: {ea_id}")
     print(f"Raw Noise Data File ID: {raw_noise_id}")

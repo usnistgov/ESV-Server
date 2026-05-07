@@ -50,23 +50,17 @@
                 "combinationMethod": "Method1",
                 "sources": [
                     {
-                        "entropyValidations": [
-                            "E1"
-                        ],
-                        "operatingEnvironments": [
-                            1
-                        ]
+                        "entropyValidations": "E1",
+                        "entropyOperatingEnvironments": [1],
+                        "rbgOperatingEnvironments": [1]
                     }
                 ],
                 "externalConditioningComponent":
                 {
                     "procedure": "getConditionedInput",
-                    "validationNumbers":
-                    [
-                        "A1",
-                        "A2"
-                    ],
+                    "validationNumbers": ["A1", "A2"],
                     "algorithm": "Algo123",
+                    "keyLen": 0,
                     "minNIn": 0,
                     "nOut": 0,
                     "minHIn": 0,
@@ -74,10 +68,13 @@
                 }
             },
             "drbg": {
-                "validationNumbers": [
-                    "A1"
+                "validations": [
+                    {
+                        "validationNumber": "A1",
+                        "algorithmOperatingEnvironments": [1]
+                    }
                 ],
-                "algorithm": "HMAC_DRBG",
+                "algorithm": "HMAC_DRBG SHA2-256",
                 "derivationFunction": true,
                 "seed": [
                     {
@@ -89,9 +86,7 @@
                 "reseed": true,
                 "reseedFrequency": "hourly"
             },
-            "operatingEnvironments": [
-                1
-            ]
+            "operatingEnvironments": [1]
         }
     ],
     "supportingDocumentation": [
@@ -114,11 +109,11 @@
     "certify": {
         "moduleId": 1,
         "vendorId": 1,
-        "entropyId": "E123",
+        "entropyId": "1234",
         "entropyCertificate": "E1"
     },
     "updatePublicUseDocument": {
         "entropyCertificate": "E1",
-        "entropyId": "E456"
+        "entropyId": "5678"
     }
 }

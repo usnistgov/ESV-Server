@@ -145,7 +145,7 @@
 										},
 										"nodeData": {
 											"vsfScriptFiles": [
-												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/externalConditioningFunction.json" },
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/externalConditioningFunction.json", "breakOnError": false },
 												{ "scriptFile": "CommonRules/skipNodeIfNull.json" },
 												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/conditioningAlgorithms.json" },
 												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/conditioningValues.json" },

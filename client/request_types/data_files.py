@@ -39,7 +39,7 @@ def send_post_data_file(ea_id, df_id, file_path, jwt, bits_per_sample = 0):
 
     # Add in data file-specific bits per sample
     payload = {}
-    if bits_per_sample is not 0:
+    if bits_per_sample != 0:
         payload["DataFileSampleSize"] = bits_per_sample         # Protocol says "dataFileSampleSize", but server v1.8 expects "DataFileSampleSize". From server v2.0 on, this is case insensitive.
 
     retry = True

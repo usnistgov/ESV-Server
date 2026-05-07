@@ -8,10 +8,9 @@
 			}
 		},
 		{
-			"lineType": "Rule",
-			"ruleType": "External",
+			"lineType": "ImportScript",
 			"parameters": {
-				"ruleText": "currentProperty > 0"
+				"scriptFile": "CommonRules/validObjectId.json"
 			}
 		},
 		{

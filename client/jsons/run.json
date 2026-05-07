@@ -1,43 +1,102 @@
-[
-    {
-        "AssessmentRegistrationPath": "/path/to/entropy-source-metadata.json",
-        "DataFiles": [
+{
+    "entropyAssessment": {
+        "primaryNoiseSource": "ea with non-vetted cc",
+        "iidClaim": false,
+        "bitsPerSample": 4,
+        "hminEstimate": 3.1,
+        "physical": true,
+        "numberOfRestarts": 1000,
+        "samplesPerRestart": 1000,
+        "additionalNoiseSources": false,
+        "conditioningComponent": [
             {
-                "oeID": 1,
-                "rawNoisePath": "/path/to/truerand_4bit.bin",
-                "restartTestPath": "/path/to/truerand_4bit.bin",
-                "unvettedConditionedPaths": [
-                    "/path/to/truerand_4bit.bin",
-                    "/path/to/truerand_4bit.bin"
+                "sequencePosition": 1,
+                "vetted": false,
+                "description": "Non-vetted CC",
+                "bijectiveClaim": false,
+                "minNin": 384,
+                "minHin": 355,
+                "nw": 128,
+                "nOut": 128,
+                "hOut": 120
+            },
+            {
+                "sequencePosition": 2,
+                "vetted": true,
+                "description": "AES-CBC-MAC",
+                "validationNumber": "A1",
+                "minNin": 384,
+                "minHin": 355,
+                "nw": 128,
+                "nOut": 128,
+                "hOut": 128
+            }
+        ]
+    },
+    "dataFiles": [
+        {
+            "oeId": 1,
+            "rawNoise": {
+                "filePath": "example_files/truerand_4bit.bin",
+                "bitsPerSample": 4
+            },
+            "restart": {
+                "filePath": "example_files/truerand_4bit.bin",
+                "bitsPerSample": 4
+            },
+            "conditioned": [
+                {
+                    "sequencePosition": 1,
+                    "filePath": "example_files/truerand_4bit.bin",
+                    "bitsPerSample": 4
+                }
+            ]
+        }
+    ],
+    "supportingDocumentation": [
+        {
+            "filePath": "example_files/test_pdf.pdf",
+            "comment": "This is a comment about our public use document",
+            "sdType": "PublicUseDocument"
+        },
+        {
+            "filePath": "example_files/test_pdf.pdf",
+            "comment": "This is a comment about our entropy assessment report",
+            "sdType": "EntropyAssessmentReport"
+        }
+    ],
+    "certify": {
+        "moduleId": 1,
+        "vendorId": 1,
+        "entropyId": "E123"
+    },
+    "history": {
+        "entropyAssessments": [
+            {
+                "entropyAssessment": 5093,
+                "oeId": 1,
+                "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlYUlkIjoiNTA5MyIsImRmSWQiOiJbMTExOTUsMTExOTYsMTExOTddIiwic3ViIjoiRT1jaHJpc3RvcGVyLmNlbGlAbmlzdC5nb3YsIENOPUNocmlzIENlbGksIE9VPUlUTCwgTz1OSVNULCBMPUdhaXRoZXJzYnVyZywgUz1NYXJ5bGFuZCwgQz1VUyIsIm5iZiI6MTc2MjM2MzYyNCwiZXhwIjoxNzYyMzY1NDI0LCJpYXQiOjE3NjIzNjM2MjQsImlzcyI6Ik5JU1QgRVNWIFRFU1QifQ.j0-NYwyOcm7QrVY9JB8HJMVHhv4LI-AeM1INYiO8aQc",
+                "rawNoiseId": 11195,
+                "restartId": 11196,
+                "conditionedIds": [
+                    {
+                        "id": 11197,
+                        "sequencePosition": 1
+                    }
                 ]
             }
         ],
-        "SupportingDocuments": [
+        "supportingDocumentation": [
             {
-                "filePath": "/path/to/report_pud.pdf",
-                "comment": "This is a comment about our public use document",
-                "sdType": "PublicUseDocument"
+                "sdId": 68504,
+                "sdType": "PublicUseDocument",
+                "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZElkIjoiNjg1MDQiLCJzdWIiOiJFPWNocmlzdG9wZXIuY2VsaUBuaXN0LmdvdiwgQ049Q2hyaXMgQ2VsaSwgT1U9SVRMLCBPPU5JU1QsIEw9R2FpdGhlcnNidXJnLCBTPU1hcnlsYW5kLCBDPVVTIiwibmJmIjoxNzYyMzYzNzc3LCJleHAiOjE3NjIzNjU1NzcsImlhdCI6MTc2MjM2Mzc3NywiaXNzIjoiTklTVCBFU1YgVEVTVCJ9.1lGn-ewkdKtaufTPTAttpXZWvhOrMREHrbMnJl3wmDY"
             },
             {
-                "filePath": "/path/to/report_ear.pdf",
-                "comment": "This is a comment about our entropy assessment report",
-                "sdType": "EntropyAssessmentReport"
+                "sdId": 68505,
+                "sdType": "EntropyAssessmentReport",
+                "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZElkIjoiNjg1MDUiLCJzdWIiOiJFPWNocmlzdG9wZXIuY2VsaUBuaXN0LmdvdiwgQ049Q2hyaXMgQ2VsaSwgT1U9SVRMLCBPPU5JU1QsIEw9R2FpdGhlcnNidXJnLCBTPU1hcnlsYW5kLCBDPVVTIiwibmJmIjoxNzYyMzYzNzc3LCJleHAiOjE3NjIzNjU1NzcsImlhdCI6MTc2MjM2Mzc3NywiaXNzIjoiTklTVCBFU1YgVEVTVCJ9.z0xIXpMyhM3C0PeWLh2rswMfh8N5sGsu2Gz_BgLsAc8"
             }
-        ],
-        "Certify": {
-            "Certify": true,
-            "moduleID": 1,
-            "vendorID": 1,
-            "itar": false,
-            "entropyID": "E123"
-        },
-        "Assessment": {
-            "numberOfAssessments": 1,
-            "limitEntropyAssessmentToSingleModule": false
-        },
-        "UpdatedPublicUseDocument": {
-            "entropyCertificate": "E1",
-            "filePath": "/path/to/report_pud_update.pdf"
-        }
+        ]
     }
-]
+}
