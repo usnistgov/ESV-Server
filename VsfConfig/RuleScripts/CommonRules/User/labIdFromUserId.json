@@ -1,0 +1,32 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "labId",
+				"value": "As(externalUserService, \"IExternalUserService\").GetLab(userId)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "labId != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "labId is a proper type.",
+			"parameters": {
+				"ruleText": "Is(labId, \"System.Int32\")"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "labId is not -1.",
+			"parameters": {
+				"ruleText": "labId != -1"
+			}
+		}
+	]
+}

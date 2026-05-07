@@ -1,0 +1,27 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Must be one of the allowed DRBGs",
+			"parameters": {
+				"ruleText": "DrbgAttributesHelper.GetDrbgAttributes(currentProperty.AlgorithmType) != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "DrbgAttributes",
+				"value": "DrbgAttributesHelper.GetDrbgAttributes(currentProperty.AlgorithmType)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Must be one of the allowed DRBGs",
+			"parameters": {
+				"ruleText": "DrbgAttributes != null"
+			}
+		}
+	]
+}

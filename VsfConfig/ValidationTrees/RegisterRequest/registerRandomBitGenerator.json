@@ -1,0 +1,367 @@
+[
+    {
+        "modelName": "RandomBitGeneratorRegisterPayload",
+        "rootNode": {
+            "dataType": "NIST.CVP.ESV.Shared.Libraries.Models.SP800_90C.RandomBitGeneratorRegisterPayload",
+            "nodeData": {
+                "vsfScriptFiles": [
+                    { "scriptFile": "CommonRules/notNull.json" }
+                ]
+            },
+            "nodes": [
+				{
+					"nodeType": "list",
+					"property": {
+						"internalIdentifier": "Rbgs"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/notNull.json" },
+							{ "scriptFile": "CommonRules/listMinCount.json" },
+							{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/randomBitGeneratorList.json" }
+						]
+					},
+					"listItem": {
+						"branchNodeData": {
+							"runBeforeListItem": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "CommonRules/notNull.json" },
+									{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/storeListItemIndex.json" }
+								]
+							}
+						},
+						"nodes": [
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "AllowsReseedRequests"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/allowsReseedRequests.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "parent",
+								"property": {
+									"internalIdentifier": "EntropySources"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/entropySources.json" },
+										{ "scriptFile": "CommonRules/skipNodeIfNull.json" }
+									]
+								},
+								"nodes": [
+									{
+										"nodeType": "list",
+										"property": {
+											"internalIdentifier": "Sources"
+										},
+										"nodeData": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "CommonRules/notNull.json" },
+												{ "scriptFile": "CommonRules/listMinCount.json" }
+											]
+										},
+										"listItem": {
+											"nodes": [
+												{
+													"nodeType": "leaf",
+													"property": {
+														"internalIdentifier": "EntropyValidationCertificateNumber"
+													},
+													"nodeData": {
+														"vsfScriptFiles": [
+															{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/entropyValidationCertificateNumber.json" }
+														]
+													}
+												},
+												{
+													"nodeType": "list",
+													"property": {
+														"internalIdentifier": "EntropyOperatingEnvironments"
+													},
+													"nodeData": {
+														"vsfScriptFiles": [
+															{ "scriptFile": "CommonRules/notNull.json" },
+															{ "scriptFile": "CommonRules/listMinCount.json" },
+															{ "scriptFile": "CommonRules/listIsUnique.json" }
+														]
+													},
+													"listItem": {
+														"branchNodeData": {
+															"runBeforeListItem": {
+																"vsfScriptFiles": [
+																	{ "scriptFile": "CommonRules/validObjectId.json" },
+																	{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/operatingEnvironment.json" }
+																]
+															}
+														}
+													}
+												},
+												{
+													"nodeType": "list",
+													"property": {
+														"internalIdentifier": "RbgOperatingEnvironments"
+													},
+													"nodeData": {
+														"vsfScriptFiles": [
+															{ "scriptFile": "CommonRules/notNull.json" },
+															{ "scriptFile": "CommonRules/listMinCount.json" },
+															{ "scriptFile": "CommonRules/listIsUnique.json" }
+														]
+													},
+													"listItem": {
+														"branchNodeData": {
+															"runBeforeListItem": {
+																"vsfScriptFiles": [
+																	{ "scriptFile": "CommonRules/validObjectId.json" },
+																	{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/rbgOperatingEnvironment.json" }
+																]
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"nodeType": "leaf",
+										"property": {
+											"internalIdentifier": "CombinationMethodType"
+										},
+										"nodeData": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/combinationMethod.json" }
+											]
+										}
+									},
+									{
+										"nodeType": "parent",
+										"property": {
+											"internalIdentifier": "ExternalConditioningFunction"
+										},
+										"nodeData": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/externalConditioningFunction.json" },
+												{ "scriptFile": "CommonRules/skipNodeIfNull.json" },
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/conditioningAlgorithms.json" },
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/conditioningValues.json" },
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/entropyRate.json" }
+											]
+										},
+										"nodes": [
+											{
+												"nodeType": "leaf",
+												"property": {
+													"internalIdentifier": "ProcedureType"
+												},
+												"nodeData": {
+													"vsfScriptFiles": [
+														{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/procedure.json" }
+													]
+												}
+											},
+											{
+												"nodeType": "list",
+												"property": {
+													"internalIdentifier": "ValidationNumbers"
+												},
+												"nodeData": {
+													"vsfScriptFiles": [
+														{ "scriptFile": "CommonRules/notNull.json" },
+														{ "scriptFile": "CommonRules/listMinCount.json" },
+														{ "scriptFile": "CommonRules/listIsUnique.json" }
+													]
+												},
+												"listItem": {
+													"branchNodeData": {
+														"runAfterListItem": {
+															"vsfScriptFiles": [
+																{ "scriptFile": "CommonRules/Acvp/acvpAlgorithmValidationExists.json" }
+															]
+														}
+													}
+												}
+											},
+											{
+												"nodeType": "leaf",
+												"property": {
+													"internalIdentifier": "KeyLength"
+												},
+												"nodeData": {
+													"vsfScriptFiles": [
+														{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/EntropySources/ExternalConditioningFunction/keyLength.json" }
+													]
+												}
+											}
+										]
+									}
+								]
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "ConstructionType"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/construction.json" }
+									] 
+								}
+							},
+							{
+								"nodeType": "list",
+								"property": {
+									"internalIdentifier": "OperatingEnvironments"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" },
+										{ "scriptFile": "CommonRules/listMinCount.json" },
+										{ "scriptFile": "CommonRules/listIsUnique.json" }
+									]
+								},
+								"listItem": {
+									"branchNodeData": {
+										"runAfterListItem": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "CommonRules/validObjectId.json" },
+												{ "scriptFile": "CommonRules/Acvp/acvpOeExists.json" }
+											]
+										}
+									}
+								}
+							},
+							{
+								"nodeType": "parent",
+								"property": {
+									"internalIdentifier": "Drbg"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/notNull.json" },
+										{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/algorithm.json" }
+									]
+								},
+								"nodes": [
+									{
+										"nodeType": "list",
+										"property": {
+											"internalIdentifier": "ValidationNumberOeObjects"
+										},
+										"nodeData": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "CommonRules/notNull.json" },
+												{ "scriptFile": "CommonRules/listMinCount.json" },
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/validationNumberOeObjectsList.json" }
+											]
+										},
+										"listItem": {
+											"nodes": [
+												{
+													"nodeType": "leaf",
+													"property": {
+														"internalIdentifier": "ValidationNumber"
+													},
+													"nodeData": {
+														"vsfScriptFiles": [
+															{ "scriptFile": "CommonRules/Acvp/acvpAlgorithmValidationExists.json" }
+														]
+													}
+												},
+												{
+													"nodeType": "list",
+													"property": {
+														"internalIdentifier": "AlgorithmOperatingEnvironments"
+													},
+													"nodeData": {
+														"vsfScriptFiles": [
+															{ "scriptFile": "CommonRules/notNull.json" },
+															{ "scriptFile": "CommonRules/listMinCount.json" },
+															{ "scriptFile": "CommonRules/listIsUnique.json" }
+														]
+													},
+													"listItem": {
+														"branchNodeData": {
+															"runBeforeListItem": {
+																"vsfScriptFiles": [
+																	{ "scriptFile": "CommonRules/validObjectId.json" },
+																	{ "scriptFile": "CommonRules/Acvp/acvpOeExists.json" }
+																]
+															}
+														}
+													}
+												}
+											]
+										}
+									},
+									{
+										"nodeType": "leaf",
+										"property": {
+											"internalIdentifier": "DerivationFunction"
+										},
+										"nodeData": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/derivationFunction.json" }
+											]
+										}
+									},
+									{
+										"nodeType": "list",
+										"property": {
+											"internalIdentifier": "Seeds"
+										},
+										"nodeData": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "CommonRules/notNull.json" },
+												{ "scriptFile": "CommonRules/listMinCount.json" },
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/seedList.json" }
+												
+											]
+										},
+										"listItem": {
+											"branchNodeData": {
+												"runAfterListItem": {
+													"vsfScriptFiles": [
+														{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/securityStrength.json" },
+														{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/minHin.json" },
+														{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/minNin.json" }
+													]
+												}
+											}
+										}
+									},
+									{
+										"nodeType": "leaf",
+										"property": {
+											"internalIdentifier": "Reseed"
+										},
+										"nodeData": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/reseed.json" }
+											]
+										}
+									},
+									{
+										"nodeType": "leaf",
+										"property": {
+											"internalIdentifier": "ReseedFrequency"
+										},
+										"nodeData": {
+											"vsfScriptFiles": [
+												{ "scriptFile": "Rules/RegisterRequest/RandomBitGenerator/Drbg/reseedFrequency.json" }
+											]
+										}
+									}
+								]
+							}
+						]
+					}
+				}
+            ]
+        }
+    }
+]

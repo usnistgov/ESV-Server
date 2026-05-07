@@ -1,0 +1,154 @@
+[
+	{
+		"modelName": "CertifyRequestPayloadAddOperatingEnvironment",
+		"rootNode": {
+			"dataType": "NIST.CVP.ESV.Shared.Libraries.Models.Certify.CertifyRequestPayloadAddOperatingEnvironment",
+			"nodeData": {
+				"vsfScriptFiles": [
+					{ "scriptFile": "CommonRules/notNull.json" }
+				]
+			},
+			"nodes": [
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "EntropyId"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/CertifyRequest/entropyId.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "LimitEntropyAssessmentToSingleModule"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/notNull.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "CertificateNumberForCertifyUpdateRequest"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/CertifyRequest/entropyCertificate.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "list",
+					"property": {
+						"internalIdentifier": "SupportingDocumentationReferences"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/listMinCount.json" },
+							{ "scriptFile": "Rules/CertifyRequest/SupportingDocumentationReference/supportingDocumentTypesCount.json" }
+						]
+					},
+					"listItem": {
+						"branchNodeData": {
+							"runBeforeListItem": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "CommonRules/notNull.json" }
+								]
+							}
+						},
+						"nodes": [
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "AccessToken"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/User/accessToken.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "SdID"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/CertifyRequest/SupportingDocumentationReference/sdIdClaim.json" }
+									]
+								}
+							}
+						]
+					}
+				},
+				{
+					"nodeType": "list",
+					"property": {
+						"internalIdentifier": "EntropyAssessmentReferences"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/listMinCount.json" },
+							{ "scriptFile": "Rules/CertifyRequest/Entropyassessmentreference/eaIdIsDistinct.json" }
+						]
+					},
+					"listItem": {
+						"branchNodeData": {
+							"runBeforeListItem": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "CommonRules/notNull.json" }
+								]
+							}
+						},
+						"nodes": [
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "AccessToken"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/User/accessToken.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "EaID"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/CertifyRequest/EntropyAssessmentReference/earEaIdClaim.json" },
+										{ "scriptFile": "Rules/CertifyRequest/EntropyAssessmentReference/earEaIdStatus.json" },
+										{
+											"scriptFile": "Rules/CertifyRequest/EntropyAssessmentReference/earEaIdDatafileResult.json",
+											"breakOnError": false
+										}
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "OeID"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/CertifyRequest/EntropyAssessmentReference/earOeId.json" }
+									]
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	}
+]

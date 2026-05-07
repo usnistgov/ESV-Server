@@ -1,0 +1,145 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "sdIDs",
+				"value": "currentProperty.Where(x => x.SdID.HasValue).Select(x => x.SdID.Value).ToList()"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "sdIDs != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "sdIDs.Count() > 0 "
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "Is(sdIDs[0],\"System.Int64\")"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "As(supportingDocumentationContentService,\"ISupportingDocumentationContentService\") != null"
+			}
+		},
+		{
+			"lineType": "Information",
+			"description": "Display sdIDs list count.",
+			"parameters": {
+				"ruleText": "String.Format(\"count is {0}\", sdIDs.Count())"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "sdTypes",
+				"value": "sdIDs.Select(x => As(supportingDocumentationContentService,\"ISupportingDocumentationContentService\").GetSupportingDocumentationType(x)).ToList()"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "sdTypes.Count() == sdIDs.Count()"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "sdTypes != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "earTypeCount",
+				"value": "sdTypes.Count(x => x == SupportingDocumentType.EntropyAssessmentReport)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "earTypeCount != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "Is(earTypeCount,\"System.Int32\")"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "pudTypeCount",
+				"value": "sdTypes.Count(x => x == SupportingDocumentType.PublicUseDocument)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "pudTypeCount != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "dcaTypeCount",
+				"value": "sdTypes.Count(x => x == SupportingDocumentType.DataCollectionAttestation)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "dcaTypeCount != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "rbgTypeCount",
+				"value": "sdTypes.Count(x => x == SupportingDocumentType.RandomBitGeneratorReport)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "rbgTypeCount != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "otherTypeCount",
+				"value": "sdTypes.Count(x => x == SupportingDocumentType.Other)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "otherTypeCount != null"
+			}
+		},
+		{
+			"lineType": "Information",
+			"description": "Display supporting documentation types count.",
+			"parameters": {
+				"ruleText": "String.Format(\"EAR Count: {0}, PUD Count: {1}, DCA Count: {2}, RBGR Count: {3}, Other Count: {4}\", earTypeCount, pudTypeCount, dcaTypeCount, rbgTypeCount, otherTypeCount)"
+			}
+		}
+	]
+}

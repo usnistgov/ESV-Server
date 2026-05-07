@@ -1,0 +1,73 @@
+[
+	{
+		"modelName": "CertifyRequestPayloadUpdatePUD",
+		"rootNode": {
+			"dataType": "NIST.CVP.ESV.Shared.Libraries.Models.Certify.CertifyRequestPayloadUpdatePUD",
+			"nodeData": {
+				"vsfScriptFiles": [
+					{ "scriptFile": "CommonRules/notNull.json" }
+				]
+			},
+			"nodes": [
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "EntropyId"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/CertifyRequest/entropyId.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "CertificateNumberForCertifyUpdateRequest"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/CertifyRequest/entropyCertificate.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "parent",
+					"property": {
+						"internalIdentifier": "SupportingDocumentReference"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/notNull.json" }
+						]
+					},
+					"nodes": [
+						{
+							"nodeType": "leaf",
+							"property": {
+								"internalIdentifier": "AccessToken"
+							},
+							"nodeData": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "CommonRules/User/accessToken.json" }
+								]
+							}
+						},
+						{
+							"nodeType": "leaf",
+							"property": {
+								"internalIdentifier": "SdID"
+							},
+							"nodeData": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "Rules/CertifyRequest/SupportingDocumentationReference/sdIdClaim.json" },
+									{ "scriptFile": "Rules/CertifyRequest/SupportingDocumentationReference/supportingDocumentTypesCountPud.json" }
+								]
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+]

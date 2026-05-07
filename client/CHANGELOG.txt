@@ -1,3 +1,18 @@
+[2.0]
+
+CHANGES
+   * Refactored the client entirely
+   * Removed lots of extra code
+   * Look at client.py for the set of business logic performed on each request
+   * Look at client_actions.py for the details of each request
+   * Runfiles are not backwards compatible, the format has been updated
+   * History object is used to track previous submissions
+   * Each submission track is broken out into separate objects in the runfile
+
+ADDED
+   * Support for 90C
+
+
 [1.7]
 
 ADDED

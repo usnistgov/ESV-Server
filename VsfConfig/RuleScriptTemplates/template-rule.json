@@ -1,0 +1,19 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "",
+			"parameters": {
+				"ruleText": ""
+			}
+		},
+		{
+			"lineType": "Rule",
+			"description": "",
+			"parameters": {
+				"ruleText": ""
+			}
+		}
+	]
+}

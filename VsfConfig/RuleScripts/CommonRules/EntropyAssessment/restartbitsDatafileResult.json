@@ -1,0 +1,29 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "publicDataFileService != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "resultList",
+				"value": "As(publicDataFileService,\"IPublicDataFileService\").GetRestartBitsDataFileResult(currentProperty.GetValueOrDefault()).ToList()"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "resultList != null"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"parameters": {
+				"ruleText": "resultList.All(s => s.Success)"
+			}
+		}	
+	]
+}

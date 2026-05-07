@@ -1,0 +1,19 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/notNull.json"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty >= 1000"
+			}
+		}
+	]
+
+}

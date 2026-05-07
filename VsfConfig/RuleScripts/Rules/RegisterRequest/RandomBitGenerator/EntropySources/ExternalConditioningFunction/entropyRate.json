@@ -1,0 +1,35 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3XOR"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "ExternalConditioningFunction shall provide a the DRBG with full entropy if used within an RBG3(XOR)",
+								"references": ["SP 800-90C Section 6.4"],
+								"parameters": {
+									"ruleText": "FullEntropyConditioningFunction == true"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

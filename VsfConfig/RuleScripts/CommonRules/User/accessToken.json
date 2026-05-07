@@ -1,0 +1,43 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"parameters": {
+				"scriptFile": "CommonRules/notNull.json"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "userCertSubject != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "jwtService != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"description": "Check access token validity and expiration date.",
+			"parameters": {
+				"key": "accessTokenIsValid",
+				"value": "As(jwtService, \"IJwtService\").IsTokenValid(userCertSubject, currentProperty, true)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "accessTokenIsValid != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "accessTokenIsValid is a proper type.",
+			"parameters": {
+				"ruleText": "Is(accessTokenIsValid, \"System.Boolean\")"
+			}
+		}
+	]
+}

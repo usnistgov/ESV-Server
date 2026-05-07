@@ -1,0 +1,32 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.IsVetted == true"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "ImportScript",
+								"parameters": {
+									"scriptFile": "CommonRules/Acvp/acvpAlgorithmValidationExists.json"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

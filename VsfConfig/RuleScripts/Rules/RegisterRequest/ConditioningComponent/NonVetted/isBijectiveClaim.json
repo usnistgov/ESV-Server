@@ -1,0 +1,34 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.IsVetted == false"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "ImportScript",
+								"description": "If non-vetted, no further checking is required on isBijectiveClaim.",
+								"parameters": {
+									"scriptFile": "CommonRules/notNull.json"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+
+}

@@ -1,0 +1,75 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "ConditioningComponentAttributes.Name.Contains(\"HMAC\")"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If HMAC is used as an external conditioning function the key length shall be the function output length",
+								"references": ["SP 800-90C Section 3.2.1.1"],
+								"parameters": {
+									"ruleText": "currentProperty == ConditioningComponentAttributes.RbgNOut"
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "ConditioningComponentAttributes.Name.Contains(\"CMAC\") || ConditioningComponentAttributes.Name.Contains(\"CBC-MAC\")"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If AES-CMAC or AES-CBC-MAC is used as an external conditioning function the key length shall be one of the approved AES key lengths",
+								"references": ["SP 800-90C Section 3.2.1.1"],
+								"parameters": {
+									"ruleText": "currentProperty == 128 || currentProperty == 192 || currentProperty == 256"
+								}
+							}
+						]
+					}
+				},
+				{
+					"else": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "No key length is expected for this external conditioning function",
+								"parameters": {
+									"ruleText": "currentProperty == null"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Operating Environments cited shall appear on the entropy certificates",
+			"parameters": {
+				"ruleText": "EntropyCertificateList.Any(e => As(e, \"EntropyCertificate\").OperatingEnvironmentProperties.Any(oe => As(oe, \"EntropyCertificateOperatingEnvironmentProperties\").OEId == currentProperty))"
+			}
+		}
+	]
+}

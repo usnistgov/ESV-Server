@@ -1,0 +1,117 @@
+[
+	{
+		"modelName": "CertifyRequestPayloadRBG",
+		"rootNode": {
+			"dataType": "NIST.CVP.ESV.Shared.Libraries.Models.Certify.CertifyRequestPayloadRBG",
+			"nodeData": {
+				"vsfScriptFiles": [
+					{ "scriptFile": "CommonRules/notNull.json" }
+				]
+			},
+			"nodes": [
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "ModuleId"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/CertifyRequest/moduleId.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "leaf",
+					"property": {
+						"internalIdentifier": "EntropyId"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "Rules/CertifyRequest/entropyId.json" }
+						]
+					}
+				},
+				{
+					"nodeType": "list",
+					"property": {
+						"internalIdentifier": "SupportingDocumentationReferences"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/listMinCount.json" },
+							{ "scriptFile": "Rules/CertifyRequest/SupportingDocumentationReference/supportingDocumentTypesCountRbg.json" }
+						]
+					},
+					"listItem": {
+						"branchNodeData": {
+							"runBeforeListItem": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "CommonRules/notNull.json" }
+								]
+							}
+						},
+						"nodes": [
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "AccessToken"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "CommonRules/User/accessToken.json" }
+									]
+								}
+							},
+							{
+								"nodeType": "leaf",
+								"property": {
+									"internalIdentifier": "SdID"
+								},
+								"nodeData": {
+									"vsfScriptFiles": [
+										{ "scriptFile": "Rules/CertifyRequest/SupportingDocumentationReference/sdIdClaim.json" }
+									]
+								}
+							}
+						]
+					}
+				},
+				{
+					"nodeType": "parent",
+					"property": {
+						"internalIdentifier": "RbgReference"
+					},
+					"nodeData": {
+						"vsfScriptFiles": [
+							{ "scriptFile": "CommonRules/notNull.json" }
+						]
+					},
+					"nodes": [
+						{
+							"nodeType": "leaf",
+							"property": {
+								"internalIdentifier": "AccessToken"
+							},
+							"nodeData": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "CommonRules/User/accessToken.json" }
+								]
+							}
+						},
+						{
+							"nodeType": "leaf",
+							"property": {
+								"internalIdentifier": "RbgId"
+							},
+							"nodeData": {
+								"vsfScriptFiles": [
+									{ "scriptFile": "Rules/CertifyRequest/rbgIdClaim.json" }
+								]
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+]

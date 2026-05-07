@@ -1,0 +1,37 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"parameters": {
+				"scriptFile": "CommonRules/notNull.json"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"parameters": {
+				"scriptFile": "CommonRules/notNullAndNotWhitespace.json"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "vnpp",
+				"value": "ValidationNumberHelper( As(loggerFactory, \"ILoggerFactory\") ).FindValidationNumberPrefixProperties(currentProperty)"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "vnpp != null"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "As(vnpp, \"ValidationNumberPrefixProperties\").VpSupport == 0"
+			}
+		}
+	]
+}

@@ -1,0 +1,46 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/notNull.json"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty > 0"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/Acvp/acvpOeExists.json"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "",
+			"parameters": {
+				"ruleText": "oeExists == true"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/Acvp/acvpOeGet.json"
+			}
+		},
+		{
+			"lineType": "Information",
+			"description": "Display OE name.",
+			"parameters": {
+				"ruleText": "String.Format(\"OE name is {0}\", As(oeObj.Name, \"System.String\"))"
+			}
+		}
+	]
+}

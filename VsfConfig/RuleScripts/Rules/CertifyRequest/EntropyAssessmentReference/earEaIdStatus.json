@@ -1,0 +1,45 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "publicEntropyAssessmentService != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "Is(currentProperty,\"System.Int64\") == true"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "earObj",
+				"value": "As(publicEntropyAssessmentService,\"IPublicEntropyAssessmentService\").GetEntropyAssessment(currentProperty.GetValueOrDefault())"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "This eaId is not yet ready for a certify request. Please try again later.",
+			"parameters": {
+				"ruleText": "earObj != null"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Status is already marked as Certify Requested.",
+			"parameters": {
+				"ruleText": "! EntropyAssessmentStatus.CertifyRequested.Equals(earObj.Status)"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "EntropyAssessmentStatus.Passed.Equals(earObj.Status)"
+			}
+		}
+	]
+}

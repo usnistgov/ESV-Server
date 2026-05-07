@@ -1,0 +1,52 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"parameters": {
+				"scriptFile": "CommonRules/SupportingDocumentation/supportingDocumentTypesCounter.json"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "Is(earTypeCount,\"System.Int32\")"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "Is(earTypeCount,\"System.Int32\")"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "Is(earTypeCount,\"System.Int32\")"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "One EntropyAssessmentReport supporting documentation type is required.",
+			"parameters": {
+				"ruleText": "earTypeCount == 1"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "One PublicUseDocument supporting documentation type is required.",
+			"parameters": {
+				"ruleText": "pudTypeCount == 1"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "A DataCollectionAttestation (DCA) supporting documentation type is optional, and only 1 DCA may be provided.",
+			"parameters": {
+				"ruleText": "dcaTypeCount == 0 || dcaTypeCount == 1"
+			}
+		}
+	]
+}

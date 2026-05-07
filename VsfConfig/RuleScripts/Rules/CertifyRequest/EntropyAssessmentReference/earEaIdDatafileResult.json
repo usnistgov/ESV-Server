@@ -1,0 +1,25 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/EntropyAssessment/rawnoiseBitsDatafileResult.json"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/EntropyAssessment/restartBitsDatafileResult.json"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/EntropyAssessment/conditionedBitsDatafileResult.json"
+			}
+		}
+	]
+}

@@ -1,0 +1,101 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"description": "",
+			"parameters": {
+				"scriptFile": "CommonRules/notNullAndNotWhitespace.json"
+			}
+		},
+		{
+			"lineType": "State",
+			"description": "Store the entropy certificate prefix letter.",
+			"parameters": {
+				"key": "entropyCertificatePrefix",
+				"value": "EntropyCertificate.EntropyCertificateNumberPrefix "
+			}
+		},
+		{
+			"lineType": "Rule",
+			"description": "Entropy certificate string length must be greater than the prefix length.",
+			"parameters": {
+				"ruleText": "currentProperty.Length > entropyCertificatePrefix.Length"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"description": "Entropy certificate starts with a prefix letter.",
+			"parameters": {
+				"ruleText": "currentProperty.StartsWith(entropyCertificatePrefix)"
+			}
+		},
+			{
+			"lineType": "State",
+			"description": "Substring of the entropy certificate number.",
+			"parameters": {
+				"key": "entropyCertificateSubstring",
+				"value": "currentProperty.Substring(entropyCertificatePrefix.Length)"
+			}
+		},
+		{
+			"lineType": "State",
+			"description": "Parse the entropy certificate string as an integer.",
+			"parameters": {
+				"key": "entropyCertificateNumber",
+				"value": "Int32.Parse(entropyCertificateSubstring)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy certificate number is greater than 0.",
+			"parameters": {
+				"ruleText": "entropyCertificateNumber > 0"
+			}
+		},
+		{
+			"lineType": "State",
+			"description": "",
+			"parameters": {
+				"key": "entropyCertificateExistsResult",
+				"value": "As(entropyCertificateService,\"IEntropyCertificateService\").CertificateNumberExists(entropyCertificateNumber)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy certificate object exists.",
+			"parameters": {
+				"ruleText": "entropyCertificateExistsResult != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy certificate return type is an ExistsResult type.",
+			"parameters": {
+				"ruleText": "As(entropyCertificateExistsResult,\"ExistsResult\") != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy certificate number exists.",
+			"parameters": {
+				"ruleText": "entropyCertificateExistsResult.Exists == true"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Entropy certificate Id exists.",
+			"parameters": {
+				"ruleText": "entropyCertificateExistsResult.TheResult.CertificateId != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"description": "Store the entropy certificate Id.",
+			"parameters": {
+				"scope": "Global",
+				"key": "entropyCertificateId",
+				"value": "entropyCertificateExistsResult.TheResult.CertificateId"
+			}
+		}
+	]
+}

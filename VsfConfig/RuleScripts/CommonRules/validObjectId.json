@@ -1,0 +1,12 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Object IDs are 0 or greater",
+			"parameters": {
+				"ruleText": "currentProperty > 0"
+			}
+		}
+	]
+}

@@ -1,0 +1,42 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.IsVetted == false"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "ImportScript",
+								"description": "If vetted is False, this is custom text. Text must not be whitespace.",
+								"parameters": {
+									"scriptFile": "CommonRules/notNullAndNotWhitespace.json"
+								}
+							},
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "Text must be equal to or less than 64 characters.",
+								"parameters": {
+									"ruleText": "currentProperty.Length <= 64"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+
+}

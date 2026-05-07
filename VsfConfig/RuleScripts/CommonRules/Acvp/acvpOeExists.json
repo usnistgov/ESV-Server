@@ -1,0 +1,37 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "oeService != null"
+			}
+		},
+		{
+			"lineType": "ImportScript",
+			"parameters": {
+				"scriptFile": "CommonRules/validObjectId.json"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "oeExists",
+				"value": "As(oeService, \"IOEService\").Exists(currentProperty)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "oeExists != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "oeExists is a proper type.",
+			"parameters": {
+				"ruleText": "Is(oeExists, \"System.Boolean\")"
+			}
+		}	
+	]
+}

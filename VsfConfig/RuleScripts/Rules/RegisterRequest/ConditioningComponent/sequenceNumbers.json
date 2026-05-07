@@ -1,0 +1,64 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "State",
+			"description": "Convert each sequence nubmer to absolute value and distinct sequence",
+			"parameters": {
+				"key": "distinctSeq",
+				"value": "currentProperty.Select(s =>  Math.Abs(s.SequencePosition)).Distinct()"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "State key and value exist",
+			"parameters": {
+				"ruleText": "distinctSeq != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "All sequence numbers are distinct",
+			"parameters": {
+				"ruleText": "currentProperty.Count() == distinctSeq.Count()"
+			}
+		},
+		{
+			"lineType": "State",
+			"description": "Sum of distinct sequnces",
+			"parameters": {
+			 "inputDataType": "System.Collections.Generic.IEnumerable`1[System.Int32]",
+			 "inputKey": "distinctSeq",
+				"key": "distinctSeqSum",
+				"value": "distinctSeq.Sum()"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "State key and value exist",
+			"parameters": {
+				"ruleText": "distinctSeqSum != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Sum is a proper type.",
+			"parameters": {
+				"ruleText": "Is(distinctSeqSum, \"System.Int32\")"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "Sum is greater than 0",
+			"parameters": {
+				"ruleText": "distinctSeqSum > 0"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "distinctSeqSum == Enumerable.Range(1, currentProperty.Count()).Sum()"
+			}
+		}
+	]
+}

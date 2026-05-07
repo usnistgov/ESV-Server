@@ -1,0 +1,124 @@
+{
+    "entropyAssessment": {
+        "primaryNoiseSource": "test noise source",
+        "iidClaim": false,
+        "bitsPerSample": 8,
+        "hminEstimate": 1.0,
+        "physical": true,
+        "numberOfRestarts": 1000,
+        "samplesPerRestart": 1000,
+        "additionalNoiseSources": false,
+        "conditioningComponent": [
+            {
+                "sequencePosition": 1,
+                "vetted": false,
+                "description": "test cc",
+                "bijectiveClaim": false,
+                "minNin": 256,
+                "minHin": 32.0,
+                "nw": 128,
+                "nOut": 128,
+                "hOut": 31.997
+            }
+        ]
+    },
+    "dataFiles": [
+        {
+            "oeId": 1,
+            "rawNoise": {
+                "filePath": "example_files/truerand_4bit.bin",
+                "bitsPerSample": 4
+            },
+            "restart": {
+                "filePath": "example_files/truerand_4bit.bin",
+                "bitsPerSample": 4
+            },
+            "conditioned": [
+                {
+                    "sequencePosition": 1,
+                    "filePath": "example_files/truerand_4bit.bin",
+                    "bitsPerSample": 4
+                }
+            ]
+        }
+    ],
+    "randomBitGenerators": [
+        {
+            "construction": "RBG1",
+            "allowsReseedRequests": true,
+            "entropySources": {
+                "combinationMethod": "Method1",
+                "sources": [
+                    {
+                        "entropyValidations": [
+                            "E1"
+                        ],
+                        "operatingEnvironments": [
+                            1
+                        ]
+                    }
+                ],
+                "externalConditioningComponent":
+                {
+                    "procedure": "getConditionedInput",
+                    "validationNumbers":
+                    [
+                        "A1",
+                        "A2"
+                    ],
+                    "algorithm": "Algo123",
+                    "minNIn": 0,
+                    "nOut": 0,
+                    "minHIn": 0,
+                    "hOut": 0
+                }
+            },
+            "drbg": {
+                "validationNumbers": [
+                    "A1"
+                ],
+                "algorithm": "HMAC_DRBG",
+                "derivationFunction": true,
+                "seed": [
+                    {
+                        "securityStrength": 128,
+                        "minHIn": 256,
+                        "minNIn": 256
+                    }
+                ],
+                "reseed": true,
+                "reseedFrequency": "hourly"
+            },
+            "operatingEnvironments": [
+                1
+            ]
+        }
+    ],
+    "supportingDocumentation": [
+        {
+            "filePath": "example_files/test_pdf.pdf",
+            "comment": "This is a comment about our public use document",
+            "sdType": "PublicUseDocument"
+        },
+        {
+            "filePath": "example_files/test_pdf.pdf",
+            "comment": "This is a comment about our entropy assessment report",
+            "sdType": "EntropyAssessmentReport"
+        },
+        {
+            "filePath": "example_files/test_pdf.pdf",
+            "comment": "This is a comment about our random bit generator report",
+            "sdType": "RandomBitGeneratorReport"
+        }
+    ],
+    "certify": {
+        "moduleId": 1,
+        "vendorId": 1,
+        "entropyId": "E123",
+        "entropyCertificate": "E1"
+    },
+    "updatePublicUseDocument": {
+        "entropyCertificate": "E1",
+        "entropyId": "E456"
+    }
+}

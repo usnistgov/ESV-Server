@@ -1,0 +1,43 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "SecurityStrength must be one of {128, 192, 256}",
+			"parameters": {
+				"ruleText": "currentProperty.SecurityStrength == 128 || currentProperty.SecurityStrength == 192 || currentProperty.SecurityStrength == 256"
+			}
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3RS || rootProperty.Rbgs[rootRbgItemIndex].ConstructionType == RandomBitGeneratorConstructionType.RBG3XOR"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "RBG3 DRBGs shall be instantiated at the highest security strength supported by the DRBG",
+								"references": ["SP 800-90C Section 2.8.3.1", "SP 800-90C Section 6.1", "SP 800-90C Section 6.3 Requirement 4"],
+								"parameters": {
+									"ruleText": "currentProperty.SecurityStrength == DrbgAttributes.SecurityStrength"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

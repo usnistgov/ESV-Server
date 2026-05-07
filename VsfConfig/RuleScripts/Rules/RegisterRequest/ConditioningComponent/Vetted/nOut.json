@@ -1,0 +1,115 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "parentProperty.IsVetted == true"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "State",
+								"parameters": {
+									"key": "ccAttribute",
+									"value": "ConditioningComponentAttributesHelper.GetCcAttributes(parentProperty.Description)"
+								}
+							},
+							{
+								"lineType": "Assert",
+								"parameters": {
+									"ruleText": "ccAttribute != null"
+								}
+							},
+							{
+								"lineType": "Branch",
+								"conditions": [
+									{
+										"if": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "As(ccAttribute, \"VettedConditioningComponentAttributes\").NOut != null"
+													}
+												}
+											]
+										},
+										"then": {
+											"scriptLines": [
+												{
+													"lineType": "State",
+													"parameters": {
+														"key": "nOut",
+														"value": "As(ccAttribute, \"VettedConditioningComponentAttributes\").NOut"
+													}
+												},
+												{
+													"lineType": "Assert",
+													"parameters": {
+														"ruleText": "nOut != null"
+													}
+												},
+
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"inputKey": "nOut",
+														"ruleText": "Array.IndexOf(nOut, currentProperty) > -1"
+													}
+												},
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "Array.IndexOf(nOut, currentProperty) == Array.IndexOf((As(ccAttribute, \"VettedConditioningComponentAttributes\")).Nw, parentProperty.Nw)"
+													}
+												}
+											]
+										}
+									},
+									{
+										"elseif": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "As(ccAttribute, \"VettedConditioningComponentAttributes\").NOutMaxBits != null"
+													}
+												}
+											]
+										},
+										"then": {
+											"scriptLines": [
+												{
+													"lineType": "Rule",
+													"ruleType": "External",
+													"parameters": {
+														"ruleText": "currentProperty <= As(ccAttribute, \"VettedConditioningComponentAttributes\").NOutMaxBits"
+													}
+												}
+											]
+										}
+									}
+								]
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+
+}

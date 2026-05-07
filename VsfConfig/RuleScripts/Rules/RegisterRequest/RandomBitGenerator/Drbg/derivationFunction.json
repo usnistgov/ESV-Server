@@ -1,0 +1,35 @@
+{ 
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "DrbgAttributes.Name.Contains(\"Hash\") || DrbgAttributes.Name.Contains(\"HMAC\")"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "Derivation Function property is not expected for Hash_DRBGs or HMAC_DRBGs",
+								"references": ["SP 800-90Ar1 Section 10.1.1.2", "SP 800-90Ar1 Section 10.1.2"],
+								"parameters": {
+									"ruleText": "currentProperty == false"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

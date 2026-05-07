@@ -1,0 +1,194 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Minimum number of bits provided to conditioning function (minNin) must be greater than 0",
+			"parameters": {
+				"ruleText": "currentProperty.MinNIn > 0"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Minimum number of entropy bits provided to conditioning function (minHin) must be greater than 0 but less than or equal to minNin",
+			"parameters": {
+				"ruleText": "currentProperty.MinHIn > 0.0 && currentProperty.MinHIn <= currentProperty.MinNIn"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Number of entropy bits output from conditioning function (hOut) must be less than the minimum number of entropy bits provided (minHin)",
+			"parameters": {
+				"ruleText": "currentProperty.HOut < currentProperty.MinHIn"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Number of entropy bits output from conditioning function (hOut) must be less than or equal to the total number of bits output (nOut)",
+			"parameters": {
+				"ruleText": "currentProperty.HOut <= currentProperty.NOut"
+			}
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "ConditioningComponentAttributes.Name.Contains(\"CBC-MAC\")"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "The AES-CBC-MAC external conditioning function can only accept complete blocks, multiples of 128-bits as input (minNIn)",
+								"references": ["SP 800-90C Section 3.2.1.3"],
+								"parameters": {
+									"ruleText": "currentProperty.MinNIn % 128 == 0"
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "ConditioningComponentAttributes.Name.Contains(\"AES\")"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "AES-based external conditioning functions shall output (nOut) a single AES block, 128 bits",
+								"references": ["SP 800-90C Section 3.2.1.1"],
+								"parameters": {
+									"ruleText": "currentProperty.NOut == 128"
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "ConditioningComponentAttributes.Name.Contains(\"Hash_DF\")"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "Hash_DF-based external conditioning functions shall output (nOut) at least enough entropy for a DRBG and at most 255 * outputLength of the hash function bits",
+								"references": ["SP 800-90C Section 3.2.1.1", "SP 800-90Ar1 Section 10.3.1"],
+								"parameters": {
+									"ruleText": "currentProperty.NOut > 128 && currentProperty.NOut < ConditioningComponentAttributes.NOutMaxBits"
+								}
+							}
+						]
+					}
+				},
+				{
+					"else": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "Number of bits output from conditioning function (nOut) must match the security strength of the function",
+								"parameters": {
+									"ruleText": "currentProperty.NOut == ConditioningComponentAttributes.RbgNOut"
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "FullEntropyHelper.IsFullEntropy(currentProperty.NOut, currentProperty.HOut) == true"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If a conditioning function outputs full entropy, GetConditionedFullEntropyInput shall be used",
+								"references": ["SP 800-90C Section 3.2.2.2"],
+								"parameters": {
+									"ruleText": "currentProperty.ProcedureType == ConditionedInputProcedureType.GetConditionedFullEntropyInput"
+								}
+							},
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If a conditioning function outputs full entropy, it shall have sufficient entropy input",
+								"references": ["SP 800-90C Section 3.2.2.2"],
+								"parameters": {
+									"ruleText": "currentProperty.MinHIn >= currentProperty.NOut + 64"
+								}
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"key": "FullEntropyConditioningFunction",
+				"scope": "Global",
+				"appendValues": false,
+				"value": "FullEntropyHelper.IsFullEntropy(currentProperty.NOut, currentProperty.HOut) && (currentProperty.MinHIn >= currentProperty.NOut + 64)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "FullEntropyConditioningFunction is type bool",
+			"parameters": {
+				"ruleText": "Is(FullEntropyConditioningFunction, \"System.Boolean\")"
+			}
+		}
+	]
+}

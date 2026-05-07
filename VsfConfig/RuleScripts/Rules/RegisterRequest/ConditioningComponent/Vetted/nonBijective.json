@@ -1,0 +1,89 @@
+{
+	"vsfScript": [
+			{
+			"lineType": "State",
+			"parameters": {
+				"key": "ccAttribute",
+				"value": "ConditioningComponentAttributesHelper.GetCcAttributes(currentProperty.Description)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"description": "A vetted conditioning component as specified through the conditioning component description property must exist.",
+				"ruleText": "ccAttribute != null"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.HOut >= 0.0"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.HOut <= currentProperty.NOut"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.HOut <= currentProperty.MinHIn"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.HOut <= currentProperty.MinNIn"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.MinHIn <= currentProperty.MinNIn"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"parameters": {
+				"ruleText": "currentProperty.NOut <= currentProperty.MinNIn"
+			}
+		},
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "As(ccAttribute, \"VettedConditioningComponentAttributes\").NOutMaxBits == null"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "currentProperty.Nw == currentProperty.NOut"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "Must be one of the operating environments on the overall RBG submission",
+			"parameters": {
+				"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].OperatingEnvironments.Contains(currentProperty)"
+			}
+		}
+	]
+}

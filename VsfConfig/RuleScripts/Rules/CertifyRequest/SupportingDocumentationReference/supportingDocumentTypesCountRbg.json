@@ -1,0 +1,24 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "ImportScript",
+			"parameters": {
+				"scriptFile": "CommonRules/SupportingDocumentation/supportingDocumentTypesCounter.json"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "Is(rbgTypeCount,\"System.Int32\")"
+			}
+		},
+		{
+			"lineType": "Rule",
+			"ruleType": "External",
+			"description": "One RandomBitGeneratorReport supporting documentation type is required.",
+			"parameters": {
+				"ruleText": "rbgTypeCount == 1"
+			}
+		}	
+	]
+}

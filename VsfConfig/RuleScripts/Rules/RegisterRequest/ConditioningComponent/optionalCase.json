@@ -1,0 +1,45 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.AdditionalNoiseSources == false && currentProperty.Count > 0"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "ImportScript",
+								"parameters": {
+									"scriptFile": "CommonRules/notNull.json"
+								}
+							},
+							{
+								"lineType": "ImportScript",
+								"parameters": {
+									"scriptFile": "Rules/RegisterRequest/ConditioningComponent/minCount.json"
+								}
+							},
+							{
+								"lineType": "ImportScript",
+								"parameters": {
+									"scriptFile": "Rules/RegisterRequest/ConditioningComponent/sequenceNumbers.json"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+
+}

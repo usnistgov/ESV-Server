@@ -1,0 +1,93 @@
+{ 
+	"vsfScript": [
+		{
+			"lineType": "Branch",
+			"conditions": [
+				{
+					"if": {
+						"scriptLines": [
+							{
+								"lineType": "Operator",
+								"operatorType": "Or",
+								"parameters": {
+									"scriptLines": [
+										{
+											"lineType": "Rule",
+											"ruleType": "External",
+											"parameters": {
+												"ruleText": "DrbgAttributes.Name.Contains(\"Hash_DRBG\") || DrbgAttributes.Name.Contains(\"HMAC_DRBG\")"
+											}
+										},
+										{
+											"lineType": "Rule",
+											"ruleType": "External",
+											"parameters": {
+												"ruleText": "DrbgAttributes.Name.Contains(\"CTR_DRBG\") && (rootProperty.Rbgs[rootRbgItemIndex].Drbg.DerivationFunction == true)"
+											}
+										}
+									]
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "In a CTR_DRBG with derivation function, or Hash_DRBG or HMAC_DRBG, at least 3/2 * security strength bits of entropy shall be provided to the DRBG for seeding",
+								"references": ["SP 800-90C Section 4.3.1 Requirement 7", "SP 800-90C Section 5.3 Requirement 8", "SP 800-90C Section 6.3 Requirement 6", "SP 800-90C Section 7.3.2 Requirement 1"],
+								"parameters": {
+									"ruleText": "currentProperty.MinHIn >= (1.5 * currentProperty.SecurityStrength)"
+								}
+							}
+						]
+					}
+				},
+				{
+					"elseif": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "DrbgAttributes.Name.Contains(\"CTR_DRBG\")"
+								}
+							},
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"parameters": {
+									"ruleText": "rootProperty.Rbgs[rootRbgItemIndex].Drbg.DerivationFunction == false"
+								}
+							}
+						]
+					},
+					"then": {
+						"scriptLines": [
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If CTR_DRBG is used without derivation function, full entropy input is required",
+								"references": ["SP 800-90C Section 4.3.1 Requirement 8", "SP 800-90C Section 5.3 Requirement 7", "SP 800-90C Section 6.3 Requirement 5", "SP 800-90C Section 7.3.2 Requirement 2", "SP 800-90Ar1 Section 10.2.1", "SP 800-90Ar1 Table 3"],
+								"parameters": {
+									"ruleText": "FullEntropyHelper.IsFullEntropy(currentProperty.MinNIn, currentProperty.MinHIn)"
+								}
+							},
+							{
+								"lineType": "Rule",
+								"ruleType": "External",
+								"description": "If CTR_DRBG is used without derivation function, the entropy input for seeding must be equal to the AES security strength + AES block size",
+								"note": "The comparison is run on MinNIn because full entropy is also required meaning MinNIn == MinHIn, the integer type is preferred over the double type for exact equality",
+								"references": ["SP 800-90C Section 4.3.1 Requirement 8", "SP 800-90C Section 5.3 Requirement 7", "SP 800-90C Section 6.3 Requirement 5", "SP 800-90C Section 7.3.2 Requirement 2", "SP 800-90Ar1 Section 10.2.1", "SP 800-90Ar1 Table 3"],
+								"parameters": {
+									"ruleText": "currentProperty.MinNIn == DrbgAttributes.SecurityStrength + 128"
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}

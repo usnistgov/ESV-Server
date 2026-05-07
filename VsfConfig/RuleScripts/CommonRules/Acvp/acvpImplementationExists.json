@@ -1,0 +1,31 @@
+{
+	"vsfScript": [
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "implementationService != null"
+			}
+		},
+		{
+			"lineType": "State",
+			"parameters": {
+				"scope": "Node",
+				"key": "implementationExists",
+				"value": "As(implementationService, \"IImplementationService\").Exists(currentProperty)"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"parameters": {
+				"ruleText": "implementationExists != null"
+			}
+		},
+		{
+			"lineType": "Assert",
+			"description": "implementationExists is a proper type.",
+			"parameters": {
+				"ruleText": "Is(implementationExists, \"System.Boolean\")"
+			}
+		}	
+	]
+}
