@@ -349,7 +349,8 @@ To create the object referencing one or more existing entropy sources the follow
                             "validatioNumber": "A1",
                             "algorithmOperatingEnvironments": [1]
                         }
-                    ],                    "algorithm": "CTR_DRBG, Hash_DRBG, HMAC_DRBG",
+                    ],
+                    "algorithm": "CTR_DRBG, Hash_DRBG, HMAC_DRBG with the mode",
                     "derivationFunction": true,
                     "seed": [
                         {
@@ -462,6 +463,16 @@ Here is a full list of the properties included in each `rbg` object:
 In this table `--` represents indentation, indicating that the property is an element of the immediate property above with less indentation. For example a `sources` object will only exist within an `entropySources` object. 
 
 Multiple random bit generators can be submitted in one payload. In this case, it is implied that the n-th RBG in the array uses the (n-1)-th RBG as a randomness source. Neither an `entropySources` nor `randomnessSource` should appear in any RBG except for the first in the payload. The response object will be the same. Each RBG will be assigned a `sequencePosition` as the index + 1 of its position in the array. The `rbgId` and `sequencePosition` will uniquely identify the RBGs in the submission.
+
+The following table lists the valid values for the specific string fields.
+
+| Field | Valid Values |
+|-------|--------------|
+| `construction` | "RBG1", "RBG2(P)", "RBG2(NP)", "RBG3(RS)", "RBG3(XOR)", "RBGC" |
+| `entropySources -> combinationMethod` | "Method1", "Method2" |
+| `entropySources -> externalConditioningFunction -> algorithm` | See above table on Entropy Source conditioning components |
+| `entropySources -> externalConditioningFunction -> procedure` | "getConditionedInput", "getConditionedFullEntropyInput" | 
+| `drbg -> algorithm` | "CTR_DRBG AES-128", "CTR_DRBG AES-192", "CTR_DRBG AES-256", "Hash_DRBG SHA2-256", "Hash_DRBG SHA2-384", "Hash_DRBG SHA2-512", "Hash_DRBG SHA2-512/256", "Hash_DRBG SHA3-256", "Hash_DRBG SHA3-384", "Hash_DRBG SHA3-512", "HMAC_DRBG SHA2-256", "HMAC_DRBG SHA2-384", "HMAC_DRBG SHA2-512", "HMAC_DRBG SHA2-512/256", "HMAC_DRBG SHA3-256", "HMAC_DRBG SHA3-384", "HMAC_DRBG SHA3-512" | 
 
 ### 4.1. Getting a Random Bit Generator
 
