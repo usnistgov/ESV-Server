@@ -346,7 +346,7 @@ To create the object referencing one or more existing entropy sources the follow
                 "drbg": {
                     "validations": [
                         {
-                            "validatioNumber": "A1",
+                            "validationNumber": "A1",
                             "algorithmOperatingEnvironments": [1]
                         }
                     ],
